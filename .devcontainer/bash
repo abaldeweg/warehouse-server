@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PATH="$(yarn global bin):$PATH"
-
 alias ll='ls -alF'
 
 alias push='git push origin --follow-tags'
