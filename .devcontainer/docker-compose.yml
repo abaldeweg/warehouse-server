@@ -11,15 +11,13 @@ services:
     network_mode: service:db
 
   db:
-    image: couchdb:latest
+    image: mongo
     restart: unless-stopped
     volumes:
-      - couchdb-data:/opt/couchdb/data
-      - config:/opt/couchdb/etc/local.d
+        - mongodb-data:/data/db
     environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=password
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: password
 
 volumes:
-  couchdb-data:
-  config:
+  mongodb-data:
