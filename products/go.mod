@@ -7,7 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-kivik/couchdb/v3 v3.4.1
 	github.com/go-kivik/kivik/v3 v3.2.4
-	github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230917205526-3ad3b4bd8262
+	github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230921182238-bf476ea66b78
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.12.1
 )
