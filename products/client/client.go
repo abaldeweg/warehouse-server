@@ -111,6 +111,7 @@ func client() (context.Context, context.CancelFunc, *mongo.Collection, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGODB_URL")))
 	if err != nil {
+        cancel()
 		return nil, nil, nil, err
 	}
 

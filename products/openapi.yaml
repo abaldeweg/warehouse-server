@@ -1,0 +1,155 @@
+openapi: 3.0.0
+
+info:
+    version: 1.0.0
+    title: products
+    description: Manage products
+
+externalDocs:
+    description: Github
+    url: https://github.com/abaldeweg/warehouse-server
+
+servers:
+    - url: http://localhost:8080/api/v1
+
+tags:
+    - name: products
+      description: Products
+    - name: mock
+      description: Mockups - only for testing!
+
+paths:
+    /products:
+        get:
+            description: List
+            tags:
+                - products
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/IndexResponse"
+                "400":
+                    description: Bad Request
+        post:
+            description: Create
+            tags:
+                - products
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/IndexPostRequest"
+            responses:
+                "201":
+                    description: Created
+                "400":
+                    description: Bad Request
+    /products/{document}:
+        put:
+            description: Update
+            tags:
+                - products
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  description: ID
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/IndexPutRequest"
+            responses:
+                "200":
+                    description: OK
+                "400":
+                    description: Bad Request
+        delete:
+            description: Delete
+            tags:
+                - products
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  description: ID
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: OK
+                "400":
+                    description: Bad Request
+    /me:
+        get:
+            description: Mocks the auth API
+            tags:
+                - mock
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/UserResponse"
+                "401":
+                    description: Unauthorized
+
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            description: Enter your token e.g. "token"
+
+    schemas:
+        IndexResponse:
+            type: object
+            properties:
+                _id:
+                    type: string
+                name:
+                    type: string
+                attributes:
+                    type: array
+                variants:
+                    type: array
+
+        IndexPostRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                attributes:
+                    type: array
+                variants:
+                    type: array
+
+        IndexPutRequest:
+            type: object
+            properties:
+                key:
+                    type: string
+                value:
+                    type: string
+
+        UserResponse:
+            type: object
+            required:
+                - id
+                - username
+            properties:
+                id:
+                    type: integer
+                username:
+                    type: string
+
+security:
+    - bearerAuth: []

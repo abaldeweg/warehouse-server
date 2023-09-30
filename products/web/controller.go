@@ -10,7 +10,7 @@ import (
 func List(c *gin.Context) {
 	results, err := client.List()
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
         return
 	}
 
@@ -20,45 +20,45 @@ func List(c *gin.Context) {
 func Create(c *gin.Context) {
 	var document client.Product
 	if err := c.BindJSON(&document); err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	res, err := client.Create(client.Product{
+	_, err := client.Create(client.Product{
 		Name:       document.Name,
 		Attributes: document.Attributes,
 		Variants:   document.Variants,
 	})
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.Status(http.StatusCreated)
 }
 
 func Update(c *gin.Context) {
 	var document UpdateProduct
 	if err := c.BindJSON(&document); err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
         return
 	}
 
-	res, err := client.Update(c.Param("id"), document.Key, document.Value)
+	_, err := client.Update(c.Param("id"), document.Key, document.Value)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.Status(http.StatusOK)
 }
 
 func Delete(c *gin.Context) {
-	res, err := client.Delete(c.Param("id"))
+	_, err := client.Delete(c.Param("id"))
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.Status(http.StatusOK)
 }
