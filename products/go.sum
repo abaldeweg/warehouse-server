@@ -152,6 +152,8 @@ github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230926125753-8ed27640
 github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230926125753-8ed27640a62f/go.mod h1:MA70xJcIbZkJdCIJX6Y0lHIeooUKVRncRXTfgOrHsyM=
 github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230930220536-fa48309c9def h1:EUNX4LP37F0VeCZdMids7qL8B18U0bPu9wRQlZTLs28=
 github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20230930220536-fa48309c9def/go.mod h1:MA70xJcIbZkJdCIJX6Y0lHIeooUKVRncRXTfgOrHsyM=
+github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231001143401-a88e5bbf06b9 h1:rwsNLcUbJ7QBlQypIqhnSy2f1yhpGRQzAbzULjMGyBs=
+github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231001143401-a88e5bbf06b9/go.mod h1:MA70xJcIbZkJdCIJX6Y0lHIeooUKVRncRXTfgOrHsyM=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
