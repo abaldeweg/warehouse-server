@@ -18,22 +18,41 @@ type Product struct {
 	Variants   []interface{}      `json:"variants" bson:"variants"`
 }
 
-func List() ([]Product, error) {
-	ctx, cancel, collection, err := client()
-    defer cancel()
-    if err != nil {
+type ClientConfig struct {
+	Ctx        context.Context
+	Cancel     context.CancelFunc
+	Client     *mongo.Client
+	Collection *mongo.Collection
+}
+
+func NewClient() (*ClientConfig, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGODB_URL")))
+	if err != nil {
+		cancel()
 		return nil, err
 	}
 
-	cur, err := collection.Find(ctx, bson.D{})
+	collection := client.Database("warehouse").Collection("products")
+
+	return &ClientConfig{ctx, cancel, client, collection}, nil
+}
+
+func (config *ClientConfig) List() ([]Product, error) {
+	if config.Cancel != nil {
+		defer config.Cancel()
+	}
+
+	cur, err := config.Collection.Find(config.Ctx, bson.D{})
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(ctx)
+	defer cur.Close(config.Ctx)
 
 	var results []Product
 
-	for cur.Next(ctx) {
+	for cur.Next(config.Ctx) {
 		var result Product
 		if err := cur.Decode(&result); err != nil {
 			return nil, err
@@ -47,14 +66,12 @@ func List() ([]Product, error) {
 	return results, nil
 }
 
-func Create(data Product) (*mongo.InsertOneResult, error) {
-	ctx, cancel, collection, err := client()
-	defer cancel()
-    if err != nil {
-		return nil, err
+func (config *ClientConfig) Create(data Product) (*mongo.InsertOneResult, error) {
+	if config.Cancel != nil {
+		defer config.Cancel()
 	}
 
-	res, err := collection.InsertOne(ctx, data)
+	res, err := config.Collection.InsertOne(config.Ctx, data)
 	if err != nil {
 		return nil, err
 	}
@@ -62,11 +79,9 @@ func Create(data Product) (*mongo.InsertOneResult, error) {
 	return res, nil
 }
 
-func Update(id, key, value string) (*mongo.UpdateResult, error) {
-	ctx, cancel, collection, err := client()
-	defer cancel()
-    if err != nil {
-		return nil, err
+func (config *ClientConfig) Update(id, key, value string) (*mongo.UpdateResult, error) {
+	if config.Cancel != nil {
+		defer config.Cancel()
 	}
 
 	d, err := primitive.ObjectIDFromHex(id)
@@ -77,7 +92,7 @@ func Update(id, key, value string) (*mongo.UpdateResult, error) {
 	filter := bson.D{{"_id", d}}
 	update := bson.D{{"$set", bson.D{{key, value}}}}
 
-	res, err := collection.UpdateOne(ctx, filter, update)
+	res, err := config.Collection.UpdateOne(config.Ctx, filter, update)
 	if err != nil {
 		return nil, err
 	}
@@ -85,11 +100,9 @@ func Update(id, key, value string) (*mongo.UpdateResult, error) {
 	return res, nil
 }
 
-func Delete(id string) (*mongo.DeleteResult, error) {
-	ctx, cancel, collection, err := client()
-	defer cancel()
-    if err != nil {
-		return nil, err
+func (config *ClientConfig) Delete(id string) (*mongo.DeleteResult, error) {
+	if config.Cancel != nil {
+		defer config.Cancel()
 	}
 
 	d, err := primitive.ObjectIDFromHex(id)
@@ -99,23 +112,10 @@ func Delete(id string) (*mongo.DeleteResult, error) {
 
 	document := bson.D{{"_id", d}}
 
-	res, err := collection.DeleteOne(ctx, document)
+	res, err := config.Collection.DeleteOne(config.Ctx, document)
 	if err != nil {
 		return nil, err
 	}
 
 	return res, nil
-}
-
-func client() (context.Context, context.CancelFunc, *mongo.Collection, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGODB_URL")))
-	if err != nil {
-        cancel()
-		return nil, nil, nil, err
-	}
-
-	collection := client.Database("warehouse").Collection("products")
-
-	return ctx, cancel, collection, nil
 }
