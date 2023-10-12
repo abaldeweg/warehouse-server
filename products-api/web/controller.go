@@ -8,6 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type UpdateProduct struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 func List(c *gin.Context) {
 	config, err := client.NewClient()
 	if err != nil {
