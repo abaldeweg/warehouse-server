@@ -1,19 +1,19 @@
 version: 2.1
 
 jobs:
-    test-products:
+    test-products-api:
         docker:
             - image: cimg/go:1.21.3
         steps:
             - checkout
             - run:
                   name: Install dependencies
-                  command: cd ./products && go mod tidy
+                  command: cd ./products-api && go mod tidy
             - run:
                   name: Run the tests
-                  command: cd ./products && go test ./...
+                  command: cd ./products-api && go test ./...
 
 workflows:
     test:
         jobs:
-            - test-products
+            - test-products-api
