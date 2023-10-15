@@ -42,6 +42,8 @@ github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeN
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231011093656-ccd44fd19b3f h1:y23jvBkW0TlU4PdQE1DiqNluJtaZhN/+qpo9Conqxy0=
 github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231011093656-ccd44fd19b3f/go.mod h1:MA70xJcIbZkJdCIJX6Y0lHIeooUKVRncRXTfgOrHsyM=
+github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231015203956-360f1c1698a0 h1:rhKbp+Aa7RMqQty9idKqhCaCaSZ0QLq0ge9Q3DmRQGY=
+github.com/incwadi-warehouse/monorepo-go/security v0.0.0-20231015203956-360f1c1698a0/go.mod h1:MA70xJcIbZkJdCIJX6Y0lHIeooUKVRncRXTfgOrHsyM=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnrnM=
