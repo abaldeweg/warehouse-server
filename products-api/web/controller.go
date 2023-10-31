@@ -52,7 +52,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-    log.Println(res)
+	log.Println(res)
 
 	c.Status(http.StatusCreated)
 }
@@ -76,7 +76,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-    log.Println(res)
+	log.Println(res)
 
 	c.Status(http.StatusOK)
 }
@@ -94,7 +94,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-    log.Println(res)
+	log.Println(res)
 
 	c.Status(http.StatusOK)
 }
