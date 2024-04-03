@@ -3,7 +3,7 @@ version: 2.1
 jobs:
     test-products-api:
         docker:
-            - image: cimg/go:1.22.1
+            - image: cimg/go:1.22.2
         steps:
             - checkout
             - run:
