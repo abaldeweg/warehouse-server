@@ -3,8 +3,8 @@ module github.com/abaldeweg/warehouse-server/gateway
 go 1.23
 
 require (
+	github.com/abaldeweg/warehouse-server/framework v0.0.0-20241016195406-c3db53c4ae4f
 	github.com/gin-gonic/gin v1.10.0
-	github.com/abaldeweg/warehouse-server/framework v0.0.0-20241015163101-08b93c4b15a5
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
