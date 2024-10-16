@@ -1,0 +1,87 @@
+openapi: 3.0.0
+
+info:
+  title: Proxy
+  version: v1
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: proxy
+    description: Proxy
+
+paths:
+  /apis/core/1/{path}:
+    get:
+      summary: Proxy GET request
+      tags:
+        - proxy
+      parameters:
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+          description: Path to proxy
+      responses:
+        200:
+          description: Successful response
+        500:
+          description: Internal server error
+        504:
+          description: Gateway timeout
+    post:
+      summary: Proxy POST request
+      tags:
+        - proxy
+      parameters:
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+          description: Path to proxy
+      responses:
+        200:
+          description: Successful response from API Core
+        500:
+          description: Internal server error
+        504:
+          description: Gateway timeout
+    put:
+      summary: Proxy PUT request
+      tags:
+        - proxy
+      parameters:
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+          description: Path to proxy
+      responses:
+        200:
+          description: Successful response
+        500:
+          description: Internal server error
+        504:
+          description: Gateway timeout
+    delete:
+      summary: Proxy DELETE request
+      tags:
+        - proxy
+      parameters:
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+          description: Path to proxy
+      responses:
+        200:
+          description: Successful response from API Core
+        500:
+          description: Internal server error
+        504:
+          description: Gateway timeout

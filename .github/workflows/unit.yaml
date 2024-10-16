@@ -1,0 +1,62 @@
+name: Unit-Tests
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test-admincli:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.23"
+            - name: Run admincli tests
+              working-directory: ./admincli
+              run: |
+                  go mod tidy
+                  go test ./...
+
+    test-blog:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.23"
+            - name: Run blog tests
+              working-directory: ./blog
+              run: |
+                  go mod tidy
+                  go test ./...
+
+    test-framework:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.23"
+            - name: Run framework tests
+              working-directory: ./framework
+              run: |
+                  go mod tidy
+                  go test ./...
+
+    test-gateway:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.23"
+            - name: Run gateway tests
+              working-directory: ./gateway
+              run: |
+                  go mod tidy
+                  go test ./...
