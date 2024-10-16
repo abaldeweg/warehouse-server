@@ -1,6 +1,6 @@
-# monorepo-go
+# warehouse-server
 
-monorepo-go is a database to manage your warehouse.
+warehouse-server is a database to manage your warehouse.
 
 ## Getting Started
 
