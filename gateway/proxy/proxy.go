@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -61,8 +62,27 @@ func response(req *http.Request, c *gin.Context) error {
 		return err
 	}
 
-	for key, value := range resp.Header {
-		c.Header(key, value[0])
+	for key, values := range resp.Header {
+		// Skip the Vary header if it only contains "Accept"
+		if key == "Vary" && len(values) == 1 && values[0] == "Accept" {
+			continue
+		}
+
+		// Remove "Accept" from the Vary header if it exists
+		if key == "Vary" {
+			newValues := []string{}
+			for _, value := range values {
+				if value != "Accept" {
+					newValues = append(newValues, value)
+				}
+			}
+			if len(newValues) > 0 {
+				c.Header(key, strings.Join(newValues, ", "))
+			}
+			continue
+		}
+
+		c.Header(key, values[0])
 	}
 
 	c.Data(resp.StatusCode, resp.Header.Get("Content-Type"), body)
