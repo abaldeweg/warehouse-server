@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const duration = 20 * time.Second
-
 func Proxy(c *gin.Context, serviceURL string, path string) error {
+	const duration = 20 * time.Second
+
 	ctx, cancel := context.WithTimeout(c.Request.Context(), duration)
 	defer cancel()
 
@@ -24,26 +24,22 @@ func Proxy(c *gin.Context, serviceURL string, path string) error {
 }
 
 func request(ctx context.Context, c *gin.Context, serviceURL string, path string) (*http.Request, error) {
-    fullURL := serviceURL + path + "?" + c.Request.URL.RawQuery
+	fullURL := serviceURL + path + "?" + c.Request.URL.RawQuery
 
-    req, err := http.NewRequestWithContext(ctx, c.Request.Method, fullURL, c.Request.Body)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
-        return nil, err
-    }
+	req, err := http.NewRequestWithContext(ctx, c.Request.Method, fullURL, c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return nil, err
+	}
 
-    for key, values := range c.Request.Header {
-        // Forward all headers EXCEPT Content-Type
-        if key != "Content-Type" {
-            for _, value := range values {
-                req.Header.Add(key, value)
-            }
-        }
-    }
+	for key, values := range c.Request.Header {
+		for _, value := range values {
+			req.Header.Add(key, value)
+		}
+	}
 
-    return req, nil
+	return req, nil
 }
-
 
 func response(req *http.Request, c *gin.Context) error {
 	client := &http.Client{}
@@ -57,7 +53,6 @@ func response(req *http.Request, c *gin.Context) error {
 		}
 		return err
 	}
-
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
@@ -69,8 +64,6 @@ func response(req *http.Request, c *gin.Context) error {
 	for key, value := range resp.Header {
 		c.Header(key, value[0])
 	}
-
-	c.Header("Content-Length", resp.Header.Get("Content-Length"))
 
 	c.Data(resp.StatusCode, resp.Header.Get("Content-Type"), body)
 
