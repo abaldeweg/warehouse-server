@@ -71,7 +71,7 @@ func saveCover(c *gin.Context, imageUUID string) {
 
 	imageFilename := fmt.Sprintf("%s%s", imageUUID, filepath.Ext(imageData.Filename))
 
-	uploadsDir := "uploads"
+	uploadsDir := "uploads/cover"
 	currentDir, err := os.Getwd()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get current directory"})
