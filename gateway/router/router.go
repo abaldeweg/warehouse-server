@@ -18,6 +18,8 @@ func Routes() *gin.Engine {
 	r := gin.Default()
 
 	r.Any(`/apis/core/1/*path`, func(c *gin.Context) {
+        c.Header("Access-Control-Allow-Origin", "*")
+
 		path := c.Param("path")
 
 		uploadCover(c, path)
