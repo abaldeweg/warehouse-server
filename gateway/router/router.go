@@ -1,7 +1,6 @@
 package router
 
 import (
-	"encoding/json"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -47,7 +46,7 @@ func Routes() *gin.Engine {
                     c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
                     return
                 }
-                c.JSON(http.StatusBadGateway, gin.H{"msg": "Internal Error"})
+                c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
                 return
             }
         }
@@ -55,7 +54,7 @@ func Routes() *gin.Engine {
 		safePath := filepath.Join("/", path)
 
 		if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
-			c.JSON(http.StatusForbidden, gin.H{"msg": "Internal Error"})
+			c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 			return
 		}
 	})
@@ -75,7 +74,7 @@ func saveCover(c *gin.Context, imageUUID string) {
 	uploadsDir := "uploads"
 	currentDir, err := os.Getwd()
 	if err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{"error": "Failed to get current directory"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get current directory"})
 		return
 	}
 
@@ -87,7 +86,7 @@ func saveCover(c *gin.Context, imageUUID string) {
 
 	imagePath := filepath.Join(uploadsDir, imageFilename)
 	if err := c.SaveUploadedFile(imageData, imagePath); err != nil {
-		c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Failed to save image"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image"})
 		return
 	}
 
@@ -105,7 +104,7 @@ func saveCover(c *gin.Context, imageUUID string) {
 		resizedImagePath = filepath.Join(uploadsDir, resizedImagePath)
 
 		if err := resizeAndSaveImage(imagePath, resizedImagePath, size.width); err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Failed to resize image"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to resize image"})
 			return
 		}
 	}
@@ -178,14 +177,5 @@ func authenticate(c *gin.Context) bool {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var user User
-		if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
-			return false
-		}
-
-		return true
-	}
-
-	return false
+	return resp.StatusCode == http.StatusOK
 }
