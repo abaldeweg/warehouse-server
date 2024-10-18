@@ -157,11 +157,20 @@ func authenticate(c *gin.Context) bool {
 
 	authHeader := c.GetHeader("Authorization")
 
+	logFile, _ := os.OpenFile("/upload/auth.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	defer logFile.Close()
+
+	logMessage := fmt.Sprintf("AUTH_API_ME: %s, authHeader: %s\n", viper.GetString("AUTH_API_ME"), authHeader)
+	logFile.WriteString(logMessage)
+
 	if authHeader == "" || len(authHeader) < 7 || authHeader[0:7] != "Bearer " {
 		return false
 	}
 
-	token := authHeader[7:]
+    token := authHeader[7:]
+
+    logMessage2 := fmt.Sprintf("Token: %s\n", token)
+    logFile.WriteString(logMessage2)
 
 	req, err := http.NewRequest("GET", viper.GetString("AUTH_API_ME"), nil)
 	if err != nil {
