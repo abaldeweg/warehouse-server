@@ -30,6 +30,8 @@ func main() {
 }
 ```
 
+Mount cover directory under `/usr/src/app/uploads/cover`.
+
 ### Config
 
 ```go
@@ -72,6 +74,7 @@ r.Use(corsConfig.SetCorsHeaders())
 |API_CORE               |API endpoint for the core                  |gateway
 |project_dir            |Path to docker compose                     |admincli
 |database               |Database name to dump                      |admincli
+|AUTH_API_ME            |Authentication API endpoint                |gateway
 
 admincli will read a config file from following paths:
 
