@@ -48,6 +48,8 @@ func Routes() *gin.Engine {
 				c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
 				return
 			}
+            c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error (auth)"})
+            return
 		}
 
 		safePath := filepath.Join("/", path)
