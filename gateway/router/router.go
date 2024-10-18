@@ -30,27 +30,27 @@ type Branch struct {
 }
 
 func Routes() *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
 
 	r.Any(`/apis/core/1/*path`, func(c *gin.Context) {
 		path := c.Param("path")
 
-		if match, _ := regexp.MatchString(`/api/book/cover/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})`, path); match {
-			if authenticate(c) {
-				// Extract the UUID from the path
-				re := regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
-				imageUUID := re.FindString(path)
+        if c.Request.Method == http.MethodPost {
+            if match, _ := regexp.MatchString(`/api/book/cover/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})`, path); match {
+                if authenticate(c) {
+                    re := regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
+                    imageUUID := re.FindString(path)
 
-				// Call saveCover with the extracted UUID
-				saveCover(c, imageUUID)
+                    saveCover(c, imageUUID)
 
-				c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
-				return
-			}
-            c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error (auth)"})
-            return
-		}
+                    c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
+                    return
+                }
+                c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error (auth)"})
+                return
+            }
+        }
 
 		safePath := filepath.Join("/", path)
 
