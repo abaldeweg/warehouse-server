@@ -157,7 +157,7 @@ func authenticate(c *gin.Context) bool {
 
 	authHeader := c.GetHeader("Authorization")
 
-	logFile, _ := os.OpenFile("/upload/auth.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logFile, _ := os.OpenFile("auth.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	defer logFile.Close()
 
 	logMessage := fmt.Sprintf("AUTH_API_ME: %s, authHeader: %s\n", viper.GetString("AUTH_API_ME"), authHeader)
