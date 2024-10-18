@@ -18,7 +18,7 @@ func main() {
 	viper.SetDefault("CORS_ALLOW_ORIGIN", "*")
 
 	corsConfig := cors.NewCors()
-	corsConfig.AllowOrigins = []string{viper.GetString("CORS_ALLOW_ORIGIN")}
+	corsConfig.Config.AllowOrigins = []string{viper.GetString("CORS_ALLOW_ORIGIN")}
 	corsConfig.SetCorsHeaders()
 
 	r := router.Routes()
