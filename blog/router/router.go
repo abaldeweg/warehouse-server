@@ -7,16 +7,20 @@ import (
 	"github.com/abaldeweg/warehouse-server/blog/content/article"
 	"github.com/abaldeweg/warehouse-server/blog/content/home"
 	"github.com/abaldeweg/warehouse-server/framework/router"
+	"github.com/abaldeweg/warehouse-server/framework/storage"
 	"github.com/gin-gonic/gin"
 )
 
 // Routes sets up the Gin router.
 func Routes() *gin.Engine {
+	s := storage.NewStorage("filesystem", "data/auth", "api_keys.json")
+	k, _ := s.Load()
+
 	r := router.Engine()
 
-	api := r.Group("/", router.ApiKeyMiddleware)
+	api := r.Group("/", router.ApiKeyMiddleware(k))
 	{
-		api.GET("/home", router.PermissionsMiddleware("articles"), func(c *gin.Context) {
+		api.GET("/home", router.PermissionsMiddleware(k, "articles"), func(c *gin.Context) {
 			index, err := home.GetHome()
 			if err != nil {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -25,7 +29,7 @@ func Routes() *gin.Engine {
 
 			c.String(http.StatusOK, index)
 		})
-		api.GET("/home/new/:days", router.PermissionsMiddleware("articles"), func(c *gin.Context) {
+		api.GET("/home/new/:days", router.PermissionsMiddleware(k, "articles"), func(c *gin.Context) {
 			daysStr := c.Param("days")
 
 			days, err := strconv.Atoi(daysStr)
@@ -42,7 +46,7 @@ func Routes() *gin.Engine {
 
 			c.JSON(http.StatusOK, gin.H{"new_articles": newCount})
 		})
-		api.GET("/article/*path", router.PermissionsMiddleware("articles"), func(c *gin.Context) {
+		api.GET("/article/*path", router.PermissionsMiddleware(k, "articles"), func(c *gin.Context) {
 			path := c.Param("path")
 
 			cnt, err := article.GetArticle(path)
