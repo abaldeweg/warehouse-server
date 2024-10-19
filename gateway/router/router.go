@@ -18,14 +18,17 @@ func Routes() *gin.Engine {
 
 	r := gin.Default()
 
+	r.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
+		c.Next()
+	})
+
 	r.Any(`/apis/core/1/*path`, handleCoreAPI)
 
 	return r
 }
 
 func handleCoreAPI(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-
 	path := c.Param("path")
 
 	uploadCover(c, path)
