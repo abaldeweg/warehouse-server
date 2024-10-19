@@ -2,67 +2,47 @@ package apikey
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"os"
 
 	"github.com/google/uuid"
 )
 
-// APIKey represents a single API key.
+// APIKeys represents a collection of API keys.
+type APIKeys struct {
+	Keys []APIKey `json:"keys"`
+}
+
+// APIKey represents a single API key with associated permissions.
 type APIKey struct {
 	Key         string   `json:"key"`
 	Permissions []string `json:"permissions"`
 }
 
-// keysFilePath is the path to the JSON file storing API keys.
-const keysFilePath = "data/auth/api_keys.json"
-
-// loadAPIKeys loads API keys from the JSON file.
-func loadAPIKeys() ([]APIKey, error) {
-	data, err := os.ReadFile(keysFilePath)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return []APIKey{}, createAPIKeysFile(nil)
-		}
-
-		return nil, fmt.Errorf("error reading API keys file: %w", err)
-	}
-
-	var keys []APIKey
+// NewAPIKeys creates a new APIKeys instance from JSON data.
+func NewAPIKeys(data []byte) (*APIKeys, error) {
+	var keys APIKeys
 	if err := json.Unmarshal(data, &keys); err != nil {
 		return nil, fmt.Errorf("error unmarshalling API keys: %w", err)
 	}
 
-	return keys, nil
+	return &keys, nil
 }
 
-// createAPIKeysFile saves API keys to the JSON file.
-// If no keys are provided, it generates a new UUID as a default key.
-func createAPIKeysFile(keys []APIKey) error {
-	if len(keys) == 0 {
-		newKey := APIKey{Key: uuid.New().String(), Permissions: []string{}}
-		keys = append(keys, newKey)
-	}
+// DefaultAPIKeysFile generates the default API keys file content.
+func DefaultAPIKeysFile() ([]byte, error) {
+	keys := APIKeys{Keys: []APIKey{{Key: uuid.New().String(), Permissions: []string{}}}}
 
 	data, err := json.MarshalIndent(keys, "", "  ")
 	if err != nil {
-		return fmt.Errorf("error marshalling API keys: %w", err)
+		return nil, fmt.Errorf("error marshalling API keys: %w", err)
 	}
 
-	return os.WriteFile(keysFilePath, data, 0644)
+	return data, nil
 }
 
-// IsValidAPIKey checks if the given key is valid.
-func IsValidAPIKey(key string) bool {
-	keys, err := loadAPIKeys()
-	if err != nil {
-		fmt.Println("Error loading API keys:", err)
-
-		return false
-	}
-
-	for _, k := range keys {
+// IsValidAPIKey checks if the given key exists in the APIKeys collection.
+func (keys *APIKeys) IsValidAPIKey(key string) bool {
+	for _, k := range keys.Keys {
 		if k.Key == key {
 			return true
 		}
@@ -72,20 +52,15 @@ func IsValidAPIKey(key string) bool {
 }
 
 // HasPermission checks if the given API key has the specified permission.
-func HasPermission(key string, permission string) bool {
-	keys, err := loadAPIKeys()
-	if err != nil {
-		fmt.Println("Error loading API keys:", err)
-		return false
-	}
-
-	for _, k := range keys {
+func (keys *APIKeys) HasPermission(key string, permission string) bool {
+	for _, k := range keys.Keys {
 		if k.Key == key {
 			for _, p := range k.Permissions {
 				if p == permission {
 					return true
 				}
 			}
+			return false
 		}
 	}
 

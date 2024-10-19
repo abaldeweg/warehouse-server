@@ -46,8 +46,9 @@ viper.SetDefault("CORS_ALLOW_ORIGIN", "http://127.0.0.1")
 ```go
 import "github.com/abaldeweg/warehouse-server/framework/apikey"
 
-apikey.IsValidAPIKey("key")
-apikey.HasPermission("key", "permission")
+key = apikey.NewAPIKeys([]byte(`{"keys": [{"key": "test-key", "permissions": ["read"]}]}`))
+key.IsValidAPIKey("key") // returns true or false
+key.HasPermission("key", "permission") // returns true or false
 ```
 
 ### Cors
