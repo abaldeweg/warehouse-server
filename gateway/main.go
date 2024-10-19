@@ -7,7 +7,6 @@ import (
 	"github.com/abaldeweg/warehouse-server/framework/cors"
 	"github.com/abaldeweg/warehouse-server/gateway/router"
 	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -15,14 +14,8 @@ func main() {
 
 	config.LoadAppConfig()
 
-	viper.SetDefault("CORS_ALLOW_ORIGIN", "*")
-
-	corsConfig := cors.NewCors()
-	corsConfig.Config.AllowOrigins = []string{viper.GetString("CORS_ALLOW_ORIGIN")}
-	corsConfig.SetCorsHeaders()
-
 	r := router.Routes()
-	r.Use(corsConfig.SetCorsHeaders())
+	r.Use(cors.SetDefaultCorsHeaders())
 
 	log.Fatal(r.Run(":8080"))
 }
