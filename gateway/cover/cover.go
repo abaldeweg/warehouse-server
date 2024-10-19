@@ -2,17 +2,13 @@ package cover
 
 import (
 	"fmt"
-	"image"
-	"image/jpeg"
-	"image/png"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
-
-	"github.com/nfnt/resize"
 )
 
 const uploadsDir = "uploads"
@@ -41,7 +37,7 @@ func saveResizedImages(c *gin.Context, imageData *multipart.FileHeader, imageUUI
 	defer os.Remove(imagePath)
 
 	sizes := []struct {
-		width  uint
+		width  int
 		suffix string
 	}{
 		{400, "l"},
@@ -77,55 +73,17 @@ func saveUploadedImage(c *gin.Context, imageData *multipart.FileHeader, imageUUI
 	return imagePath, nil
 }
 
-func resizeAndSaveImage(imagePath string, resizedImagePath string, width uint) error {
-	file, err := os.Open(imagePath)
+func resizeAndSaveImage(imagePath string, resizedImagePath string, width int) error {
+	img, err := imaging.Open(imagePath)
 	if err != nil {
-		return fmt.Errorf("failed to open image")
-	}
-	defer file.Close()
-
-	img, err := decodeImage(file, imagePath)
-	if err != nil {
-		return err
+		return fmt.Errorf("failed to open image: %w", err)
 	}
 
-	resizedImage := resize.Resize(width, 0, img, resize.Lanczos3)
+	resizedImage := imaging.Resize(img, width, 0, imaging.Lanczos)
 
-	out, err := os.Create(resizedImagePath)
-	if err != nil {
-		return fmt.Errorf("failed to create resized image file")
-	}
-	defer out.Close()
-
-	if err := encodeImage(out, resizedImage, imagePath); err != nil {
-		return fmt.Errorf("failed to encode resized image")
+	if err := imaging.Save(resizedImage, resizedImagePath); err != nil {
+		return fmt.Errorf("failed to save resized image: %w", err)
 	}
 
 	return nil
-}
-
-func decodeImage(file *os.File, imagePath string) (image.Image, error) {
-	ext := filepath.Ext(imagePath)
-
-	switch ext {
-	case ".jpg", ".jpeg":
-		return jpeg.Decode(file)
-	case ".png":
-		return png.Decode(file)
-	default:
-		return nil, fmt.Errorf("unsupported image format: %s", ext)
-	}
-}
-
-func encodeImage(out *os.File, resizedImage image.Image, imagePath string) error {
-	ext := filepath.Ext(imagePath)
-
-	switch ext {
-	case ".jpg", ".jpeg":
-		return jpeg.Encode(out, resizedImage, nil)
-	case ".png":
-		return png.Encode(out, resizedImage)
-	default:
-		return fmt.Errorf("unsupported image format: %s", ext)
-	}
 }
