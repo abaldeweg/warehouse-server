@@ -1,8 +1,10 @@
-[
-    {
-        "key": "test",
-        "permissions": [
-            "articles"
-        ]
-    }
-]
+{
+    "keys": [
+        {
+            "key": "test",
+            "permissions": [
+                "articles"
+            ]
+        }
+    ]
+}
