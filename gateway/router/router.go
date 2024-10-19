@@ -12,13 +12,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
 
 	r.Any(`/apis/core/1/*path`, func(c *gin.Context) {
-        c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
 
 		path := c.Param("path")
 
