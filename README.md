@@ -4,11 +4,7 @@ warehouse-server is a database to manage your warehouse.
 
 ## Getting Started
 
-## Blog
-
-Mount auth volume to `/usr/src/app/data/auth/` and data volume to `/usr/src/app/data/content/`.
-
-The routes needs the API-Key to contain the `articles` permission.
+Build the images and start the container.
 
 ## Framework
 
@@ -60,15 +56,20 @@ r := gin.Default()
 r.Use(cors.SetDefaultCorsHeaders())
 ```
 
-## Settings
+#### Cors Settings
 
-|Var                    |Description                                |Used by
-|-----------------------|-------------------------------------------|--------------------------------
-|CORS_ALLOW_ORIGIN      |Allowed origins                            |gateway, blog
-|API_CORE               |API endpoint for the core                  |gateway
-|project_dir            |Path to docker compose                     |admincli
-|database               |Database name to dump                      |admincli
-|AUTH_API_ME            |Authentication API endpoint                |gateway
+|Var                    |Description
+|-----------------------|-----------
+|CORS_ALLOW_ORIGIN      |Allowed origins
+
+## admincli
+
+### admincli Settings
+
+|Var                    |Description
+|-----------------------|-----------
+|project_dir            |Path to docker compose
+|database               |Database name to dump
 
 admincli will read a config file from following paths:
 
@@ -81,3 +82,23 @@ Example
 project_dir: .
 database: db-1
 ```
+
+## gateway
+
+|Var                    |Description
+|-----------------------|-----------
+|CORS_ALLOW_ORIGIN      |Allowed origins
+|API_CORE               |API endpoint for the core
+|AUTH_API_ME            |Authentication API endpoint
+
+## Blog
+
+Mount auth volume to `/usr/src/app/data/auth/` and data volume to `/usr/src/app/data/content/`.
+
+The routes needs the API-Key to contain the `articles` permission.
+
+### Blog Settings
+
+|Var                    |Description
+|-----------------------|-----------
+|CORS_ALLOW_ORIGIN      |Allowed origins
