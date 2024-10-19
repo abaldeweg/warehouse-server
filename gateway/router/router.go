@@ -18,22 +18,24 @@ func Routes() *gin.Engine {
 
 	r := gin.Default()
 
-	r.Any(`/apis/core/1/*path`, func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-
-		path := c.Param("path")
-
-		uploadCover(c, path)
-
-		safePath := filepath.Join("/", path)
-
-		if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
-			return
-		}
-	})
+	r.Any(`/apis/core/1/*path`, handleCoreAPI)
 
 	return r
+}
+
+func handleCoreAPI(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
+
+	path := c.Param("path")
+
+	uploadCover(c, path)
+
+	safePath := filepath.Join("/", path)
+
+	if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return
+	}
 }
 
 func uploadCover(c *gin.Context, path string) {
