@@ -12,6 +12,10 @@ The routes needs the API-Key to contain the `articles` permission.
 
 ## Framework
 
+Mount cover directory under `/usr/src/app/uploads/cover`.
+
+### Router
+
 ```go
 package main
 
@@ -19,18 +23,13 @@ import (
  "log"
 
  "github.com/abaldeweg/warehouse-server/blog/router"
- "github.com/abaldeweg/warehouse-server/framework/config"
 )
 
 func main() {
-    config.LoadAppConfig()
-
     r := router.Routes()
     log.Fatal(r.Run(":8080"))
 }
 ```
-
-Mount cover directory under `/usr/src/app/uploads/cover`.
 
 ### Config
 

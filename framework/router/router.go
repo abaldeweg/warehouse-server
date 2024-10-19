@@ -7,6 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Engine creates a gin engine with CORS and sets it to release mode.
+func Engine() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
+
+	r := gin.Default()
+
+	return r
+}
+
 // ApiKeyMiddleware is a middleware to check for API key authentication.
 func ApiKeyMiddleware(c *gin.Context) {
 	key := c.GetHeader("X-API-Key")
@@ -34,13 +43,4 @@ func PermissionsMiddleware(permissions ...string) gin.HandlerFunc {
 
 		c.Next()
 	}
-}
-
-// Engine creates a gin engine with CORS and sets it to release mode.
-func Engine() *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
-
-	r := gin.Default()
-
-	return r
 }
