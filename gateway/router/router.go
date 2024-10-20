@@ -28,6 +28,7 @@ func Routes() *gin.Engine {
 	return r
 }
 
+// handleCoreAPI handles requests to the core API.
 func handleCoreAPI(c *gin.Context) {
 	path := c.Param("path")
 
