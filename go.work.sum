@@ -110,6 +110,7 @@ cloud.google.com/go/vpcaccess v1.8.0/go.mod h1:7fz79sxE9DbGm9dbbIdir3tsJhwCxiNAs
 cloud.google.com/go/webrisk v1.10.0/go.mod h1:ztRr0MCLtksoeSOQCEERZXdzwJGoH+RGYQ2qodGOy2U=
 cloud.google.com/go/websecurityscanner v1.7.0/go.mod h1:d5OGdHnbky9MAZ8SGzdWIm3/c9p0r7t+5BerY5JYdZc=
 cloud.google.com/go/workflows v1.13.0/go.mod h1:StCuY3jhBj1HYMjCPqZs7J0deQLHPhF6hDtzWJaVF+Y=
+github.com/abaldeweg/warehouse-server/framework v0.2.0/go.mod h1:PYIDQYZpS0bA4CC5grrnVstRdJzEjKMf5XTjfEL5zK0=
 github.com/armon/go-metrics v0.4.1/go.mod h1:E6amYzXo6aW1tqzoZGT755KkbgrJsSdpwZ+3JqfkOG4=
 github.com/bazelbuild/rules_go v0.49.0/go.mod h1:Dhcz716Kqg1RHNWos+N6MlXNkjNP2EwZQ0LukRKJfMs=
 github.com/coreos/go-semver v0.3.0/go.mod h1:nnelYz7RCh+5ahJtPPxZlU+153eP4D4r3EedlOD2RNk=
@@ -133,8 +134,6 @@ github.com/hashicorp/golang-lru v0.5.4/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uG
 github.com/hashicorp/serf v0.10.1/go.mod h1:yL2t6BqATOLGc5HF7qbFkTfXoPIY0WZdWHfEvMqbG+4=
 github.com/iancoleman/strcase v0.3.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/incwadi-warehouse/monorepo-go/framework v0.0.0-20241015163101-08b93c4b15a5/go.mod h1:xX9FQyY8/hBQ+7RMI9rlLu1eozuu7amRiZfA7f5H8y8=
-github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
-github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/klauspost/compress v1.17.2/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
 github.com/lyft/protoc-gen-star/v2 v2.0.4-0.20230330145011-496ad1ac90a4/go.mod h1:amey7yeodaJhXSbf/TlLvWiqQfLOSpEk//mLlc+axEk=
