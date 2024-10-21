@@ -3,12 +3,12 @@ package router
 import (
 	"net/http"
 	"path/filepath"
-	"regexp"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"github.com/abaldeweg/warehouse-server/gateway/proxy"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
 
@@ -45,7 +45,7 @@ func Routes() *gin.Engine {
 			apiCoreBook.POST(`/new`, handleCoreAPI("/apis/core/1/api/book/new"))
 			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/book"))
 			apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/book/cover"))
-			apiCoreBook.POST(`/cover/:id`, handleCover("/apis/core/1/api/book/cover"))
+			apiCoreBook.POST(`/cover/:id`, handleCover)
 			apiCoreBook.DELETE(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/book/cover"))
 			apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/apis/core/1/api/book/sell"))
 			apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/apis/core/1/api/book/remove"))
@@ -174,49 +174,45 @@ func handleCoreAPIWithId(path string) gin.HandlerFunc {
 }
 
 // handleCover handles requests to the core API.
-func handleCover(path string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id := c.Param("id")
-		safePath := filepath.Join("/", path, id)
+func handleCover(c *gin.Context) {
+	imageUUID := c.Param("id")
 
-		if match, _ := regexp.MatchString(`/api/book/cover/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})`, safePath); match {
-			if auth.Authenticate(c) {
-				re := regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
-				imageUUID := re.FindString(safePath)
-
-				cover.SaveCover(c, imageUUID)
-
-				c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
-				return
-			}
-
-			c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
-			return
-		}
-	}
-}
-
-func PermissionsMiddleware(permissions ...string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		user := c.MustGet("user").(auth.User)
-
-		for _, permission := range permissions {
-			if HasRole(user.Roles, permission) {
-				c.Next()
-				return
-			}
-		}
-
-		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
-	}
-}
-
-func HasRole(roles []string, permission string) bool {
-	for _, a := range roles {
-		if a == permission {
-			return true
-		}
+	validate := validator.New()
+	err := validate.Var(imageUUID, "uuid")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid UUID"})
+		return
 	}
 
-	return false
+	if auth.Authenticate(c) {
+		cover.SaveCover(c, imageUUID)
+
+		c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
+		return
+	}
+
+	c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
 }
+
+// RoleMiddleware ensures that the user has the specified role before allowing access.
+func RoleMiddleware(requiredRole string) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        user, ok := c.Get("user")
+        if !ok {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+            return
+        }
+
+        userRoles := user.(auth.User).Roles
+
+        for _, role := range userRoles {
+            if role == requiredRole {
+                c.Next()
+                return
+            }
+        }
+
+        c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
+    }
+}
+
