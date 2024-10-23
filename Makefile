@@ -2,6 +2,12 @@ release:
 	git tag -a v$(TAG) -m "v$(TAG)"
 	git push origin v$(TAG)
 
+    cd warehousecli/
+
+    goreleaser
+
+    cd ../
+
 	git tag -a blog/v$(TAG) -m "v$(TAG)"
 	git push origin blog/v$(TAG)
 
