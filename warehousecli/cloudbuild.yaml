@@ -29,4 +29,7 @@ steps:
       - '--location=europe-west3'
       - '--gcs-source=gs://${_BUCKET_NAME}/*'
 
+substitutions:
+  _BUCKET_NAME: 'debs'
+  _REPO_NAME: 'apt'
 
