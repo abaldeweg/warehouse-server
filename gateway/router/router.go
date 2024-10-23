@@ -106,8 +106,9 @@ func Routes() *gin.Engine {
 			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/inventory"))
 		}
 
-		apiCore.GET(`/api/me`, handleCoreAPI("/apis/core/1/api/me"))
-		apiCore.PUT(`/api/password`, handleCoreAPI("/apis/core/1/api/password"))
+		apiCore.GET(`/api/me`, handleCoreAPI("apis/core/1/api/me"))
+		apiCore.GET(`/api/login_check`, handleCoreAPI("apis/core/1/api/login_check"))
+		apiCore.PUT(`/api/password`, handleCoreAPI("apis/core/1/api/password"))
 
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
