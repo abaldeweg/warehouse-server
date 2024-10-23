@@ -3,7 +3,7 @@ release:
 	git push origin v$(TAG)
 
 
-	goreleaser release -f ./warehousecli/.goreleaser.yaml
+	goreleaser release --clean -f warehousecli/.goreleaser.yaml
 
 
 	# git tag -a blog/v$(TAG) -m "v$(TAG)"
