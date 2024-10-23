@@ -49,7 +49,7 @@ func response(req *http.Request, c *gin.Context) error {
 		if err == context.DeadlineExceeded {
 			c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Request timed out"})
 		} else {
-			c.JSON(http.StatusBadGateway, gin.H{"msg": "Bad Gateway"})
+			c.JSON(http.StatusBadGateway, gin.H{"msg": err.Error()})
 		}
 		return err
 	}
