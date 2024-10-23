@@ -20,3 +20,13 @@ steps:
       - cp
       - ./dist/warehousecli.deb
       - 'gs://${_BUCKET_NAME}'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - artifacts
+      - apt
+      - import
+      - ${_REPO_NAME}
+      - '--location=europe-west3'
+      - '--gcs-source=gs://${_BUCKET_NAME}/*'
+
+
