@@ -62,23 +62,23 @@ r.Use(cors.SetDefaultCorsHeaders())
 |-----------------------|-----------
 |CORS_ALLOW_ORIGIN      |Allowed origins
 
-## admincli
+## warehousecli
 
-### admincli Settings
+### warehousecli Settings
 
 |Var                    |Description
 |-----------------------|-----------
 |project_dir            |Path to docker compose
 |database               |Database name to dump
 
-admincli will read a config file from following paths:
+warehousecli will read a config file from following paths:
 
-- /etc/admincli/admincli.yaml
+- /etc/warehousecli/warehousecli.yaml
 
 Example
 
 ```yaml
-// admincli.yaml
+// warehousecli.yaml
 project_dir: .
 database: db-1
 ```

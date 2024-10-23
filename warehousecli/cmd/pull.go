@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/abaldeweg/warehouse-server/admincli/command"
+	"github.com/abaldeweg/warehouse-server/warehousecli/command"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
