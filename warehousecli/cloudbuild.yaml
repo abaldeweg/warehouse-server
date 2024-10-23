@@ -1,12 +1,23 @@
 steps:
-- name: 'golang:1.23'
-  args: ['go', 'build', '-o', 'warehousecli']
+  - name: 'golang:1.23'
+    args:
+      - go
+      - build
+      - '-o'
+      - warehousecli
+    dir: warehousecli
 
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'warehousecli', 'gs://bw-apt']
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      - cp
+      - warehousecli/warehousecli
+      - 'gs://bw-apt'
 
-- name: 'golang:1.23'
-  args: ['goreleaser']
-
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', 'dist/', 'gs://bw-apt']
+  - name: 'ubuntu:latest'
+    args:
+    - ./build/build.sh
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      - cp
+      - ./build/dist/debian
+      - 'gs://bw-apt'
