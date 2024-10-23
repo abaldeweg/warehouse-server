@@ -4,3 +4,9 @@ steps:
 
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', 'warehousecli', 'gs://bw-apt']
+
+- name: 'golang:1.23'
+  args: ['goreleaser']
+
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', '-r', 'dist/', 'gs://bw-apt']
