@@ -107,7 +107,7 @@ func Routes() *gin.Engine {
 		}
 
 		apiCore.GET(`/api/me`, handleCoreAPI("apis/core/1/api/me"))
-		apiCore.GET(`/api/login_check`, handleCoreAPI("apis/core/1/api/login_check"))
+		apiCore.POST(`/api/login_check`, handleCoreAPI("apis/core/1/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("apis/core/1/api/password"))
 
 		apiCorePublic := apiCore.Group(`/api/public`)
