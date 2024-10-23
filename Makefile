@@ -2,8 +2,6 @@ release:
 	git tag -a v$(TAG) -m "v$(TAG)"
 	git push origin v$(TAG)
 
-	goreleaser
-
 	git tag -a blog/v$(TAG) -m "v$(TAG)"
 	git push origin blog/v$(TAG)
 
