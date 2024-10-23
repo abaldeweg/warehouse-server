@@ -1,15 +1,15 @@
 steps:
-  - name: 'golang:1.23'
+  - name: "golang:1.23"
     args:
       - go
       - build
-      - '-o'
+      - "-o"
       - warehousecli
     dir: warehousecli
-  - name: 'ubuntu:latest'
+  - name: "ubuntu:latest"
     args:
       - bash
-      - '-c'
+      - "-c"
       - |
         set -e
         apt-get update -y
@@ -19,17 +19,16 @@ steps:
     args:
       - cp
       - ./dist/warehousecli.deb
-      - 'gs://${_BUCKET_NAME}'
-  - name: 'gcr.io/cloud-builders/gcloud'
+      - "gs://${_BUCKET_NAME}"
+  - name: gcr.io/cloud-builders/gcloud
     args:
       - artifacts
       - apt
       - import
-      - ${_REPO_NAME}
-      - '--location=europe-west3'
-      - '--gcs-source=gs://${_BUCKET_NAME}/*'
+      - "${_REPO_NAME}"
+      - "--location=europe-west3"
+      - "--gcs-source=gs://${_BUCKET_NAME}/*"
 
 substitutions:
-  _BUCKET_NAME: 'debs'
-  _REPO_NAME: 'apt'
-
+  _BUCKET_NAME: "debs"
+  _REPO_NAME: "apt"
