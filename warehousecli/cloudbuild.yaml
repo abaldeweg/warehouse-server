@@ -6,11 +6,6 @@ steps:
       - '-o'
       - warehousecli
     dir: warehousecli
-  - name: gcr.io/cloud-builders/gsutil
-    args:
-      - cp
-      - warehousecli/warehousecli
-      - 'gs://bw-apt'
   - name: 'ubuntu:latest'
     args:
       - bash
@@ -19,9 +14,9 @@ steps:
         set -e
         apt-get update -y
         apt-get install -y dpkg fakeroot
-        ./warehousecli/build/build.sh
+        ./warehousecli/build/build.sh "${TAG_NAME}"
   - name: gcr.io/cloud-builders/gsutil
     args:
       - cp
-      - ./dist/warehouse.deb
-      - 'gs://bw-apt'
+      - ./dist/warehousecli.deb
+      - 'gs://${_BUCKET_NAME}'

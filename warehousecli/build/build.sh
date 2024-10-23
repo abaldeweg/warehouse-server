@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TAG_NAME="${1:-0.0.0}"
+TAG_NAME="${TAG_NAME#v}"
 project=warehousecli
 
 if [ -d dist/ ]; then rm -r dist/; fi
