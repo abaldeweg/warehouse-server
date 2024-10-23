@@ -3,7 +3,7 @@
     "image": "mcr.microsoft.com/devcontainers/go:1-1.23-bullseye",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "features": {
-        "ghcr.io/guiyomh/features/goreleaser:0": {},
+        "ghcr.io/guiyomh/features/goreleaser:latest": {},
         "ghcr.io/abaldeweg/devcontainer_features/bash:latest": {}
     },
     "forwardPorts": [
@@ -16,8 +16,10 @@
                 "golang.go",
                 "DavidAnson.vscode-markdownlint",
                 "redhat.vscode-yaml",
-                "42Crunch.vscode-openapi"
+                "42Crunch.vscode-openapi",
+                "alexcvzz.vscode-sqlite"
             ]
         }
-    }
+    },
+    "postCreateCommand": "sudo apt update && sudo apt install -y sqlite3"
 }

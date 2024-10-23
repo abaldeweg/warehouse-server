@@ -91,6 +91,14 @@ database: db-1
 |API_CORE               |API endpoint for the core
 |AUTH_API_ME            |Authentication API endpoint
 
+## core
+
+|Var|Description|Default
+|---|-----------|-------
+|DATABASE|Define which database to use (sqlite or mysql)|`sqlite`
+|MYSQL_URL|Databse config string for MySQL|`adm:pass@tcp(localhost:3306)/warehouse?charset=utf8mb4&parseTime=True&loc=Local`
+|SQLITE_NAME|Database name for SQLite (without file extension)|`warehouse`
+
 ## Blog
 
 Mount auth volume to `/usr/src/app/data/auth/` and data volume to `/usr/src/app/data/content/`.

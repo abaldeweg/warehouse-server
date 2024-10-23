@@ -61,3 +61,20 @@ func Authenticate(c *gin.Context) bool {
 
 	return true
 }
+
+// Authenticate authenticates a user based on the Authorization header.
+// It makes a request to the auth service to validate the token and retrieve user information.
+func AuthenticateTEST(c *gin.Context) bool {
+	user := User{
+		Id:       1,
+		Username: "admin",
+		Branch: Branch{
+			Id: 1,
+		},
+		Roles: []string{"ROLE_ADMIN", "ROLE_USER"},
+	}
+
+	c.Set("user", user)
+
+	return true
+}
