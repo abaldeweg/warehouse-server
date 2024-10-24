@@ -5,12 +5,16 @@ import (
 	"path/filepath"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
+	"github.com/abaldeweg/warehouse-server/gateway/core/controllers"
+	"github.com/abaldeweg/warehouse-server/gateway/core/database"
 	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"github.com/abaldeweg/warehouse-server/gateway/proxy"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
+
+var authenticator = auth.AuthenticateTEST
 
 // Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
@@ -23,15 +27,41 @@ func Routes() *gin.Engine {
 		c.Next()
 	})
 
+	db := database.Connect()
+
 	apiCore := r.Group(`/apis/core/1`)
 	{
 		apiCoreAuthor := apiCore.Group(`/api/author`)
 		{
-			apiCoreAuthor.GET(`/find`, handleCoreAPI("/api/author/find"))
-			apiCoreAuthor.GET(`/:id`, handleCoreAPIWithId("/api/author"))
-			apiCoreAuthor.POST(`/new`, handleCoreAPI("/api/author/new"))
-			apiCoreAuthor.PUT(`/:id`, handleCoreAPIWithId("/api/author"))
-			apiCoreAuthor.DELETE(`/:id`, handleCoreAPIWithId("/api/author"))
+			apiCoreAuthor.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreAuthor.GET(`/find`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewAuthorController(db)
+				ac.GetAuthors(c)
+			})
+
+			apiCoreAuthor.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewAuthorController(db)
+				ac.GetAuthor(c)
+			})
+			apiCoreAuthor.POST(`/new`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewAuthorController(db)
+				ac.CreateAuthor(c)
+			})
+			apiCoreAuthor.PUT(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewAuthorController(db)
+				ac.UpdateAuthor(c)
+			})
+			apiCoreAuthor.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ac := controllers.NewAuthorController(db)
+				ac.DeleteAuthor(c)
+			})
 		}
 
 		apiCoreBook := apiCore.Group(`/api/book`)
@@ -185,7 +215,7 @@ func handleCover(c *gin.Context) {
 		return
 	}
 
-	if auth.Authenticate(c) {
+	if authenticator(c) {
 		cover.SaveCover(c, imageUUID)
 
 		c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
@@ -197,23 +227,22 @@ func handleCover(c *gin.Context) {
 
 // RoleMiddleware ensures that the user has the specified role before allowing access.
 func RoleMiddleware(requiredRole string) gin.HandlerFunc {
-    return func(c *gin.Context) {
-        user, ok := c.Get("user")
-        if !ok {
-            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
-            return
-        }
+	return func(c *gin.Context) {
+		user, ok := c.Get("user")
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+			return
+		}
 
-        userRoles := user.(auth.User).Roles
+		userRoles := user.(auth.User).Roles
 
-        for _, role := range userRoles {
-            if role == requiredRole {
-                c.Next()
-                return
-            }
-        }
+		for _, role := range userRoles {
+			if role == requiredRole {
+				c.Next()
+				return
+			}
+		}
 
-        c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
-    }
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
+	}
 }
-
