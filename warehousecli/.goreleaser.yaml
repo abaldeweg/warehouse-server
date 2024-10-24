@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
@@ -11,8 +13,8 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-    id: admincli
-    binary: admincli
+    id: warehousecli
+    binary: warehousecli
 
 archives:
   - format: tar.gz
@@ -26,7 +28,7 @@ archives:
 
 nfpms:
   -
-    package_name: admincli
+    package_name: warehousecli
     section: misc
     description: "Offers tools for maintenance"
     maintainer: "André Baldeweg"

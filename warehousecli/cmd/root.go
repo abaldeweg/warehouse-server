@@ -9,7 +9,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "admincli",
+	Use:   "warehousecli",
 	Short: "Maintenance tools",
 	Long:  `The app gives you simple access to maintenance tools.`,
 }
@@ -23,9 +23,9 @@ func Execute() {
 func init() {
 	viper.SetDefault("project_dir", ".")
 
-	viper.SetConfigName("admincli")
+	viper.SetConfigName("warehousecli")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("/etc/admincli/")
+	viper.AddConfigPath("/etc/warehousecli/")
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal(err)

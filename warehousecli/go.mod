@@ -1,4 +1,4 @@
-module github.com/abaldeweg/warehouse-server/admincli
+module github.com/abaldeweg/warehouse-server/warehousecli
 
 go 1.23
 

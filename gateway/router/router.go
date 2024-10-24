@@ -66,111 +66,112 @@ func Routes() *gin.Engine {
 
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
-			apiCoreBook.GET(`/find`, handleCoreAPI("/apis/core/1/api/book/find"))
-			apiCoreBook.DELETE(`/clean`, handleCoreAPI("/apis/core/1/api/book/clean"))
-			apiCoreBook.GET(`/stats`, handleCoreAPI("/apis/core/1/api/book/stats"))
-			apiCoreBook.PUT(`/inventory/found/:id`, handleCoreAPIWithId("/apis/core/1/api/book/inventory/found"))
-			apiCoreBook.PUT(`/inventory/notfound/:id`, handleCoreAPIWithId("/apis/core/1/api/book/inventory/notfound"))
-			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/book"))
-			apiCoreBook.POST(`/new`, handleCoreAPI("/apis/core/1/api/book/new"))
-			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/book"))
-			apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/book/cover"))
+			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
+			apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
+			apiCoreBook.GET(`/stats`, handleCoreAPI("/api/book/stats"))
+			apiCoreBook.PUT(`/inventory/found/:id`, handleCoreAPIWithId("/api/book/inventory/found"))
+			apiCoreBook.PUT(`/inventory/notfound/:id`, handleCoreAPIWithId("/api/book/inventory/notfound"))
+			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
+			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
+			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
+			apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
 			apiCoreBook.POST(`/cover/:id`, handleCover)
-			apiCoreBook.DELETE(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/book/cover"))
-			apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/apis/core/1/api/book/sell"))
-			apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/apis/core/1/api/book/remove"))
-			apiCoreBook.PUT(`/reserve/:id`, handleCoreAPIWithId("/apis/core/1/api/book/reserve"))
-			apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/book"))
+			apiCoreBook.DELETE(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
+			apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/api/book/sell"))
+			apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/api/book/remove"))
+			apiCoreBook.PUT(`/reserve/:id`, handleCoreAPIWithId("/api/book/reserve"))
+			apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
 		}
 
 		apiCoreBranch := apiCore.Group(`/api/branch`)
 		{
-			apiCoreBranch.GET(`/`, handleCoreAPI("/apis/core/1/api/branch/"))
-			apiCoreBranch.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/branch"))
-			apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/branch"))
+			apiCoreBranch.GET(`/`, handleCoreAPI("/api/branch/"))
+			apiCoreBranch.GET(`/:id`, handleCoreAPIWithId("/api/branch"))
+			apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/api/branch"))
 		}
 
 		apiCoreCondition := apiCore.Group(`/api/condition`)
 		{
-			apiCoreCondition.GET(`/`, handleCoreAPI("/apis/core/1/api/condition/"))
-			apiCoreCondition.POST(`/new`, handleCoreAPI("/apis/core/1/api/condition/new"))
-			apiCoreCondition.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/condition"))
-			apiCoreCondition.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/condition"))
-			apiCoreCondition.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/condition"))
+			apiCoreCondition.GET(`/`, handleCoreAPI("/api/condition/"))
+			apiCoreCondition.POST(`/new`, handleCoreAPI("/api/condition/new"))
+			apiCoreCondition.GET(`/:id`, handleCoreAPIWithId("/api/condition"))
+			apiCoreCondition.PUT(`/:id`, handleCoreAPIWithId("/api/condition"))
+			apiCoreCondition.DELETE(`/:id`, handleCoreAPIWithId("/api/condition"))
 		}
 
 		apiCoreDirectory := apiCore.Group(`/api/directory`)
 		{
-			apiCoreDirectory.GET(`/`, handleCoreAPI("/apis/core/1/api/directory/"))
-			apiCoreDirectory.POST(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/directory/cover"))
-			apiCoreDirectory.POST(`/new`, handleCoreAPI("/apis/core/1/api/directory/new"))
-			apiCoreDirectory.POST(`/upload`, handleCoreAPI("/apis/core/1/api/directory/upload"))
-			apiCoreDirectory.PUT(`/edit`, handleCoreAPI("/apis/core/1/api/directory/edit"))
-			apiCoreDirectory.DELETE(`/`, handleCoreAPI("/apis/core/1/api/directory/"))
+			apiCoreDirectory.GET(`/`, handleCoreAPI("/api/directory/"))
+			apiCoreDirectory.POST(`/cover/:id`, handleCoreAPIWithId("/api/directory/cover"))
+			apiCoreDirectory.POST(`/new`, handleCoreAPI("/api/directory/new"))
+			apiCoreDirectory.POST(`/upload`, handleCoreAPI("/api/directory/upload"))
+			apiCoreDirectory.PUT(`/edit`, handleCoreAPI("/api/directory/edit"))
+			apiCoreDirectory.DELETE(`/`, handleCoreAPI("/api/directory/"))
 		}
 
 		apiCoreFormat := apiCore.Group(`/api/format`)
 		{
-			apiCoreFormat.GET(`/`, handleCoreAPI("/apis/core/1/api/format/"))
-			apiCoreFormat.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/format"))
-			apiCoreFormat.POST(`/new`, handleCoreAPI("/apis/core/1/api/format/new"))
-			apiCoreFormat.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/format"))
-			apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/format"))
+			apiCoreFormat.GET(`/`, handleCoreAPI("/api/format/"))
+			apiCoreFormat.GET(`/:id`, handleCoreAPIWithId("/api/format"))
+			apiCoreFormat.POST(`/new`, handleCoreAPI("/api/format/new"))
+			apiCoreFormat.PUT(`/:id`, handleCoreAPIWithId("/api/format"))
+			apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/api/format"))
 		}
 
 		apiCoreGenre := apiCore.Group(`/api/genre`)
 		{
-			apiCoreGenre.GET(`/`, handleCoreAPI("/apis/core/1/api/genre/"))
-			apiCoreGenre.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/genre"))
-			apiCoreGenre.POST(`/new`, handleCoreAPI("/apis/core/1/api/genre/new"))
-			apiCoreGenre.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/genre"))
-			apiCoreGenre.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/genre"))
+			apiCoreGenre.GET(`/`, handleCoreAPI("/api/genre/"))
+			apiCoreGenre.GET(`/:id`, handleCoreAPIWithId("/api/genre"))
+			apiCoreGenre.POST(`/new`, handleCoreAPI("/api/genre/new"))
+			apiCoreGenre.PUT(`/:id`, handleCoreAPIWithId("/api/genre"))
+			apiCoreGenre.DELETE(`/:id`, handleCoreAPIWithId("/api/genre"))
 		}
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
-			apiCoreInventory.GET(`/`, handleCoreAPI("/apis/core/1/api/inventory/"))
-			apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/inventory"))
-			apiCoreInventory.POST(`/new`, handleCoreAPI("/apis/core/1/api/inventory/new"))
-			apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/inventory"))
-			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/inventory"))
+			apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
+			apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
+			apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
+			apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
+			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
 		}
 
-		apiCore.GET(`/api/me`, handleCoreAPI("/apis/core/1/api/me"))
-		apiCore.PUT(`/api/password`, handleCoreAPI("/apis/core/1/api/password"))
+		apiCore.GET(`/api/me`, handleCoreAPI("/api/me"))
+		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
+		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
 			{
-				apiCorePublicBook.GET(`/find`, handleCoreAPI("/apis/core/1/api/public/book/find"))
-				apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/public/book"))
-				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/apis/core/1/api/public/book/recommendation"))
-				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/apis/core/1/api/public/book/cover"))
+				apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
+				apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
+				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
+				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
 			}
-			apiCorePublic.GET(`/branch/`, handleCoreAPI("/apis/core/1/api/public/branch/"))
-			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/apis/core/1/api/public/branch/show"))
-			apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/apis/core/1/api/public/genre"))
-			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/apis/core/1/api/public/reservation/new"))
+			apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
+			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
+			apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
 		}
 
 		apiCoreReservation := apiCore.Group(`/api/reservation`)
 		{
-			apiCoreReservation.GET(`/list`, handleCoreAPI("/apis/core/1/api/reservation/list"))
-			apiCoreReservation.GET(`/status`, handleCoreAPI("/apis/core/1/api/reservation/status"))
-			apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/reservation"))
-			apiCoreReservation.POST(`/new`, handleCoreAPI("/apis/core/1/api/reservation/new"))
-			apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/reservation"))
-			apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/reservation"))
+			apiCoreReservation.GET(`/list`, handleCoreAPI("/api/reservation/list"))
+			apiCoreReservation.GET(`/status`, handleCoreAPI("/api/reservation/status"))
+			apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/api/reservation"))
+			apiCoreReservation.POST(`/new`, handleCoreAPI("/api/reservation/new"))
+			apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/api/reservation"))
+			apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/api/reservation"))
 		}
 
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{
-			apiCoreTag.GET(`/`, handleCoreAPI("/apis/core/1/api/tag/"))
-			apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/apis/core/1/api/tag"))
-			apiCoreTag.POST(`/new`, handleCoreAPI("/apis/core/1/api/tag/new"))
-			apiCoreTag.PUT(`/:id`, handleCoreAPIWithId("/apis/core/1/api/tag"))
-			apiCoreTag.DELETE(`/:id`, handleCoreAPIWithId("/apis/core/1/api/tag"))
+			apiCoreTag.GET(`/`, handleCoreAPI("/api/tag/"))
+			apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/api/tag"))
+			apiCoreTag.POST(`/new`, handleCoreAPI("/api/tag/new"))
+			apiCoreTag.PUT(`/:id`, handleCoreAPIWithId("/api/tag"))
+			apiCoreTag.DELETE(`/:id`, handleCoreAPIWithId("/api/tag"))
 		}
 	}
 

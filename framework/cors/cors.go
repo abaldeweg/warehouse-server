@@ -1,6 +1,8 @@
 package cors
 
 import (
+	"strings"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -15,7 +17,8 @@ func DefaultConfig() cors.Config {
 	if viper.IsSet("CORS_ALLOW_ORIGIN") {
 		allowOrigin = viper.GetString("CORS_ALLOW_ORIGIN")
 	}
-	config.AllowOrigins = []string{allowOrigin}
+	config.AllowOrigins = strings.Split(allowOrigin, ",")
+
 
 	return config
 }
