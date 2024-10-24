@@ -18,7 +18,7 @@ steps:
   - name: gcr.io/cloud-builders/gsutil
     args:
       - cp
-      - ./dist/warehousecli.deb
+      - ./warehousecli/dist/warehousecli.deb
       - "gs://${_BUCKET_NAME}"
   - name: gcr.io/cloud-builders/gcloud
     args:

@@ -4,12 +4,12 @@ TAG_NAME="${1:-0.0.0}"
 TAG_NAME="${TAG_NAME#v}"
 project=warehousecli
 
-if [ -d dist/ ]; then rm -r dist/; fi
-mkdir dist/
+if [ -d warehousecli/dist/ ]; then rm -r warehousecli/dist/; fi
+mkdir warehousecli/dist/
 
-mkdir -p ./debian/DEBIAN
+mkdir -p ./warehousecli/debian/DEBIAN
 
-cat <<EOF > ./debian/DEBIAN/control
+cat <<EOF > ./warehousecli/debian/DEBIAN/control
 Package: warehousecli
 Version: ${TAG_NAME}
 Section: utils
@@ -19,12 +19,12 @@ Maintainer: André Baldeweg <a@baldeweg.org>
 Description: Warehouse CLI
 EOF
 
-mkdir -p ./debian/usr/bin
-cp ./warehousecli/warehousecli ./debian/usr/bin
+mkdir -p ./warehousecli/debian/usr/bin
+cp ./warehousecli/warehousecli ./warehousecli/debian/usr/bin
 
-find debian/ -type f -exec chmod 0644 {} \;
-find debian/ -type d -exec chmod 0755 {} \;
+find warehousecli/debian/ -type f -exec chmod 0644 {} \;
+find warehousecli/debian/ -type d -exec chmod 0755 {} \;
 
-chmod +x debian/usr/bin/warehousecli
+chmod +x warehousecli/debian/usr/bin/warehousecli
 
-fakeroot dpkg -b ./debian dist/${project}.deb
+fakeroot dpkg -b ./warehousecli/debian warehousecli/dist/${project}.deb
