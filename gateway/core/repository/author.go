@@ -10,6 +10,11 @@ type AuthorRepository struct {
 	db *gorm.DB
 }
 
+// TableName overrides the table name used by Author to `authors`
+func (r *AuthorRepository) TableName() string {
+	return "author"
+}
+
 // NewAuthorRepository creates a new author repository.
 func NewAuthorRepository(db *gorm.DB) *AuthorRepository {
 	return &AuthorRepository{db: db}
