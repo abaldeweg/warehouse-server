@@ -15,8 +15,3 @@ type Author struct {
 func (a *Author) Validate(v *validator.Validate) error {
 	return v.Struct(a)
 }
-
-// TableName specifies the table name for the Author model in the database.
-func (Author) TableName() string {
-	return "authors"
-}
