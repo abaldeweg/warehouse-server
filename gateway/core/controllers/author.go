@@ -34,7 +34,7 @@ func (ac *AuthorController) GetAuthors(c *gin.Context) {
 
 	authors, err := ac.repo.FindAllByTerm(term)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to receive author"})
 		return
 	}
 
@@ -62,12 +62,12 @@ func (ac *AuthorController) GetAuthor(c *gin.Context) {
 func (ac *AuthorController) CreateAuthor(c *gin.Context) {
 	var author models.Author
 	if err := c.ShouldBindJSON(&author); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad Request"})
 		return
 	}
 
 	if err := ac.v.Struct(author); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not Valid"})
 		return
 	}
 
@@ -89,14 +89,14 @@ func (ac *AuthorController) UpdateAuthor(c *gin.Context) {
 
 	var author models.Author
 	if err := c.ShouldBindJSON(&author); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad Request"})
 		return
 	}
 
 	author.ID = id
 
 	if err := ac.v.Struct(author); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not Valid"})
 		return
 	}
 
