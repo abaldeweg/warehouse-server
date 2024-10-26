@@ -34,7 +34,7 @@ func (ac *AuthorController) GetAuthors(c *gin.Context) {
 
 	authors, err := ac.repo.FindAllByTerm(term)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve authors"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
