@@ -32,14 +32,14 @@ func TestSaveCover(t *testing.T) {
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
 		}},
 		{"test.png", []string{
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.png",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.png",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.png",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
 		}},
 		{"test.webp", []string{
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.webp",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.webp",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.webp",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
 		}},
 	}
 

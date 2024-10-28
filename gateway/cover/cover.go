@@ -1,7 +1,11 @@
 package cover
 
 import (
+	"bytes"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -9,6 +13,7 @@ import (
 
 	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/image/webp"
 )
 
 const uploadsDir = "uploads"
@@ -46,7 +51,7 @@ func saveResizedImages(c *gin.Context, imageData *multipart.FileHeader, imageUUI
 	}
 
 	for _, size := range sizes {
-		resizedImagePath := filepath.Join(uploadsDir, fmt.Sprintf("%s-%s%s", imageUUID, size.suffix, filepath.Ext(imageData.Filename)))
+		resizedImagePath := filepath.Join(uploadsDir, fmt.Sprintf("%s-%s%s", imageUUID, size.suffix, ".jpg"))
 
 		if err := resizeAndSaveImage(imagePath, resizedImagePath, size.width); err != nil {
 			return fmt.Errorf("failed to resize image: %w", err)
@@ -74,16 +79,67 @@ func saveUploadedImage(c *gin.Context, imageData *multipart.FileHeader, imageUUI
 }
 
 func resizeAndSaveImage(imagePath string, resizedImagePath string, width int) error {
-	img, err := imaging.Open(imagePath)
+	file, err := os.Open(imagePath)
 	if err != nil {
 		return fmt.Errorf("failed to open image: %w", err)
 	}
+	defer file.Close()
 
-	resizedImage := imaging.Resize(img, width, 0, imaging.Lanczos)
+	var img image.Image
 
-	if err := imaging.Save(resizedImage, resizedImagePath); err != nil {
-		return fmt.Errorf("failed to save resized image: %w", err)
+	switch filepath.Ext(imagePath) {
+	case ".jpg", ".jpeg":
+		img, err = jpeg.Decode(file)
+	case ".png":
+		img, err = png.Decode(file)
+	case ".webp":
+		img, err = convertWebp(file)
+	default:
+		return fmt.Errorf("unsupported image format")
+	}
+
+	if err != nil {
+		return fmt.Errorf("failed to decode image: %w", err)
+	}
+
+	originalBounds := img.Bounds()
+	aspectRatio := float64(originalBounds.Dx()) / float64(originalBounds.Dy())
+	height := int(float64(width) / aspectRatio)
+
+	resizedImage := imaging.Resize(img, width, height, imaging.Lanczos)
+
+	outFile, err := os.Create(resizedImagePath)
+	if err != nil {
+		return fmt.Errorf("failed to create resized image file: %w", err)
+	}
+	defer outFile.Close()
+
+	err = jpeg.Encode(outFile, resizedImage, nil)
+	if err != nil {
+		return fmt.Errorf("failed to encode resized image: %w", err)
 	}
 
 	return nil
+}
+
+func convertWebp(file *os.File) (image.Image, error) {
+  var err error
+  var img image.Image
+	img, err = webp.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := new(bytes.Buffer)
+	err = jpeg.Encode(buf, img, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	img, err = jpeg.Decode(buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return img, nil
 }
