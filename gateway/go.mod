@@ -3,11 +3,12 @@ module github.com/abaldeweg/warehouse-server/gateway
 go 1.23
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.4.5
+	github.com/abaldeweg/warehouse-server/framework v0.5.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
+	golang.org/x/image v0.21.0
 )
 
 require (
@@ -15,7 +16,6 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
-	golang.org/x/image v0.21.0 // indirect
 )
 
 require (
