@@ -12,6 +12,8 @@ type AuthorRepository struct {
 
 const tableName = "author"
 
+const limit = 100
+
 // NewAuthorRepository creates a new author repository.
 func NewAuthorRepository(db *gorm.DB) *AuthorRepository {
 	return &AuthorRepository{db: db}
@@ -20,7 +22,7 @@ func NewAuthorRepository(db *gorm.DB) *AuthorRepository {
 // FindAllByTerm returns all authors by term.
 func (r *AuthorRepository) FindAllByTerm(term string) ([]models.Author, error) {
 	var authors []models.Author
-	result := r.db.Table(tableName).Where("firstname LIKE ? OR surname LIKE ? OR CONCAT(firstname, ' ', surname) LIKE ? OR CONCAT(surname, ' ', firstname) LIKE ? OR CONCAT(firstname, ',', surname) LIKE ? OR CONCAT(firstname, ', ', surname) LIKE ?", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%").Find(&authors)
+	result := r.db.Table(tableName).Where("firstname LIKE ? OR surname LIKE ? OR CONCAT(firstname, ' ', surname) LIKE ? OR CONCAT(surname, ' ', firstname) LIKE ? OR CONCAT(firstname, ',', surname) LIKE ? OR CONCAT(firstname, ', ', surname) LIKE ?", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%", "%"+term+"%").Limit(limit).Find(&authors)
 	return authors, result.Error
 }
 
