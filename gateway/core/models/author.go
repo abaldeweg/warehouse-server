@@ -15,3 +15,13 @@ type Author struct {
 func (a *Author) Validate(v *validator.Validate) error {
 	return v.Struct(a)
 }
+
+// Tabler interface for table name.
+type Tabler interface {
+	TableName() string
+}
+
+// TableName returns the author table name.
+func (a *Author) TableName() string {
+	return "author"
+}
