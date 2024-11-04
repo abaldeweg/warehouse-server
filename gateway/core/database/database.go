@@ -46,6 +46,7 @@ func Connect() *gorm.DB {
 func runMigrations(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&models.Author{},
+		&models.Branch{},
 	)
 
 	if err != nil {

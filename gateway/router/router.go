@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/controllers"
@@ -14,7 +15,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var authenticator = auth.AuthenticateTEST
+var authenticator = auth.Authenticate
 
 // Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
@@ -85,10 +86,34 @@ func Routes() *gin.Engine {
 
 		apiCoreBranch := apiCore.Group(`/api/branch`)
 		{
-			apiCoreBranch.GET(`/`, handleCoreAPI("/api/branch/"))
-			apiCoreBranch.GET(`/:id`, handleCoreAPIWithId("/api/branch"))
-			apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/api/branch"))
+      apiCoreBranch.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreBranch.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBranchController(db)
+				bc.List(c)
+			})
+			apiCoreBranch.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBranchController(db)
+				bc.Show(c)
+			})
+			apiCoreBranch.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), IsOwnBranchMiddleware(), func(c *gin.Context) {
+				bc := controllers.NewBranchController(db)
+				bc.Update(c)
+			})
 		}
+
+		// apiCoreBranch := apiCore.Group(`/api/branch`)
+		// {
+		// 	apiCoreBranch.GET(`/`, handleCoreAPI("/api/branch/"))
+		// 	apiCoreBranch.GET(`/:id`, handleCoreAPIWithId("/api/branch"))
+		// 	apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/api/branch"))
+		// }
 
 		apiCoreCondition := apiCore.Group(`/api/condition`)
 		{
@@ -241,6 +266,31 @@ func RoleMiddleware(requiredRole string) gin.HandlerFunc {
 				c.Next()
 				return
 			}
+		}
+
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
+	}
+}
+
+// IsOwnBranchMiddleware ensures that the user is associated with the branch being accessed.
+// It checks if the user's branch ID matches the branch ID provided in the request context.
+func IsOwnBranchMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, ok := c.Get("user")
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+			return
+		}
+
+		branchId, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid branch ID"})
+			return
+		}
+
+		if user.(auth.User).Branch.Id == branchId {
+			c.Next()
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})

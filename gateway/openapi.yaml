@@ -263,6 +263,74 @@ paths:
                 properties:
                   error:
                     type: string
+  /apis/core/1/api/branch/:
+    get:
+      tags:
+        - branch
+      summary: List all branches
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Branch'
+        '404':
+          description: No branches found
+  /apis/core/1/api/branch/{id}:
+    get:
+      tags:
+        - branch
+      summary: Show a branch by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Branch ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+        '400':
+          description: Invalid ID
+        '404':
+          description: Branch not found
+    put:
+      tags:
+        - branch
+      summary: Update a branch
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Branch ID
+      requestBody:
+        description: Branch data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Branch'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+        '400':
+          description: Invalid ID or Bad request or Branch not valid
+        '500':
+          description: Branch not updated
 
 components:
   schemas:
@@ -273,3 +341,26 @@ components:
           type: string
         surname:
           type: string
+    Branch:
+      type: object
+      properties:
+        name:
+          type: string
+        steps:
+          type: number
+          format: float
+        currency:
+          type: string
+        ordering:
+          type: string
+        public:
+          type: boolean
+        pricelist:
+          type: string
+        cart:
+          type: boolean
+        content:
+          type: string
+      required:
+        - name
+        - currency
