@@ -115,14 +115,46 @@ func Routes() *gin.Engine {
 		// 	apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/api/branch"))
 		// }
 
-		apiCoreCondition := apiCore.Group(`/api/condition`)
+    apiCoreCondition := apiCore.Group(`/api/condition`)
 		{
-			apiCoreCondition.GET(`/`, handleCoreAPI("/api/condition/"))
-			apiCoreCondition.POST(`/new`, handleCoreAPI("/api/condition/new"))
-			apiCoreCondition.GET(`/:id`, handleCoreAPIWithId("/api/condition"))
-			apiCoreCondition.PUT(`/:id`, handleCoreAPIWithId("/api/condition"))
-			apiCoreCondition.DELETE(`/:id`, handleCoreAPIWithId("/api/condition"))
+      apiCoreCondition.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreCondition.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewConditionController(db)
+				bc.FindAll(c)
+			})
+			apiCoreCondition.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				bc := controllers.NewConditionController(db)
+				bc.Create(c)
+			})
+			apiCoreCondition.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewConditionController(db)
+				bc.FindOne(c)
+			})
+			apiCoreCondition.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				bc := controllers.NewConditionController(db)
+				bc.Update(c)
+			})
+			apiCoreCondition.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				bc := controllers.NewConditionController(db)
+				bc.Delete(c)
+			})
 		}
+
+		// apiCoreCondition := apiCore.Group(`/api/condition`)
+		// {
+		// 	apiCoreCondition.GET(`/`, handleCoreAPI("/api/condition/"))
+		// 	apiCoreCondition.POST(`/new`, handleCoreAPI("/api/condition/new"))
+		// 	apiCoreCondition.GET(`/:id`, handleCoreAPIWithId("/api/condition"))
+		// 	apiCoreCondition.PUT(`/:id`, handleCoreAPIWithId("/api/condition"))
+		// 	apiCoreCondition.DELETE(`/:id`, handleCoreAPIWithId("/api/condition"))
+		// }
 
 		apiCoreDirectory := apiCore.Group(`/api/directory`)
 		{
