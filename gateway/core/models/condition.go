@@ -15,7 +15,7 @@ type Condition struct {
 
 // TableName overrides the default table name for Condition model.
 func (Condition) TableName() string {
-	return "condition"
+	return "cond"
 }
 
 // Validate validates the Condition model based on defined rules.
