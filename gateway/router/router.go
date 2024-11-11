@@ -108,13 +108,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreBranch := apiCore.Group(`/api/branch`)
-		// {
-		// 	apiCoreBranch.GET(`/`, handleCoreAPI("/api/branch/"))
-		// 	apiCoreBranch.GET(`/:id`, handleCoreAPIWithId("/api/branch"))
-		// 	apiCoreBranch.PUT(`/:id`, handleCoreAPIWithId("/api/branch"))
-		// }
-
     apiCoreCondition := apiCore.Group(`/api/condition`)
 		{
       apiCoreCondition.Use(func(c *gin.Context) {
@@ -146,15 +139,6 @@ func Routes() *gin.Engine {
 				bc.Delete(c)
 			})
 		}
-
-		// apiCoreCondition := apiCore.Group(`/api/condition`)
-		// {
-		// 	apiCoreCondition.GET(`/`, handleCoreAPI("/api/condition/"))
-		// 	apiCoreCondition.POST(`/new`, handleCoreAPI("/api/condition/new"))
-		// 	apiCoreCondition.GET(`/:id`, handleCoreAPIWithId("/api/condition"))
-		// 	apiCoreCondition.PUT(`/:id`, handleCoreAPIWithId("/api/condition"))
-		// 	apiCoreCondition.DELETE(`/:id`, handleCoreAPIWithId("/api/condition"))
-		// }
 
 		apiCoreDirectory := apiCore.Group(`/api/directory`)
 		{
