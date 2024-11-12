@@ -208,12 +208,44 @@ func Routes() *gin.Engine {
 
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{
-			apiCoreTag.GET(`/`, handleCoreAPI("/api/tag/"))
-			apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/api/tag"))
-			apiCoreTag.POST(`/new`, handleCoreAPI("/api/tag/new"))
-			apiCoreTag.PUT(`/:id`, handleCoreAPIWithId("/api/tag"))
-			apiCoreTag.DELETE(`/:id`, handleCoreAPIWithId("/api/tag"))
+      apiCoreTag.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreTag.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				tc := controllers.NewTagController(db)
+				tc.FindAll(c)
+			})
+			apiCoreTag.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				tc := controllers.NewTagController(db)
+				tc.FindOne(c)
+			})
+			apiCoreTag.POST(`/new`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				tc := controllers.NewTagController(db)
+				tc.Create(c)
+			})
+			apiCoreTag.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				tc := controllers.NewTagController(db)
+				tc.Update(c)
+			})
+			apiCoreTag.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				tc := controllers.NewTagController(db)
+				tc.Delete(c)
+			})
 		}
+
+    // apiCoreTag := apiCore.Group(`/api/tag`)
+		// {
+		// 	apiCoreTag.GET(`/`, handleCoreAPI("/api/tag/"))
+		// 	apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/api/tag"))
+		// 	apiCoreTag.POST(`/new`, handleCoreAPI("/api/tag/new"))
+		// 	apiCoreTag.PUT(`/:id`, handleCoreAPIWithId("/api/tag"))
+		// 	apiCoreTag.DELETE(`/:id`, handleCoreAPIWithId("/api/tag"))
+		// }
 	}
 
 	return r
