@@ -25,9 +25,15 @@ func NewConditionController(db *gorm.DB) *ConditionController {
 	}
 }
 
-// FindAll retrieves all conditions.
+// FindAll retrieves all conditions for the authenticated user's branch.
 func (cc *ConditionController) FindAll(c *gin.Context) {
-	conditions, err := cc.ConditionRepo.FindAll()
+	user, ok := c.Get("user")
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+
+	conditions, err := cc.ConditionRepo.FindAllByBranchID(uint(user.(auth.User).Branch.Id))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve conditions"})
 		return

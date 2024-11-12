@@ -7,7 +7,7 @@ import (
 
 // ConditionRepository defines the interface for interacting with Condition data.
 type ConditionRepository interface {
-	FindAll() ([]models.Condition, error)
+	FindAllByBranchID(branchID uint) ([]models.Condition, error)
 	FindOneByID(id uint) (models.Condition, error)
 	Create(condition *models.Condition) error
 	Update(condition *models.Condition) error
@@ -24,13 +24,12 @@ type conditionRepository struct {
 	db *gorm.DB
 }
 
-// FindAll retrieves all conditions from the database.
-func (r *conditionRepository) FindAll() ([]models.Condition, error) {
+// FindAllByBranchID retrieves all conditions associated with a specific branch ID.
+func (r *conditionRepository) FindAllByBranchID(branchID uint) ([]models.Condition, error) {
 	var conditions []models.Condition
-	if err := r.db.Find(&conditions).Error; err != nil {
+	if err := r.db.Where("branch_id = ?", branchID).Find(&conditions).Error; err != nil {
 		return nil, err
 	}
-
 	return conditions, nil
 }
 
