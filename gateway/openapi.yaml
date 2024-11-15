@@ -543,7 +543,120 @@ paths:
           description: Tag not found
         500:
           description: Internal Server Error
+  /apis/core/1/api/genre:
+    get:
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+  /apis/core/1/api/genre/new:
+    post:
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genre'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
 
+        '400':
+          description: Invalid request payload / Validation failed
+        '401':
+          description: Unauthorized
+        '500':
+          description: Failed to create genre
+  /apis/core/1/api/genre/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Invalid ID
+        '401':
+          description: Unauthorized
+        '404':
+          description: Genre not found
+    put:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genre'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Invalid ID / Invalid request payload / Validation failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Failed to update genre
+    delete:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Invalid ID
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Genre not found
+        '500':
+          description: Failed to delete genre
 components:
   schemas:
     AuthorEntity:
@@ -582,6 +695,13 @@ components:
         name:
           type: string
     Tag:
+      type: object
+      properties:
+        name:
+          type: string
+        branch_id:
+          type: integer
+    Genre:
       type: object
       properties:
         name:

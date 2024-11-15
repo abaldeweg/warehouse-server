@@ -159,14 +159,46 @@ func Routes() *gin.Engine {
 			apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/api/format"))
 		}
 
-		apiCoreGenre := apiCore.Group(`/api/genre`)
+    apiCoreGenre := apiCore.Group(`/api/genre`)
 		{
-			apiCoreGenre.GET(`/`, handleCoreAPI("/api/genre/"))
-			apiCoreGenre.GET(`/:id`, handleCoreAPIWithId("/api/genre"))
-			apiCoreGenre.POST(`/new`, handleCoreAPI("/api/genre/new"))
-			apiCoreGenre.PUT(`/:id`, handleCoreAPIWithId("/api/genre"))
-			apiCoreGenre.DELETE(`/:id`, handleCoreAPIWithId("/api/genre"))
+      apiCoreGenre.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreGenre.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewGenreController(db)
+				ac.FindAll(c)
+			})
+			apiCoreGenre.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ac := controllers.NewGenreController(db)
+				ac.FindOne(c)
+			})
+			apiCoreGenre.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ac := controllers.NewGenreController(db)
+				ac.Create(c)
+			})
+			apiCoreGenre.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ac := controllers.NewGenreController(db)
+				ac.Update(c)
+			})
+			apiCoreGenre.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ac := controllers.NewGenreController(db)
+				ac.Delete(c)
+			})
 		}
+
+		// apiCoreGenre := apiCore.Group(`/api/genre`)
+		// {
+		// 	apiCoreGenre.GET(`/`, handleCoreAPI("/api/genre/"))
+		// 	apiCoreGenre.GET(`/:id`, handleCoreAPIWithId("/api/genre"))
+		// 	apiCoreGenre.POST(`/new`, handleCoreAPI("/api/genre/new"))
+		// 	apiCoreGenre.PUT(`/:id`, handleCoreAPIWithId("/api/genre"))
+		// 	apiCoreGenre.DELETE(`/:id`, handleCoreAPIWithId("/api/genre"))
+		// }
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
