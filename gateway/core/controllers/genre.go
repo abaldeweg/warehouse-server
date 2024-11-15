@@ -133,8 +133,6 @@ func (gc *GenreController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, existingGenre)
 }
 
-
-
 // Delete deletes a genre by ID.
 func (gc *GenreController) Delete(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
