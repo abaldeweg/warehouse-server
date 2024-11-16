@@ -10,26 +10,27 @@ type Book struct {
 	BranchID         uint       `json:"branch_id"`
 	Branch           *Branch    `json:"branch" gorm:"foreignKey:BranchID"`
 	Added            time.Time  `json:"added"`
-	ShortDescription string     `json:"summary"`
+	Title            string     `json:"title" gorm:"type:varchar(255);not null" validate:"required"`
+	ShortDescription string     `json:"short_description"`
 	Author           []*Author  `json:"authors" gorm:"many2many:book_author;"`
 	GenreID          uint       `json:"genre_id" gorm:"index"`
 	Genre            *Genre     `json:"genre" gorm:"foreignKey:GenreID"`
 	Price            float32    `json:"price" gorm:"default:0.00"`
-	Sold             bool       `gorm:"default:false"`
+	Sold             bool       `json:"sold" gorm:"default:false"`
 	SoldOn           time.Time  `json:"sold_on,omitempty"`
-	Removed          bool       `gorm:"default:false"`
+	Removed          bool       `json:"removed" gorm:"default:false"`
 	RemovedOn        time.Time  `json:"removed_on,omitempty"`
-	Reserved         bool       `gorm:"default:false"`
+	Reserved         bool       `json:"reserved" gorm:"default:false"`
 	ReservedAt       time.Time  `json:"reserved_at,omitempty"`
-	ReleaseYear      time.Time  `json:"published_date"`
+	ReleaseYear      int        `json:"published_date" validate:"release_year"`
 	Condition        *Condition `json:"condition" gorm:"foreignKey:ConditionID"`
 	ConditionID      uint       `json:"condition_id"`
 	Tags             []*Tag     `json:"tags" gorm:"many2many:book_tag;"`
 	// Reservation      []*Reservation `json:"reservations" gorm:"foreignKey:BookID"`
 	Recommendation bool `json:"recommendations" gorm:"foreignKey:BookID"`
-	Inventory      bool `gorm:"default:false"`
+	Inventory      bool `json:"inventory" gorm:"default:false"`
 	// Format           *Format        `json:"format" gorm:"foreignKey:FormatID"`
-	FormatID  uint   `json:"format_id"`
+	FormatID  uint   `json:"format_id" gorm:"not null"`
 	Subtitle  string `json:"subtitle" validate:"max=255"`
 	Duplicate bool   `gorm:"default:false"`
 }
