@@ -27,12 +27,12 @@ type Book struct {
 	ConditionID      uint       `json:"condition_id"`
 	Tags             []*Tag     `json:"tags" gorm:"many2many:book_tag;"`
 	// Reservation      []*Reservation `json:"reservations" gorm:"foreignKey:BookID"`
-	Recommendation bool `json:"recommendations" gorm:"foreignKey:BookID"`
-	Inventory      bool `json:"inventory" gorm:"default:false"`
-	// Format           *Format        `json:"format" gorm:"foreignKey:FormatID"`
-	FormatID  uint   `json:"format_id" gorm:"not null"`
-	Subtitle  string `json:"subtitle" validate:"max=255"`
-	Duplicate bool   `gorm:"default:false"`
+	Recommendation bool    `json:"recommendations" gorm:"foreignKey:BookID"`
+	Inventory      bool    `json:"inventory" gorm:"default:false"`
+	Format         *Format `json:"format" gorm:"foreignKey:FormatID"`
+	FormatID       uint    `json:"format_id" gorm:"not null"`
+	Subtitle       string  `json:"subtitle" validate:"max=255"`
+	Duplicate      bool    `gorm:"default:false"`
 }
 
 // TableName overrides the default table name for Book model.

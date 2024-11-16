@@ -86,7 +86,7 @@ func Routes() *gin.Engine {
 
 		apiCoreBranch := apiCore.Group(`/api/branch`)
 		{
-      apiCoreBranch.Use(func(c *gin.Context) {
+			apiCoreBranch.Use(func(c *gin.Context) {
 				if !authenticator(c) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 					return
@@ -108,9 +108,9 @@ func Routes() *gin.Engine {
 			})
 		}
 
-    apiCoreCondition := apiCore.Group(`/api/condition`)
+		apiCoreCondition := apiCore.Group(`/api/condition`)
 		{
-      apiCoreCondition.Use(func(c *gin.Context) {
+			apiCoreCondition.Use(func(c *gin.Context) {
 				if !authenticator(c) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 					return
@@ -152,16 +152,48 @@ func Routes() *gin.Engine {
 
 		apiCoreFormat := apiCore.Group(`/api/format`)
 		{
-			apiCoreFormat.GET(`/`, handleCoreAPI("/api/format/"))
-			apiCoreFormat.GET(`/:id`, handleCoreAPIWithId("/api/format"))
-			apiCoreFormat.POST(`/new`, handleCoreAPI("/api/format/new"))
-			apiCoreFormat.PUT(`/:id`, handleCoreAPIWithId("/api/format"))
-			apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/api/format"))
+			apiCoreFormat.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreFormat.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				fc := controllers.NewFormatController(db)
+				fc.FindAll(c)
+			})
+			apiCoreFormat.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				fc := controllers.NewFormatController(db)
+				fc.FindOne(c)
+			})
+			apiCoreFormat.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				fc := controllers.NewFormatController(db)
+				fc.Create(c)
+			})
+			apiCoreFormat.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				fc := controllers.NewFormatController(db)
+				fc.Update(c)
+			})
+			apiCoreFormat.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				fc := controllers.NewFormatController(db)
+				fc.Delete(c)
+			})
 		}
 
-    apiCoreGenre := apiCore.Group(`/api/genre`)
+		// apiCoreFormat := apiCore.Group(`/api/format`)
+		// {
+		// 	apiCoreFormat.GET(`/`, handleCoreAPI("/api/format/"))
+		// 	apiCoreFormat.GET(`/:id`, handleCoreAPIWithId("/api/format"))
+		// 	apiCoreFormat.POST(`/new`, handleCoreAPI("/api/format/new"))
+		// 	apiCoreFormat.PUT(`/:id`, handleCoreAPIWithId("/api/format"))
+		// 	apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/api/format"))
+		// }
+
+		apiCoreGenre := apiCore.Group(`/api/genre`)
 		{
-      apiCoreGenre.Use(func(c *gin.Context) {
+			apiCoreGenre.Use(func(c *gin.Context) {
 				if !authenticator(c) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 					return
@@ -240,7 +272,7 @@ func Routes() *gin.Engine {
 
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{
-      apiCoreTag.Use(func(c *gin.Context) {
+			apiCoreTag.Use(func(c *gin.Context) {
 				if !authenticator(c) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 					return
@@ -270,7 +302,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
-    // apiCoreTag := apiCore.Group(`/api/tag`)
+		// apiCoreTag := apiCore.Group(`/api/tag`)
 		// {
 		// 	apiCoreTag.GET(`/`, handleCoreAPI("/api/tag/"))
 		// 	apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/api/tag"))
