@@ -14,6 +14,8 @@ github.com/abaldeweg/warehouse-server/framework v0.7.1 h1:lgeGqGz5LjwAwt059wS88H
 github.com/abaldeweg/warehouse-server/framework v0.7.1/go.mod h1:jQ23mOhA90TlUolBDVVUIZsDXyLKoIo1OpcQ/mqcjd0=
 github.com/abaldeweg/warehouse-server/framework v0.8.0 h1:ssZO+/JczwHVFDfvexn0FLchgXB4IdUj/NBo4KqOnWw=
 github.com/abaldeweg/warehouse-server/framework v0.8.0/go.mod h1:jQ23mOhA90TlUolBDVVUIZsDXyLKoIo1OpcQ/mqcjd0=
+github.com/abaldeweg/warehouse-server/framework v0.9.0 h1:meFhTl9Cmub/X76NmOcX1wr2NwHxPf3TKc0I57n8rOs=
+github.com/abaldeweg/warehouse-server/framework v0.9.0/go.mod h1:OPzlatqRQ83QQQF4dQt+531rVAAy4ZpR4J3Z4ujJB6A=
 github.com/bytedance/sonic v1.12.3 h1:W2MGa7RCU1QTeYRTPE3+88mVC0yXmsRQRChiyVocVjU=
 github.com/bytedance/sonic v1.12.3/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
@@ -147,6 +149,8 @@ golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.26.0 h1:KHjCJyddX0LoSTb3J+vWpupP9p0oznkqVk/IfjymZbo=
 golang.org/x/sys v0.26.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+golang.org/x/sys v0.27.0 h1:wBqf8DvsY9Y/2P8gAfPDEYNuS30J4lPHJxXSb/nJZ+s=
+golang.org/x/sys v0.27.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.19.0 h1:kTxAhCbGbxhK0IwgSKiMO5awPoDQ0RpfiVYBfK860YM=
 golang.org/x/text v0.19.0/go.mod h1:BuEKDfySbSR4drPmRPG/7iBdf8hvFMuRexcpahXilzY=
