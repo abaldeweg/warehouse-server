@@ -924,6 +924,7 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+
 components:
   schemas:
     AuthorEntity:
