@@ -657,6 +657,7 @@ paths:
           description: Genre not found
         '500':
           description: Failed to delete genre
+
 components:
   schemas:
     AuthorEntity:
@@ -706,5 +707,3 @@ components:
       properties:
         name:
           type: string
-        branch_id:
-          type: integer

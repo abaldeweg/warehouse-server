@@ -26,7 +26,7 @@ func NewGenreRepository(db *gorm.DB) GenreRepository {
 // FindAllByBranchID retrieves all genres associated with a specific branch ID, ordered alphabetically by name.
 func (r *genreRepository) FindAllByBranchID(branchID uint) ([]models.Genre, error) {
 	var genres []models.Genre
-	if err := r.db.Where("branch_id = ?", branchID).Order("name asc").Find(&genres).Error; err != nil {
+	if err := r.db.Preload("Branch").Where("branch_id = ?", branchID).Order("name asc").Find(&genres).Error; err != nil {
 		return nil, err
 	}
 	return genres, nil
@@ -35,7 +35,7 @@ func (r *genreRepository) FindAllByBranchID(branchID uint) ([]models.Genre, erro
 // FindOne retrieves a specific genre by ID.
 func (r *genreRepository) FindOne(id uint) (models.Genre, error) {
 	var genre models.Genre
-	if err := r.db.First(&genre, id).Error; err != nil {
+	if err := r.db.Preload("Branch").First(&genre, id).Error; err != nil {
 		return models.Genre{}, err
 	}
 	return genre, nil
@@ -43,7 +43,7 @@ func (r *genreRepository) FindOne(id uint) (models.Genre, error) {
 
 // Create creates a new genre.
 func (r *genreRepository) Create(genre *models.Genre) error {
-	return r.db.Create(genre).Error
+    return r.db.Create(genre).Error
 }
 
 // Update updates an existing genre.
