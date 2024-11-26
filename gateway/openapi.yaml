@@ -845,6 +845,3 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-        branch_id:
-          type: integer
-          format: int64

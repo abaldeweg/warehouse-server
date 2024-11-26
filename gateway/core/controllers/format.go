@@ -89,7 +89,14 @@ func (fc *FormatController) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, format)
+	createdFormat, err := fc.formatRepo.FindOne(format.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve created format"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, createdFormat)
+
 }
 
 // Update updates an existing format for the authenticated user's branch.
@@ -136,7 +143,13 @@ func (fc *FormatController) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, format)
+	updatedFormat, err := fc.formatRepo.FindOne(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated format"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedFormat)
 }
 
 // Delete deletes a format by ID for the authenticated user's branch.
