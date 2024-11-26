@@ -836,8 +836,6 @@ components:
       properties:
         name:
           type: string
-        branch_id:
-          type: integer
     Format:
       type: object
       properties:

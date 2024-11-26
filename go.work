@@ -1,8 +1,9 @@
-go 1.23
+go 1.23.2
 
 use (
-	./warehousecli
 	./blog
 	./framework
 	./gateway
+	./static
+	./warehousecli
 )
