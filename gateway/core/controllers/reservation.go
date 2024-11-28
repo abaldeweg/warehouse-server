@@ -116,7 +116,13 @@ func (rc *ReservationController) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, reservation)
+	createdReservation, err := rc.reservationRepo.FindOne(uuid.MustParse(reservation.ID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Reservation created, but failed to retrieve"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, createdReservation)
 }
 
 // Update updates an existing reservation by its UUID.
@@ -164,7 +170,13 @@ func (rc *ReservationController) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, reservation)
+	updatedReservation, err := rc.reservationRepo.FindOne(uuid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Reservation updated, but failed to retrieve"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedReservation)
 }
 
 // Delete deletes a reservation by its UUID.

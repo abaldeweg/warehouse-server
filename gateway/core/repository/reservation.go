@@ -29,7 +29,7 @@ func NewReservationRepository(db *gorm.DB) ReservationRepository {
 // FindAll retrieves all reservations for the given branch ID, ordered by creation date in descending order.
 func (rr *reservationRepository) FindAll(branchID uint) ([]models.Reservation, error) {
 	var reservations []models.Reservation
-	err := rr.db.Preload("Books").Where("branch_id = ?", branchID).Order("created_at DESC").Find(&reservations).Error
+	err := rr.db.Preload("Branch").Preload("Books").Where("branch_id = ?", branchID).Order("created_at DESC").Find(&reservations).Error
 	return reservations, err
 }
 
@@ -43,7 +43,7 @@ func (rr *reservationRepository) ReservationStatus(branchID uint) (int64, error)
 // FindOne retrieves a reservation by its UUID.
 func (rr *reservationRepository) FindOne(id uuid.UUID) (*models.Reservation, error) {
 	var reservation models.Reservation
-	err := rr.db.First(&reservation, "id = ?", id).Error
+	err := rr.db.Preload("Branch").Preload("Books").First(&reservation, "id = ?", id).Error
 	if err != nil {
 		return nil, err
 	}

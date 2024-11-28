@@ -989,8 +989,6 @@ components:
     Reservation:
       type: object
       properties:
-        branch_id:
-          type: integer
         notes:
           type: string
         books:
