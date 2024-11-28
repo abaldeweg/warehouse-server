@@ -110,3 +110,7 @@ The routes needs the API-Key to contain the `articles` permission.
 |Var                    |Description
 |-----------------------|-----------
 |CORS_ALLOW_ORIGIN      |Allowed origins
+
+## Static
+
+Mount data volume to `/usr/src/app/data/`.

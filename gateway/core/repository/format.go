@@ -18,14 +18,14 @@ func NewFormatRepository(db *gorm.DB) *FormatRepository {
 // FindAllByBranchID returns all formats for a given branch ID, ordered alphabetically by name.
 func (r *FormatRepository) FindAllByBranchID(branchID uint) ([]models.Format, error) {
 	var formats []models.Format
-	result := r.db.Where("branch_id = ?", branchID).Order("name asc").Find(&formats)
+	result := r.db.Preload("Branch").Where("branch_id = ?", branchID).Order("name asc").Find(&formats)
 	return formats, result.Error
 }
 
 // FindOne returns one format by id and branchID.
 func (r *FormatRepository) FindOne(id uint) (models.Format, error) {
 	var format models.Format
-	result := r.db.Where("id = ?", id).First(&format)
+	result := r.db.Preload("Branch").Where("id = ?", id).First(&format)
 	return format, result.Error
 }
 

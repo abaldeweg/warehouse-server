@@ -84,7 +84,13 @@ func (gc *GenreController) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, genre)
+	createdGenre, err := gc.GenreRepo.FindOne(genre.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve created genre"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, createdGenre)
 }
 
 // Update updates an existing genre.
