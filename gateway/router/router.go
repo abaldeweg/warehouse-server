@@ -262,13 +262,49 @@ func Routes() *gin.Engine {
 
 		apiCoreReservation := apiCore.Group(`/api/reservation`)
 		{
-			apiCoreReservation.GET(`/list`, handleCoreAPI("/api/reservation/list"))
-			apiCoreReservation.GET(`/status`, handleCoreAPI("/api/reservation/status"))
-			apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/api/reservation"))
-			apiCoreReservation.POST(`/new`, handleCoreAPI("/api/reservation/new"))
-			apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/api/reservation"))
-			apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/api/reservation"))
+			apiCoreReservation.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreReservation.GET(`/list`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.FindAll(c)
+			})
+			apiCoreReservation.GET(`/status`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.ReservationStatus(c)
+			})
+			apiCoreReservation.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.FindOne(c)
+			})
+			apiCoreReservation.POST(`/new`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.Create(c)
+			})
+			apiCoreReservation.PUT(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.Update(c)
+			})
+			apiCoreReservation.DELETE(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				rc := controllers.NewReservationController(db)
+				rc.Delete(c)
+			})
 		}
+
+		// apiCoreReservation := apiCore.Group(`/api/reservation`)
+		// {
+		// 	apiCoreReservation.GET(`/list`, handleCoreAPI("/api/reservation/list"))
+		// 	apiCoreReservation.GET(`/status`, handleCoreAPI("/api/reservation/status"))
+		// 	apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/api/reservation"))
+		// 	apiCoreReservation.POST(`/new`, handleCoreAPI("/api/reservation/new"))
+		// 	apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/api/reservation"))
+		// 	apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/api/reservation"))
+		// }
 
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{

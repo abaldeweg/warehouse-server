@@ -51,6 +51,7 @@ func runMigrations(db *gorm.DB) {
 		&models.Tag{},
 		&models.Genre{},
 		&models.Format{},
+		&models.Reservation{},
 	)
 
 	if err != nil {
