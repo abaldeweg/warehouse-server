@@ -114,3 +114,7 @@ The routes needs the API-Key to contain the `articles` permission.
 ## Static
 
 Mount data volume to `/usr/src/app/data/`.
+
+## Release
+
+Run `make release TAG=1.0.0`.
