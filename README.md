@@ -62,27 +62,6 @@ r.Use(cors.SetDefaultCorsHeaders())
 |-----------------------|-----------
 |CORS_ALLOW_ORIGIN      |Allowed origins
 
-## warehousecli
-
-### warehousecli Settings
-
-|Var                    |Description
-|-----------------------|-----------
-|project_dir            |Path to docker compose
-|database               |Database name to dump
-
-warehousecli will read a config file from following paths:
-
-- /etc/warehousecli/warehousecli.yaml
-
-Example
-
-```yaml
-// warehousecli.yaml
-project_dir: .
-database: db-1
-```
-
 ## gateway
 
 |Var                    |Description
