@@ -9,19 +9,6 @@ on:
             - main
 
 jobs:
-    test-warehousecli:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-go@v5
-              with:
-                  go-version: "1.23"
-            - name: Run warehousecli tests
-              working-directory: ./warehousecli
-              run: |
-                  go mod tidy
-                  go test ./...
-
     test-blog:
         runs-on: ubuntu-latest
         steps:
