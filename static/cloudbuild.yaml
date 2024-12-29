@@ -4,7 +4,7 @@ steps:
       - build
       - "--no-cache"
       - "-t"
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$_TAG"
       - "-f"
       - ./static/Dockerfile
       - ./static
@@ -12,13 +12,14 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$_TAG"
     id: Push
 images:
-  - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+  - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$_TAG"
 options:
   substitutionOption: ALLOW_LOOSE
 substitutions:
   _GCR_HOSTNAME: eu.gcr.io
+  _TAG: latest
 tags:
   - $_SERVICE_NAME
