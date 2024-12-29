@@ -5,5 +5,4 @@ use (
 	./framework
 	./gateway
 	./static
-	./warehousecli
 )
