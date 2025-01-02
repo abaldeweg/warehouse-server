@@ -2,7 +2,8 @@ FROM golang:1.23
 
 WORKDIR /usr/src/app
 
-COPY go.mod go.sum ./
+COPY go.mod ./
+# COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
