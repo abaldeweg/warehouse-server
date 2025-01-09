@@ -31,6 +31,11 @@ func TestSaveCover(t *testing.T) {
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
 		}},
+    {"test.JPG", []string{
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
+			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
+		}},
 		{"test.png", []string{
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
@@ -78,6 +83,48 @@ func TestSaveCover(t *testing.T) {
 			assert.NoFileExists(t, filepath.Join(currentDir, uploadsDir, "36ee6d5c-820b-4f0c-9637-73b63dacc2a7.jpg"))
 			assert.NoFileExists(t, filepath.Join(currentDir, uploadsDir, "36ee6d5c-820b-4f0c-9637-73b63dacc2a7.png"))
 			assert.NoFileExists(t, filepath.Join(currentDir, uploadsDir, "36ee6d5c-820b-4f0c-9637-73b63dacc2a7.webp"))
+
+			os.RemoveAll(filepath.Join(currentDir, uploadsDir))
+		})
+	}
+}
+
+func TestFailingSaveCover(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	router := gin.Default()
+	router.POST("/upload", func(c *gin.Context) {
+		SaveCover(c, "36ee6d5c-820b-4f0c-9637-73b63dacc2a7")
+	})
+
+	testCases := []struct {
+		imageName      string
+	}{
+		{"test.gif"},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.imageName, func(t *testing.T) {
+			imageData, err := os.ReadFile(tc.imageName)
+			if err != nil {
+				t.Fatalf("Error reading image file: %v", err)
+			}
+
+			body := new(bytes.Buffer)
+			writer := multipart.NewWriter(body)
+			part, _ := writer.CreateFormFile("cover", tc.imageName)
+			_, _ = io.Copy(part, bytes.NewReader(imageData))
+			writer.Close()
+
+			req, _ := http.NewRequest("POST", "/upload", body)
+			req.Header.Set("Content-Type", writer.FormDataContentType())
+
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+			currentDir, _ := os.Getwd()
 
 			os.RemoveAll(filepath.Join(currentDir, uploadsDir))
 		})

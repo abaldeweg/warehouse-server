@@ -87,12 +87,23 @@ func resizeAndSaveImage(imagePath string, resizedImagePath string, width int) er
 
 	var img image.Image
 
-	switch filepath.Ext(imagePath) {
-	case ".jpg", ".jpeg":
+	fileHeader := make([]byte, 512)
+	if _, err := file.Read(fileHeader); err != nil {
+		return fmt.Errorf("failed to read file header: %w", err)
+	}
+
+	mimeType := http.DetectContentType(fileHeader)
+	_, err = file.Seek(0, 0)
+	if err != nil {
+		return fmt.Errorf("failed to reset file pointer: %w", err)
+	}
+
+	switch mimeType {
+	case "image/jpeg":
 		img, err = jpeg.Decode(file)
-	case ".png":
+	case "image/png":
 		img, err = png.Decode(file)
-	case ".webp":
+	case "image/webp":
 		img, err = convertWebp(file)
 	default:
 		return fmt.Errorf("unsupported image format")
