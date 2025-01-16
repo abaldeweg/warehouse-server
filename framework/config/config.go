@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+type Option func()
+
 func LoadAppConfig(options ...Option) {
 	for _, option := range options {
 		option()
@@ -22,8 +24,6 @@ func LoadAppConfig(options ...Option) {
 		}
 	}
 }
-
-type Option func()
 
 func WithName(name string) Option {
 	return func() {
