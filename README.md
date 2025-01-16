@@ -78,6 +78,19 @@ r.Use(cors.SetDefaultCorsHeaders())
 |MYSQL_URL|Databse config string for MySQL|`adm:pass@tcp(localhost:3306)/warehouse?charset=utf8mb4&parseTime=True&loc=Local`
 |SQLITE_NAME|Database name for SQLite (without file extension)|`warehouse`
 
+## Storage
+
+```go
+package main
+
+import "github.com/abaldeweg/warehouse-server/framework/storage"
+
+s := storage.NewStorage("filesystem", "data/auth", "api_keys.json")
+k, _ := s.Save()
+k, _ := s.Load()
+k, _ := s.Remove()
+```
+
 ## Blog
 
 Mount auth volume to `/usr/src/app/data/auth/` and data volume to `/usr/src/app/data/content/`.
