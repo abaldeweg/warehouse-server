@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TestLoadAppConfig tests the LoadAppConfig function.
 func TestLoadAppConfig(t *testing.T) {
 	t.Run("Config File Not Found", func(t *testing.T) {
 		LoadAppConfig(WithName("config"), WithFormat("json"), WithPaths("."))

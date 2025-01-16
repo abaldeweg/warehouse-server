@@ -7,8 +7,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Option is a function that sets a configuration option.
 type Option func()
 
+// LoadAppConfig loads the application configuration.
 func LoadAppConfig(options ...Option) {
 	for _, option := range options {
 		option()
@@ -25,18 +27,21 @@ func LoadAppConfig(options ...Option) {
 	}
 }
 
+// WithName sets the name of the configuration file.
 func WithName(name string) Option {
 	return func() {
 		viper.SetConfigName(name)
 	}
 }
 
+// WithFormat sets the format of the configuration file.
 func WithFormat(format string) Option {
 	return func() {
 		viper.SetConfigType(format)
 	}
 }
 
+// WithPaths sets the paths to search for the configuration file.
 func WithPaths(paths ...string) Option {
 	return func() {
 		for _, path := range paths {
