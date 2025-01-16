@@ -62,23 +62,7 @@ r.Use(cors.SetDefaultCorsHeaders())
 |-----------------------|-----------
 |CORS_ALLOW_ORIGIN      |Allowed origins
 
-## gateway
-
-|Var                    |Description
-|-----------------------|-----------
-|CORS_ALLOW_ORIGIN      |Allowed origins
-|API_CORE               |API endpoint for the core
-|AUTH_API_ME            |Authentication API endpoint
-
-## core
-
-|Var|Description|Default
-|---|-----------|-------
-|DATABASE|Define which database to use (sqlite or mysql)|`sqlite`
-|MYSQL_URL|Databse config string for MySQL|`adm:pass@tcp(localhost:3306)/warehouse?charset=utf8mb4&parseTime=True&loc=Local`
-|SQLITE_NAME|Database name for SQLite (without file extension)|`warehouse`
-
-## Storage
+### Storage
 
 ```go
 package main
@@ -90,6 +74,22 @@ k, _ := s.Save()
 k, _ := s.Load()
 k, _ := s.Remove()
 ```
+
+## gateway
+
+|Var                    |Description
+|-----------------------|-----------
+|CORS_ALLOW_ORIGIN      |Allowed origins
+|API_CORE               |API endpoint for the core
+|AUTH_API_ME            |Authentication API endpoint
+
+### core
+
+|Var|Description|Default
+|---|-----------|-------
+|DATABASE|Define which database to use (sqlite or mysql)|`sqlite`
+|MYSQL_URL|Databse config string for MySQL|`adm:pass@tcp(localhost:3306)/warehouse?charset=utf8mb4&parseTime=True&loc=Local`
+|SQLITE_NAME|Database name for SQLite (without file extension)|`warehouse`
 
 ## Blog
 
