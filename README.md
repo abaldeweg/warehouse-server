@@ -92,6 +92,8 @@ The routes needs the API-Key to contain the `articles` permission.
 
 ## Static
 
+The module sets up a simple HTTP file server that serves files from the `data` directory on port 8080.
+
 Mount data volume to `/usr/src/app/data/`.
 
 ## Release
