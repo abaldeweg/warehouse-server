@@ -109,6 +109,12 @@ The module sets up a simple HTTP file server that serves files from the `data` d
 
 Mount data volume to `/usr/src/app/data/`.
 
+## logs
+
+The module processes logs and returns them by request.
+
+Mount data volumes to `/usr/src/app/data/auth/`, `/usr/src/app/data/db/` and `/usr/src/app/data/source/`.
+
 ## Release
 
 Run `make release TAG=1.0.0`.

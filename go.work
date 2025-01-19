@@ -4,5 +4,6 @@ use (
 	./blog
 	./framework
 	./gateway
+	./logs
 	./static
 )

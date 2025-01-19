@@ -1,2 +1,4 @@
 dist
 gateway/warehouse.db
+logs/data/source/
+logs/data/db/
