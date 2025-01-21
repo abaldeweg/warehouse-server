@@ -40,7 +40,7 @@ func GetLogs(c *gin.Context) {
 }
 
 // CreateLog handles the POST request to parse and store logs.
-func CreateLog(c *gin.Context) {
+func ReadLogs(c *gin.Context) {
 	entries, err := parser.ReadLogEntries()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})

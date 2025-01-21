@@ -16,7 +16,7 @@ func Routes() *gin.Engine {
 
 	api := r.Group("/apis/logs/1", router.ApiKeyMiddleware(k))
 	{
-		api.POST("/logs", controller.CreateLog)
+		api.POST("/logs", controller.ReadLogs)
 		api.GET("/logs/:from/:to", controller.GetLogs)
 	}
 
