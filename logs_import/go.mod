@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/logs_import
 go 1.23.2
 
 require (
-	github.com/abaldeweg/warehouse-server/logs v0.0.0-20250123164018-3580927a4a21
+	github.com/abaldeweg/warehouse-server/logs v0.0.0-20250123191826-b761c4e66785
 	github.com/spf13/cobra v1.8.1
 )
 
