@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Logs API
   version: v1
-  description: Parse and retrieve logs from the server.
+  description: Retrieve logs from the server.
 
 externalDocs:
   description: Github
@@ -43,33 +43,6 @@ paths:
               schema:
                 type: string
                 example: "Sample log data"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal server error"
-  /apis/logs/1/logs:
-    post:
-      summary: Parse and store logs
-      description: Parse log files and store entries in the database.
-      security:
-        - APIKeyAuth: []
-      responses:
-        "200":
-          description: Successfully parsed and stored logs
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "success"
         "500":
           description: Internal server error
           content:

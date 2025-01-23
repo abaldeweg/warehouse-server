@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/abaldeweg/warehouse-server/logs/router"
+	"github.com/abaldeweg/warehouse-server/logs_web/router"
 )
 
 func main() {

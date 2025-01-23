@@ -5,5 +5,7 @@ use (
 	./framework
 	./gateway
 	./logs
+	./logs_import
+	./logs_web
 	./static
 )
