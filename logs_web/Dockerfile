@@ -10,4 +10,4 @@ RUN go build -v -o /usr/local/bin ./...
 
 EXPOSE 8080
 
-CMD ["logs"]
+CMD ["logs_web"]

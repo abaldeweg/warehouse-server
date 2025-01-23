@@ -40,16 +40,16 @@ func GetLogs(c *gin.Context) {
 }
 
 // CreateLog handles the POST request to parse and store logs.
-func ReadLogs(c *gin.Context) {
+func ImportLogs() {
 	entries, err := parser.ReadLogEntries()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		print("Internal Server Error")
 		return
 	}
 
 	h, err := db.NewDBHandler()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		print("Internal Server Error")
 		return
 	}
 	defer h.Close()
@@ -58,16 +58,16 @@ func ReadLogs(c *gin.Context) {
 		date, _ := strconv.Atoi(time.Time(entry.Time).Format("20060102"))
 		exists, err := h.Exists(date, entry)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			print("Internal Server Error")
 			return
 		}
 		if !exists {
 			if err := h.Write(date, entry); err != nil {
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+				print("Internal Server Error")
 				return
 			}
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "success"})
+	print("success")
 }
