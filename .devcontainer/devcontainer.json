@@ -3,7 +3,6 @@
     "image": "mcr.microsoft.com/devcontainers/go:1-1.23-bookworm",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "features": {
-        "ghcr.io/guiyomh/features/goreleaser:0.1.1": {},
         "ghcr.io/abaldeweg/devcontainer_features/bash:2.0.0": {}
     },
     "forwardPorts": [
