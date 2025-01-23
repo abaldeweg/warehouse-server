@@ -1,5 +1,7 @@
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250119131103-647062374439 h1:YGxAHFomBY60acQhx7pianbf+x/X2Th4VaVEPalkSBg=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250119131103-647062374439/go.mod h1:diyGnhJGBE/6aiKAeSTqXF8pqlYCgzBJ/Pun8OPqx9g=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250123164018-3580927a4a21 h1:mI9drSf3eEZ+9pD5OQAPkvFlrhvdOfS5+/D/Dlm4Qfg=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250123164018-3580927a4a21/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
 github.com/bytedance/sonic v1.12.6/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
