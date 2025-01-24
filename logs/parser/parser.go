@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,10 +13,19 @@ import (
 )
 
 // ReadLogEntries reads log entries from log files and returns them as a slice of LogEntry.
-func ReadLogEntries() ([]entity.LogEntry, error) {
-	logFiles, err := listAndFilterLogFiles("data/source/*")
-	if err != nil {
-		return nil, err
+func ReadLogEntries(optionalFileName ...string) ([]entity.LogEntry, error) {
+	var logFiles []string
+	var err error
+
+	if len(optionalFileName) > 0 {
+		logFiles = optionalFileName
+    fmt.Println("passed log file: ", logFiles)
+	} else {
+		logFiles, err = listAndFilterLogFiles("data/source/*")
+    fmt.Println("read files from fs")
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	var entries []entity.LogEntry
