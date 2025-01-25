@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -18,36 +19,37 @@ var ImportLogsCmd = &cobra.Command{
 	Short: "Read logs from the log file and import them into the database",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		var fileName string
-		if len(args) > 0 {
-			fileName = args[0]
-		}
-
-		entries, err := parser.ReadLogEntries(fileName)
+		entries, err := parser.ReadLogEntries()
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			os.Exit(1)
 		}
 
 		h, err := db.NewDBHandler()
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			os.Exit(1)
 		}
 		defer h.Close()
 
 		for _, entry := range entries {
 			date, _ := strconv.Atoi(time.Time(entry.Time).Format("20060102"))
+      fmt.Println(date)
 			exists, err := h.Exists(date, entry)
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err)
+				os.Exit(1)
 			}
 			if !exists {
 				if err := h.Write(date, entry); err != nil {
-					log.Fatal(err)
+					log.Println(err)
+					os.Exit(1)
 				}
 			}
 		}
 
 		fmt.Println("\033[32mLogs successfully imported!\033[0m")
+		os.Exit(0)
 	},
 }
 

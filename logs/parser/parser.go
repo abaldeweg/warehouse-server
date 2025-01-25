@@ -13,20 +13,15 @@ import (
 )
 
 // ReadLogEntries reads log entries from log files and returns them as a slice of LogEntry.
-func ReadLogEntries(optionalFileName ...string) ([]entity.LogEntry, error) {
+func ReadLogEntries() ([]entity.LogEntry, error) {
 	var logFiles []string
 	var err error
 
-	if len(optionalFileName) > 0 {
-		logFiles = optionalFileName
-    fmt.Println("passed log file: ", logFiles)
-	} else {
-		logFiles, err = listAndFilterLogFiles("data/source/*")
-    fmt.Println("read files from fs")
-		if err != nil {
-			return nil, err
-		}
+	logFiles, err = listAndFilterLogFiles("data/source/*")
+	if err != nil {
+		return nil, err
 	}
+	fmt.Println("found files: ", logFiles)
 
 	var entries []entity.LogEntry
 	for _, logFile := range logFiles {
