@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/abaldeweg/warehouse-server/logs/entity"
 )
@@ -43,9 +45,23 @@ func listAndFilterLogFiles(pattern string) ([]string, error) {
 	}
 
 	var logFiles []string
+	threshold := time.Now().AddDate(0, 0, -5).Format("20060102")
+	thresholdInt, err := strconv.Atoi(threshold)
+	if err != nil {
+		return nil, err
+	}
 	for _, file := range files {
 		if strings.Contains(file, "access.log-") && strings.HasSuffix(file, ".gz") {
-			logFiles = append(logFiles, file)
+			date := strings.TrimSuffix(strings.Split(file, "access.log-")[1], ".gz")
+			dateInt, err := strconv.Atoi(date)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Println("Extracted date:", dateInt)
+			fmt.Println("Threshold:", thresholdInt)
+			if dateInt >= thresholdInt {
+				logFiles = append(logFiles, file)
+			}
 		}
 	}
 	return logFiles, nil
