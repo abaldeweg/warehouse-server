@@ -2,6 +2,8 @@ github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125153818-052f6ab4fe00 h1
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125153818-052f6ab4fe00/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250126163955-e706dc4cbaf7 h1:eF26Yf8bMO2PiPA1yXMTB4SQlKFSrO8nCOug6jBJYFo=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250126163955-e706dc4cbaf7/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250126185444-284172ff2ef1 h1:YJbTLyK4DAj4XCFiI975vkxJq0oF9itg9qlHy+199ZM=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250126185444-284172ff2ef1/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
