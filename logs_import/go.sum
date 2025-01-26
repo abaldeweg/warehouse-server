@@ -2,6 +2,10 @@ github.com/abaldeweg/warehouse-server/logs v0.0.0-20250124073805-d0d2d0625966 h1
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250124073805-d0d2d0625966/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250124170444-f1742e7bba0f h1:YYzuIO6RNnPTYhNJ2qqsdj9HmBZ5RxKUWyhu8hNIQ7Q=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250124170444-f1742e7bba0f/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125150353-e49e90a3713c h1:44Zm/KNPusBkE4d2BAZk9+uQdY7VNW6r6cOo4I3t3Io=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125150353-e49e90a3713c/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125153818-052f6ab4fe00 h1:p/ZObI2Cns2kbuzWlU5k9EEw+5F9Z5sKF0E19oCt7Uo=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250125153818-052f6ab4fe00/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
