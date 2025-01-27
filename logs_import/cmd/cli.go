@@ -15,9 +15,8 @@ import (
 
 // ImportLogsCmd reads logs from the log file and imports them into the database.
 var ImportLogsCmd = &cobra.Command{
-	Use:   "import [file]",
+	Use:   "import",
 	Short: "Read logs from the log file and import them into the database",
-	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		entries, err := parser.ReadLogEntries()
 		if err != nil {
@@ -34,7 +33,7 @@ var ImportLogsCmd = &cobra.Command{
 
 		for _, entry := range entries {
 			date, _ := strconv.Atoi(time.Time(entry.Time).Format("20060102"))
-      fmt.Println(date)
+			fmt.Println(date)
 			exists, err := h.Exists(date, entry)
 			if err != nil {
 				log.Println(err)
