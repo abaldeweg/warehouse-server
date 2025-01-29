@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/abaldeweg/warehouse-server/logs/entity"
+	"github.com/abaldeweg/warehouse-server/logs_import/entity"
 	_ "github.com/mattn/go-sqlite3"
 )
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/abaldeweg/warehouse-server/logs/entity"
+	"github.com/abaldeweg/warehouse-server/logs_import/entity"
 )
 
 // ReadLogEntries reads log entries from log files and returns them as a slice of LogEntry.
