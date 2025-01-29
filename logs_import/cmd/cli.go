@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/abaldeweg/warehouse-server/logs/db"
-	"github.com/abaldeweg/warehouse-server/logs/parser"
+	"github.com/abaldeweg/warehouse-server/logs_import/db"
+	"github.com/abaldeweg/warehouse-server/logs_import/parser"
 )
 
 // ImportLogsCmd reads logs from the log file and imports them into the database.
