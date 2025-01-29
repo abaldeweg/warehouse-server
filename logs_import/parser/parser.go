@@ -19,7 +19,6 @@ func ReadLogEntries() ([]entity.LogEntry, error) {
 	var logFiles []string
 	var err error
 
-	fmt.Println("Reading log entries")
 	logFiles, err = listAndFilterLogFiles("data/source/access.log-*.gz")
 	if err != nil {
 		return nil, err
@@ -57,8 +56,6 @@ func listAndFilterLogFiles(pattern string) ([]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("Extracted date:", dateInt)
-		fmt.Println("Threshold:", thresholdInt)
 		if dateInt >= thresholdInt {
 			logFiles = append(logFiles, file)
 		}

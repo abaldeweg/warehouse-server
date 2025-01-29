@@ -33,7 +33,6 @@ var ImportLogsCmd = &cobra.Command{
 
 		for _, entry := range entries {
 			date, _ := strconv.Atoi(time.Time(entry.Time).Format("20060102"))
-			fmt.Println(date)
 			exists, err := h.Exists(date, entry)
 			if err != nil {
 				log.Println(err)
