@@ -48,6 +48,8 @@ github.com/abaldeweg/warehouse-server/logs v0.0.0-20250127105543-a38f563777ef h1
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250127105543-a38f563777ef/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250127130010-707a5c370226 h1:JQRGBJY5fhk7A99H48HR7O4AybPbKWBMXUpMA1PHSyE=
 github.com/abaldeweg/warehouse-server/logs v0.0.0-20250127130010-707a5c370226/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250129143459-90fd9b0bfeb0 h1:eml/OgSsO8Rxt/Z3DxIMIyRPno8agJ72plN2Bm+a38w=
+github.com/abaldeweg/warehouse-server/logs v0.0.0-20250129143459-90fd9b0bfeb0/go.mod h1:2uw8MX5qdiQauGUtx4TmR3ZK06fykF7rRVKLqi2LxSY=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
 github.com/bytedance/sonic v1.12.6/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
