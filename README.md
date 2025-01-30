@@ -109,11 +109,21 @@ The module sets up a simple HTTP file server that serves files from the `data` d
 
 Mount data volume to `/usr/src/app/data/`.
 
-## logs
+## logs_import
 
-The module processes logs and returns them by request.
+The module processes logs.
 
-Mount data volumes to `/usr/src/app/data/auth/` and `/usr/src/app/data/source/`.
+Mount data volume to `/usr/src/app/data/source/`.
+
+|Var                    |Description
+|-----------------------|-----------
+|MONGODB_URI            |MongoDB connection string
+
+## logs_web
+
+The module returns log entries by request.
+
+Mount data volumes to `/usr/src/app/data/auth/`.
 
 |Var                    |Description
 |-----------------------|-----------
