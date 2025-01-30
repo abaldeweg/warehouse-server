@@ -12,7 +12,7 @@ import (
 
 // DBHandler handles database operations for logs.
 type DBHandler struct {
-	client *mongo.Client
+	client     *mongo.Client
 	collection *mongo.Collection
 }
 
@@ -44,7 +44,12 @@ func (handler *DBHandler) Write(date int, data entity.LogEntry) error {
 	if err != nil {
 		return err
 	}
-	_, err = handler.collection.InsertOne(context.TODO(), bson.M{"date": date, "data": jsonData})
+	// Convert JSON data to BSON
+	var bsonData bson.M
+	if err := bson.UnmarshalExtJSON(jsonData, true, &bsonData); err != nil {
+		return err
+	}
+	_, err = handler.collection.InsertOne(context.TODO(), bsonData)
 	return err
 }
 
@@ -54,7 +59,11 @@ func (handler *DBHandler) Exists(date int, data entity.LogEntry) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	filter := bson.M{"date": date, "data": jsonData}
+	var bsonData bson.M
+	if err := bson.UnmarshalExtJSON(jsonData, true, &bsonData); err != nil {
+		return false, err
+	}
+	filter := bsonData
 	count, err := handler.collection.CountDocuments(context.TODO(), filter)
 	if err != nil {
 		return false, err
