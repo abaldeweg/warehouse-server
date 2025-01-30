@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/abaldeweg/warehouse-server/logs_web/entity"
@@ -39,9 +40,24 @@ func (handler *DBHandler) Close() error {
 	return handler.client.Disconnect(context.TODO())
 }
 
-// Get fetches all log entries from the database.
+// Get fetches log entries from the database within a specified time range.
 func (handler *DBHandler) Get(from int, to int) ([]entity.LogEntry, error) {
-	filter := bson.M{"date": bson.M{"$gte": time.Unix(int64(from), 0), "$lte": time.Unix(int64(to), 0)}}
+	fromTime, err := time.Parse("20060102", fmt.Sprintf("%d", from))
+	if err != nil {
+		return nil, err
+	}
+	toTime, err := time.Parse("20060102", fmt.Sprintf("%d", to))
+	if err != nil {
+		return nil, err
+	}
+	toTime = toTime.Add(23*time.Hour + 59*time.Minute + 59*time.Second)
+
+	filter := bson.M{
+		"time": bson.M{
+			"$gte": fromTime.Format(time.RFC3339),
+			"$lte": toTime.Format(time.RFC3339),
+		},
+	}
 	cursor, err := handler.collection.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
