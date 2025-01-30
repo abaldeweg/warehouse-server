@@ -1,36 +1,41 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"encoding/json"
-	"os"
 
 	"github.com/abaldeweg/warehouse-server/logs_import/entity"
-	_ "github.com/mattn/go-sqlite3"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // DBHandler handles database operations for logs.
 type DBHandler struct {
-	db *sql.DB
+	client *mongo.Client
+	collection *mongo.Collection
 }
 
 // NewDBHandler creates a new DBHandler.
 func NewDBHandler() (*DBHandler, error) {
-	setup()
-
-	db, err := sql.Open("sqlite3", "data/db/events.db")
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		return nil, err
 	}
 
-	migrate(db)
+	if err := client.Ping(context.TODO(), nil); err != nil {
+		return nil, err
+	}
 
-	return &DBHandler{db: db}, nil
+	collection := client.Database("logs").Collection("events")
+
+	return &DBHandler{client: client, collection: collection}, nil
 }
 
 // Close closes the database connection.
 func (handler *DBHandler) Close() error {
-	return handler.db.Close()
+	return handler.client.Disconnect(context.TODO())
 }
 
 // Write inserts a log entry into the database.
@@ -39,8 +44,7 @@ func (handler *DBHandler) Write(date int, data entity.LogEntry) error {
 	if err != nil {
 		return err
 	}
-	query := `INSERT INTO logs (date, data) VALUES (?, ?)`
-	_, err = handler.db.Exec(query, date, jsonData)
+	_, err = handler.collection.InsertOne(context.TODO(), bson.M{"date": date, "data": jsonData})
 	return err
 }
 
@@ -50,42 +54,10 @@ func (handler *DBHandler) Exists(date int, data entity.LogEntry) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	query := `SELECT COUNT(*) FROM logs WHERE date = ? AND data = ?`
-	var count int
-	err = handler.db.QueryRow(query, date, jsonData).Scan(&count)
+	filter := bson.M{"date": date, "data": jsonData}
+	count, err := handler.collection.CountDocuments(context.TODO(), filter)
 	if err != nil {
 		return false, err
 	}
 	return count > 0, nil
-}
-
-// setup creates the necessary directories and files for the database.
-func setup() error {
-	if err := os.MkdirAll("data/db", os.ModePerm); err != nil {
-		return err
-	}
-	_, err := os.Stat("data/db/events.db")
-	if os.IsNotExist(err) {
-		file, err := os.Create("data/db/events.db")
-		if err != nil {
-			return err
-		}
-		file.Close()
-	}
-	return nil
-}
-
-// migrate creates the necessary tables for the database.
-func migrate(db *sql.DB) error {
-	createTableQuery := `
-	CREATE TABLE IF NOT EXISTS logs (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		date INTEGER,
-		data TEXT
-	)`
-	_, err := db.Exec(createTableQuery)
-	if err != nil {
-		return err
-	}
-	return nil
 }
