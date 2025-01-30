@@ -1,24 +1,24 @@
 {
-    "name": "Go",
-    "image": "mcr.microsoft.com/devcontainers/go:1-1.23-bookworm",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "features": {
-        "ghcr.io/abaldeweg/devcontainer_features/bash:2.0.0": {}
-    },
-    "forwardPorts": [
-        5984
-    ],
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "EditorConfig.EditorConfig",
-                "golang.go",
-                "DavidAnson.vscode-markdownlint",
-                "redhat.vscode-yaml",
-                "42Crunch.vscode-openapi",
-                "alexcvzz.vscode-sqlite"
-            ]
-        }
-    },
-    "postCreateCommand": "sudo apt update && sudo apt install -y sqlite3"
+  "name": "Go",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/abaldeweg/devcontainer_features/bash:2.0.0": {}
+  },
+  "forwardPorts": [
+    5984
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "golang.go",
+        "DavidAnson.vscode-markdownlint",
+        "redhat.vscode-yaml",
+        "42Crunch.vscode-openapi",
+        "mongodb.mongodb-vscode"
+      ]
+    }
+  }
 }
