@@ -113,7 +113,11 @@ Mount data volume to `/usr/src/app/data/`.
 
 The module processes logs and returns them by request.
 
-Mount data volumes to `/usr/src/app/data/auth/`, `/usr/src/app/data/db/` and `/usr/src/app/data/source/`.
+Mount data volumes to `/usr/src/app/data/auth/` and `/usr/src/app/data/source/`.
+
+|Var                    |Description
+|-----------------------|-----------
+|MONGODB_URI            |MongoDB connection string
 
 ## Release
 

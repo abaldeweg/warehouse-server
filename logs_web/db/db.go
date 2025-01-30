@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/abaldeweg/warehouse-server/logs_web/entity"
+	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,13 +14,13 @@ import (
 
 // DBHandler handles database operations for logs.
 type DBHandler struct {
-	client *mongo.Client
+	client     *mongo.Client
 	collection *mongo.Collection
 }
 
 // NewDBHandler creates a new DBHandler.
 func NewDBHandler() (*DBHandler, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(viper.Get("MONGODB_URI").(string))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		return nil, err

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/abaldeweg/warehouse-server/logs_import/entity"
+	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -18,7 +19,7 @@ type DBHandler struct {
 
 // NewDBHandler creates a new DBHandler.
 func NewDBHandler() (*DBHandler, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(viper.Get("MONGODB_URI").(string))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		return nil, err
