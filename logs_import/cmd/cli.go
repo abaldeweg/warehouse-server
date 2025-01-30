@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
-	"time"
 
 	"github.com/spf13/cobra"
 
@@ -24,25 +22,17 @@ var ImportLogsCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		h, err := db.NewDBHandler()
+		db, err := db.NewDBHandler()
 		if err != nil {
 			log.Println(err)
 			os.Exit(1)
 		}
-		defer h.Close()
+		defer db.Close()
 
 		for _, entry := range entries {
-			date, _ := strconv.Atoi(time.Time(entry.Time).Format("20060102"))
-			exists, err := h.Exists(date, entry)
-			if err != nil {
+			if err := db.Add(entry); err != nil {
 				log.Println(err)
 				os.Exit(1)
-			}
-			if !exists {
-				if err := h.Write(date, entry); err != nil {
-					log.Println(err)
-					os.Exit(1)
-				}
 			}
 		}
 

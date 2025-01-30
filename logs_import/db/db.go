@@ -39,35 +39,23 @@ func (handler *DBHandler) Close() error {
 	return handler.client.Disconnect(context.TODO())
 }
 
-// Write inserts a log entry into the database.
-func (handler *DBHandler) Write(date int, data entity.LogEntry) error {
+// Add adds a log entry to the database.
+func (handler *DBHandler) Add(data entity.LogEntry) error {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
-	// Convert JSON data to BSON
 	var bsonData bson.M
 	if err := bson.UnmarshalExtJSON(jsonData, true, &bsonData); err != nil {
 		return err
+	}
+	count, err := handler.collection.CountDocuments(context.TODO(), bsonData)
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil
 	}
 	_, err = handler.collection.InsertOne(context.TODO(), bsonData)
 	return err
-}
-
-// Exists checks if a log entry already exists in the database.
-func (handler *DBHandler) Exists(date int, data entity.LogEntry) (bool, error) {
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		return false, err
-	}
-	var bsonData bson.M
-	if err := bson.UnmarshalExtJSON(jsonData, true, &bsonData); err != nil {
-		return false, err
-	}
-	filter := bsonData
-	count, err := handler.collection.CountDocuments(context.TODO(), filter)
-	if err != nil {
-		return false, err
-	}
-	return count > 0, nil
 }
