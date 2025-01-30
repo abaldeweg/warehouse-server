@@ -4,7 +4,17 @@ go 1.23.2
 
 require github.com/abaldeweg/warehouse-server/framework v0.12.1
 
-require github.com/mattn/go-sqlite3 v1.14.24 // indirect
+require go.mongodb.org/mongo-driver v1.17.2
+
+require (
+	github.com/golang/snappy v0.0.4 // indirect
+	github.com/klauspost/compress v1.16.7 // indirect
+	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
+	github.com/xdg-go/scram v1.1.2 // indirect
+	github.com/xdg-go/stringprep v1.0.4 // indirect
+	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
+)
 
 require (
 	cel.dev/expr v0.16.2 // indirect
@@ -18,7 +28,6 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.24.3 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.48.3 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3 // indirect
-	github.com/abaldeweg/warehouse-server/logs v0.0.0-20250129143459-90fd9b0bfeb0
 	github.com/bytedance/sonic v1.12.6 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.4.1 // indirect
