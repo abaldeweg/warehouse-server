@@ -23,10 +23,10 @@ func ReadLogEntries() ([]entity.LogEntry, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("found files: ", logFiles)
 
 	var entries []entity.LogEntry
 	for _, logFile := range logFiles {
+    fmt.Println("processing", logFile)
 		fileEntries, err := parseLogFile(logFile)
 		if err != nil {
 			return nil, err
