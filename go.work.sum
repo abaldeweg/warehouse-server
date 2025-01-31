@@ -229,11 +229,9 @@ cloud.google.com/go/lifesciences v0.10.0/go.mod h1:1zMhgXQ7LbMbA5n4AYguFgbulboun
 cloud.google.com/go/lifesciences v0.10.1/go.mod h1:5D6va5/Gq3gtJPKSsE6vXayAigfOXK2eWLTdFUOTCDs=
 cloud.google.com/go/lifesciences v0.10.2/go.mod h1:vXDa34nz0T/ibUNoeHnhqI+Pn0OazUTdxemd0OLkyoY=
 cloud.google.com/go/logging v1.10.0/go.mod h1:EHOwcxlltJrYGqMGfghSet736KR3hX1MAj614mrMk9I=
-cloud.google.com/go/logging v1.12.0/go.mod h1:wwYBt5HlYP1InnrtYI0wtwttpVU1rifnMT7RejksUAM=
 cloud.google.com/go/longrunning v0.5.6/go.mod h1:vUaDrWYOMKRuhiv6JBnn49YxCPz2Ayn9GqyjaBT8/mA=
 cloud.google.com/go/longrunning v0.5.9/go.mod h1:HD+0l9/OOW0za6UWdKJtXoFAX/BGg/3Wj8p10NeWF7c=
 cloud.google.com/go/longrunning v0.6.0/go.mod h1:uHzSZqW89h7/pasCWNYdUpwGz3PcVWhrWupreVPYLts=
-cloud.google.com/go/longrunning v0.6.2/go.mod h1:k/vIs83RN4bE3YCswdXC5PFfWVILjm3hpEUlSko4PiI=
 cloud.google.com/go/managedidentities v1.7.0/go.mod h1:o4LqQkQvJ9Pt7Q8CyZV39HrzCfzyX8zBzm8KIhRw91E=
 cloud.google.com/go/managedidentities v1.7.1/go.mod h1:iK4qqIBOOfePt5cJR/Uo3+uol6oAVIbbG7MGy917cYM=
 cloud.google.com/go/managedidentities v1.7.2/go.mod h1:t0WKYzagOoD3FNtJWSWcU8zpWZz2i9cw2sKa9RiPx5I=
@@ -364,7 +362,6 @@ cloud.google.com/go/tpu v1.7.0/go.mod h1:/J6Co458YHMD60nM3cCjA0msvFU/miCGMfx/nYy
 cloud.google.com/go/tpu v1.7.1/go.mod h1:kgvyq1Z1yuBJSk5ihUaYxX58YMioCYg1UPuIHSxBX3M=
 cloud.google.com/go/tpu v1.7.2/go.mod h1:0Y7dUo2LIbDUx0yQ/vnLC6e18FK6NrDfAhYS9wZ/2vs=
 cloud.google.com/go/trace v1.10.9/go.mod h1:vtWRnvEh+d8h2xljwxVwsdxxpoWZkxcNYnJF3FuJUV8=
-cloud.google.com/go/trace v1.11.2/go.mod h1:bn7OwXd4pd5rFuAnTrzBuoZ4ax2XQeG3qNgYmfCy0Io=
 cloud.google.com/go/translate v1.10.3/go.mod h1:GW0vC1qvPtd3pgtypCv4k4U8B7EdgK9/QEF2aJEUovs=
 cloud.google.com/go/translate v1.12.0/go.mod h1:4/C4shFIY5hSZ3b3g+xXWM5xhBLqcUqksSMrQ7tyFtc=
 cloud.google.com/go/translate v1.12.1/go.mod h1:5f4RvC7/hh76qSl6LYuqOJaKbIzEpR1Sj+CMA6gSgIk=
@@ -498,8 +495,7 @@ github.com/incwadi-warehouse/monorepo-go/framework v0.0.0-20241015163101-08b93c4
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/klauspost/compress v1.17.2 h1:RlWWUY/Dr4fL8qk9YG7DTZ7PDgME2V4csBXA8L/ixi4=
-github.com/klauspost/compress v1.17.2/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/klauspost/compress v1.16.7/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pretty v0.3.0/go.mod h1:640gp4NfQd8pI5XOwp5fnNeVWj67G7CFk/SaSQn7NBk=
@@ -541,7 +537,6 @@ go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.4
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0/go.mod h1:p8pYQP+m5XfbZm9fxtSKAbM6oIllS7s2AfxrChvc7iw=
 go.opentelemetry.io/otel v1.24.0/go.mod h1:W7b9Ozg4nkF5tWI5zsXkaKKDjdVjpD4oAt9Qi/MArHo=
 go.opentelemetry.io/otel v1.30.0/go.mod h1:tFw4Br9b7fOS+uEao81PJjVMjW/5fvNCbpsDIXqP0pc=
-go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v1.29.0/go.mod h1:BLbf7zbNIONBLPwvFnwNHGj4zge8uTCM/UPIVW1Mq2I=
 go.opentelemetry.io/otel/metric v1.24.0/go.mod h1:VYhLe1rFfxuTXLgj4CBiyz+9WYBA8pNGJgDcSFRKBco=
 go.opentelemetry.io/otel/metric v1.30.0/go.mod h1:aXTfST94tswhWEb+5QjlSqG+cZlmyXy/u8jFpor3WqQ=
 go.opentelemetry.io/otel/sdk v1.24.0/go.mod h1:KVrIYw6tEubO9E96HQpcmpTKDVn9gdv35HoYiQWGDFg=
