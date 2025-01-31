@@ -75,3 +75,23 @@ func (handler *DBHandler) Get(from int, to int) ([]entity.LogEntry, error) {
 	}
 	return logs, nil
 }
+
+// FindDemanded retrieves logs based on the provided filter.
+func (handler *DBHandler) FindDemanded(filter map[string]interface{}) ([]entity.LogEntry, error) {
+	bsonFilter := bson.M(filter)
+	cursor, err := handler.collection.Find(context.TODO(), bsonFilter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var logs []entity.LogEntry
+	for cursor.Next(context.TODO()) {
+		var logEntry entity.LogEntry
+		if err := cursor.Decode(&logEntry); err != nil {
+			return nil, err
+		}
+		logs = append(logs, logEntry)
+	}
+	return logs, nil
+}

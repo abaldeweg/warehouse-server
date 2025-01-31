@@ -54,6 +54,72 @@ paths:
                     type: string
                     example: "Internal server error"
 
+  /apis/logs/1/events:
+    post:
+      summary: Retrieve events based on filter
+      description: Retrieve events from the server based on the provided filter.
+      security:
+        - APIKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                {
+                  "time": {
+                    "$gte": "2025-01-17T00:00:00Z",
+                    "$lte": "2025-01-31T23:59:59Z"
+                  }
+                }
+      responses:
+        "200":
+          description: Successfully retrieved events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "60d5ec49f1b2c2a1d4e8b0e7"
+                    eventType:
+                      type: string
+                      example: "error"
+                    severity:
+                      type: string
+                      example: "high"
+                    message:
+                      type: string
+                      example: "An error occurred"
+                    timestamp:
+                      type: string
+                      format: date-time
+                      example: "2023-10-01T12:34:56Z"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid JSON"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
 components:
   securitySchemes:
     APIKeyAuth:

@@ -36,3 +36,18 @@ func GetLogs(c *gin.Context) {
 
 	c.JSON(http.StatusOK, d)
 }
+
+// GetEvents handles the GET request to retrieve logs.
+func GetEvents(c *gin.Context) {
+	var filter map[string]interface{}
+	if err := c.ShouldBindJSON(&filter); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		return
+	}
+
+	h, _ := db.NewDBHandler()
+	d, _ := h.FindDemanded(filter)
+	defer h.Close()
+
+	c.JSON(http.StatusOK, d)
+}
