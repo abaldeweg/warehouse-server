@@ -4,8 +4,14 @@ import (
 	"time"
 
 	"github.com/abaldeweg/warehouse-server/framework/config"
-	"github.com/abaldeweg/warehouse-server/logs_import/cmd"
 	"github.com/spf13/viper"
+
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/abaldeweg/warehouse-server/logs_import/db"
+	"github.com/abaldeweg/warehouse-server/logs_import/parser"
 )
 
 func main() {
@@ -13,9 +19,34 @@ func main() {
 
 	viper.SetDefault("MONGODB_URI", "mongodb://localhost:27017")
 
-	go cmd.Execute()
+	go importLogs()
 
 	for {
 		time.Sleep(1 * time.Second)
 	}
+}
+
+func importLogs() {
+	entries, err := parser.ReadLogEntries()
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+
+	db, err := db.NewDBHandler()
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	for _, entry := range entries {
+		if err := db.Add(entry); err != nil {
+			log.Println(err)
+			os.Exit(1)
+		}
+	}
+
+	fmt.Println("\033[32mLogs successfully imported!\033[0m")
+	os.Exit(0)
 }
