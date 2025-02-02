@@ -119,6 +119,14 @@ Mount data volume to `/usr/src/app/data/source/`.
 |-----------------------|-----------
 |MONGODB_URI            |MongoDB connection string
 
+Create a config file in `/data/config/config.json` with the following contents and fit it to your needs.
+
+```json
+{
+  "blocklist": ["/"]
+}
+```
+
 ## logs_web
 
 The module returns log entries by request.

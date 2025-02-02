@@ -15,9 +15,10 @@ import (
 )
 
 func main() {
-	config.LoadAppConfig()
+  config.LoadAppConfig(config.WithName("config"), config.WithFormat("json"), config.WithPaths("./data/config"))
 
 	viper.SetDefault("MONGODB_URI", "mongodb://localhost:27017")
+	viper.SetDefault("blocklist", []string{})
 
 	go importLogs()
 
@@ -41,12 +42,24 @@ func importLogs() {
 	defer db.Close()
 
 	for _, entry := range entries {
-		if err := db.Add(entry); err != nil {
-			log.Println(err)
-			os.Exit(1)
+		if !isBlocked(entry.RequestPath) {
+			if err := db.Add(entry); err != nil {
+				log.Println(err)
+				os.Exit(1)
+			}
 		}
 	}
 
 	fmt.Println("\033[32mLogs successfully imported!\033[0m")
 	os.Exit(0)
+}
+
+func isBlocked(host string) bool {
+	blocklist := viper.GetStringSlice("blocklist")
+	for _, blocked := range blocklist {
+		if host == blocked {
+			return true
+		}
+	}
+	return false
 }
