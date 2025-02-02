@@ -19,7 +19,7 @@ func ReadLogEntries() ([]entity.LogEntry, error) {
 	var logFiles []string
 	var err error
 
-	logFiles, err = listAndFilterLogFiles("data/source/access.log-*.gz")
+	logFiles, err = listAndFilterLogFiles("data/logs/access.log-*.gz")
 	if err != nil {
 		return nil, err
 	}

@@ -113,7 +113,7 @@ Mount data volume to `/usr/src/app/data/`.
 
 The module processes logs.
 
-Mount data volume to `/usr/src/app/data/source/`.
+Mount data volume to `/usr/src/app/data/logs/`.
 
 |Var                    |Description
 |-----------------------|-----------
