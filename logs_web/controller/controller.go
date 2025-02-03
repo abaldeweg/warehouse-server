@@ -15,9 +15,18 @@ func GetEvents(c *gin.Context) {
 		return
 	}
 
-	h, _ := db.NewDBHandler()
-	d, _ := h.FindDemanded(filter)
+	h, err := db.NewDBHandler()
+  if err != nil {
+    c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+    return
+  }
 	defer h.Close()
+
+	d, err := h.FindDemanded(filter)
+  if err != nil {
+    c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+    return
+  }
 
 	c.JSON(http.StatusOK, d)
 }
