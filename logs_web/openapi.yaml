@@ -12,48 +12,6 @@ servers:
   - url: http://localhost:8080
 
 paths:
-  /apis/logs/1/logs/{from}/{to}:
-    get:
-      summary: Retrieve logs
-      description: Retrieve logs from the server.
-      security:
-        - APIKeyAuth: []
-      parameters:
-        - name: from
-          in: path
-          required: true
-          description: Start date for log retrieval
-          schema:
-            type: string
-            format: date
-            example: "20250118"
-        - name: to
-          in: path
-          required: true
-          description: End date for log retrieval
-          schema:
-            type: string
-            format: date
-            example: "20250118"
-      responses:
-        "200":
-          description: Successfully retrieved logs
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "Sample log data"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal server error"
-
   /apis/logs/1/events:
     post:
       summary: Retrieve events based on filter
