@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println("Blocklist:", viper.GetStringSlice("blocklist"))
 
-	go importer.ImportLogs()
+	go importer.Import()
 
 	for {
 		time.Sleep(1 * time.Second)
