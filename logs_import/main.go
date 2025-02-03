@@ -20,6 +20,8 @@ func main() {
 	viper.SetDefault("MONGODB_URI", "mongodb://localhost:27017")
 	viper.SetDefault("blocklist", []string{})
 
+  fmt.Println("Blocklist:", viper.GetStringSlice("blocklist"))
+
 	go importLogs()
 
 	for {
