@@ -39,10 +39,14 @@ func (handler *DBHandler) Close() error {
 	return handler.client.Disconnect(context.TODO())
 }
 
-// FindDemanded retrieves logs based on the provided filter.
-func (handler *DBHandler) FindDemanded(filter map[string]interface{}) ([]entity.LogEntry, error) {
+// FindDemanded retrieves logs based on the provided filter and sorts them by the provided sort fields.
+func (handler *DBHandler) FindDemanded(filter map[string]interface{}, sortFields map[string]int) ([]entity.LogEntry, error) {
 	bsonFilter := bson.M(filter)
-	cursor, err := handler.collection.Find(context.TODO(), bsonFilter)
+	findOptions := options.Find().SetSort(bson.D{})
+	for field, order := range sortFields {
+		findOptions.Sort = append(findOptions.Sort.(bson.D), bson.E{Key: field, Value: order})
+	}
+	cursor, err := handler.collection.Find(context.TODO(), bsonFilter, findOptions)
 	if err != nil {
 		return nil, err
 	}
