@@ -33,3 +33,21 @@ func GetEvents(c *gin.Context) {
 
 	c.JSON(http.StatusOK, d)
 }
+
+// Count handles the GET request to count all log entries.
+func Count(c *gin.Context) {
+	h, err := db.NewDBHandler()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	defer h.Close()
+
+	count, err := h.CountAll()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"count": count})
+}

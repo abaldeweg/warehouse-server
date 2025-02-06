@@ -83,6 +83,34 @@ paths:
                     type: string
                     example: "Internal server error"
 
+  /apis/logs/1/count:
+    get:
+      summary: Count all log entries
+      description: Retrieve the count of all log entries in the server.
+      security:
+        - APIKeyAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 100
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
 components:
   securitySchemes:
     APIKeyAuth:

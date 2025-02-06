@@ -62,3 +62,12 @@ func (handler *DBHandler) FindDemanded(filter map[string]interface{}, sortFields
 	}
 	return logs, nil
 }
+
+// CountAll counts all log entries in the database.
+func (handler *DBHandler) CountAll() (int64, error) {
+	count, err := handler.collection.CountDocuments(context.TODO(), bson.M{})
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
