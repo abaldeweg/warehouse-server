@@ -26,13 +26,15 @@ paths:
               type: object
               example:
                 {
-                  "time": {
-                    "$gte": "2025-01-17T00:00:00Z",
-                    "$lte": "2025-01-31T23:59:59Z"
-                  },
-                  "sort": {
-                    "time": -1
-                  }
+                  "filter":
+                    {
+                      "time":
+                        {
+                          "$gte": "2025-01-17T00:00:00Z",
+                          "$lte": "2025-01-31T23:59:59Z",
+                        },
+                    },
+                  "sort": { "time": -1 },
                 }
       responses:
         "200":
