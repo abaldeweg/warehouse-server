@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/abaldeweg/warehouse-server/logs_import/entity"
 	"github.com/spf13/viper"
@@ -57,5 +58,16 @@ func (handler *DBHandler) Add(data entity.LogEntry) error {
 		return nil
 	}
 	_, err = handler.collection.InsertOne(context.TODO(), bsonData)
+	return err
+}
+
+// Cleanup removes all database entries older than 56 days.
+func (handler *DBHandler) Cleanup() error {
+	filter := bson.M{
+		"time": bson.M{
+			"$lt": time.Now().AddDate(0, 0, -56).UTC().Format(time.RFC3339),
+		},
+	}
+	_, err := handler.collection.DeleteMany(context.TODO(), filter)
 	return err
 }
