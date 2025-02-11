@@ -47,3 +47,29 @@ jobs:
         run: |
           go mod tidy
           go test ./...
+
+  test-logs_import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+      - name: Run logs_import tests
+        working-directory: ./logs_import
+        run: |
+          go mod tidy
+          go test ./...
+
+  test-logs_web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+      - name: Run logs_web tests
+        working-directory: ./logs_web
+        run: |
+          go mod tidy
+          go test ./...
