@@ -182,15 +182,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreFormat := apiCore.Group(`/api/format`)
-		// {
-		// 	apiCoreFormat.GET(`/`, handleCoreAPI("/api/format/"))
-		// 	apiCoreFormat.GET(`/:id`, handleCoreAPIWithId("/api/format"))
-		// 	apiCoreFormat.POST(`/new`, handleCoreAPI("/api/format/new"))
-		// 	apiCoreFormat.PUT(`/:id`, handleCoreAPIWithId("/api/format"))
-		// 	apiCoreFormat.DELETE(`/:id`, handleCoreAPIWithId("/api/format"))
-		// }
-
 		apiCoreGenre := apiCore.Group(`/api/genre`)
 		{
 			apiCoreGenre.Use(func(c *gin.Context) {
@@ -222,15 +213,6 @@ func Routes() *gin.Engine {
 				ac.Delete(c)
 			})
 		}
-
-		// apiCoreGenre := apiCore.Group(`/api/genre`)
-		// {
-		// 	apiCoreGenre.GET(`/`, handleCoreAPI("/api/genre/"))
-		// 	apiCoreGenre.GET(`/:id`, handleCoreAPIWithId("/api/genre"))
-		// 	apiCoreGenre.POST(`/new`, handleCoreAPI("/api/genre/new"))
-		// 	apiCoreGenre.PUT(`/:id`, handleCoreAPIWithId("/api/genre"))
-		// 	apiCoreGenre.DELETE(`/:id`, handleCoreAPIWithId("/api/genre"))
-		// }
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
@@ -337,15 +319,6 @@ func Routes() *gin.Engine {
 				tc.Delete(c)
 			})
 		}
-
-		// apiCoreTag := apiCore.Group(`/api/tag`)
-		// {
-		// 	apiCoreTag.GET(`/`, handleCoreAPI("/api/tag/"))
-		// 	apiCoreTag.GET(`/:id`, handleCoreAPIWithId("/api/tag"))
-		// 	apiCoreTag.POST(`/new`, handleCoreAPI("/api/tag/new"))
-		// 	apiCoreTag.PUT(`/:id`, handleCoreAPIWithId("/api/tag"))
-		// 	apiCoreTag.DELETE(`/:id`, handleCoreAPIWithId("/api/tag"))
-		// }
 	}
 
 	return r
