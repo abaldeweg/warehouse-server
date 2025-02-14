@@ -18,7 +18,8 @@
         "DavidAnson.vscode-markdownlint",
         "redhat.vscode-yaml",
         "42Crunch.vscode-openapi",
-        "mongodb.mongodb-vscode"
+        "mongodb.mongodb-vscode",
+        "yy0931.vscode-sqlite3-editor"
       ]
     }
   }
