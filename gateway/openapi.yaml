@@ -924,6 +924,30 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/public/book/{id}:
+    get:
+      summary: Get a public book by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Public Book UUID
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicBook'
+        400:
+          description: Invalid UUID
+        404:
+          description: Public Book not found
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
@@ -1008,3 +1032,38 @@ components:
           type: string
         open:
           type: boolean
+    PublicBook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        currency:
+          type: string
+        title:
+          type: string
+        authorFirstname:
+          type: string
+        authorSurname:
+          type: string
+        branch_id:
+          type: integer
+        shortDescription:
+          type: string
+        genre:
+          type: string
+        branchName:
+          type: string
+        branchOrdering:
+          type: string
+        price:
+          type: number
+          format: float
+        releaseYear:
+          type: integer
+        cond:
+          type: string
+        format_name:
+          type: string
+        subtitle:
+          type: string

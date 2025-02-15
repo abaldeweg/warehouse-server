@@ -227,12 +227,30 @@ func Routes() *gin.Engine {
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
+		// apiCorePublic := apiCore.Group(`/api/public`)
+		// {
+		// 	apiCorePublicBook := apiCorePublic.Group(`/book`)
+		// 	{
+		// 		apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
+		// 		apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
+		// 		apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
+		// 		apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+		// 	}
+		// 	apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
+		// 	apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
+		// 	apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+		// 	apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
+		// }
+
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
+			apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
 			{
-				apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
-				apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
+				apiCorePublicBook.GET(`/:id`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Show(c)
+				})
 				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
 				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
 			}
