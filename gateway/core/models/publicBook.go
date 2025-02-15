@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -36,6 +37,9 @@ type PublicBook struct {
 	Removed          bool      `json:"-" gorm:"default:false"`
 	Reserved         bool      `json:"-" gorm:"default:false"`
 	Recommendation   bool      `json:"-" gorm:"default:false"`
+	CoverS           string    `json:"cover_s" gorm:"default:null"`
+	CoverM           string    `json:"cover_m" gorm:"default:null"`
+	CoverL           string    `json:"cover_l" gorm:"default:null"`
 }
 
 // TableName overrides the default table name for PublicBook model.
@@ -60,5 +64,8 @@ func (book *PublicBook) AfterFind(tx *gorm.DB) (err error) {
 	book.Cond = book.Condition.Name
 	book.FormatName = book.Format.Name
 	book.BranchCart = book.Branch.Cart
+  book.CoverS = cover.ShowCover("s", book.ID)
+  book.CoverM = cover.ShowCover("m", book.ID)
+  book.CoverL = cover.ShowCover("l", book.ID)
 	return
 }
