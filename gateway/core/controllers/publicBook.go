@@ -42,6 +42,11 @@ func (pbc *PublicBookController) Show(c *gin.Context) {
 		return
 	}
 
+	if book.Sold || book.Removed || book.Reserved {
+		c.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
 	c.JSON(http.StatusOK, book)
 }
 
