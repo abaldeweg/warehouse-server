@@ -948,6 +948,37 @@ paths:
           description: Public Book not found
         500:
           description: Internal Server Error
+  /apis/core/1/api/public/book/recommendation/{branch}:
+    get:
+      summary: Get recommended books for a specific branch
+      parameters:
+        - in: path
+          name: branch
+          schema:
+            type: string
+          required: true
+          description: Branch ID
+          example: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicBook'
+                  counter:
+                    type: integer
+        400:
+          description: Invalid Branch ID
+        404:
+          description: Branch not found
+        500:
+          description: Internal Server Error
 
 components:
   schemas:

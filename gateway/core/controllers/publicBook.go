@@ -44,3 +44,26 @@ func (pbc *PublicBookController) Show(c *gin.Context) {
 
 	c.JSON(http.StatusOK, book)
 }
+
+// Recommendation retrieves recommended books for a specific branch.
+func (pbc *PublicBookController) Recommendation(c *gin.Context) {
+	branchID := c.Param("branch")
+	var branch models.Branch
+	if err := pbc.DB.First(&branch, "id = ?", branchID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"msg": "Branch not found"})
+		return
+	}
+
+	if !branch.Public {
+		c.JSON(http.StatusOK, gin.H{"books": []models.PublicBook{}, "counter": 0})
+		return
+	}
+
+	var books []models.PublicBook
+	if err := pbc.DB.Preload("Branch").Preload("Genre").Preload("Condition").Preload("Format").Preload("Author").Where("branch_id = ? AND sold = ? AND removed = ? AND reserved = ? AND recommendation = ?", branchID, false, false, false, true).Find(&books).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal server error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"books": books, "counter": len(books)})
+}
