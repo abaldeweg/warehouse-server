@@ -255,7 +255,10 @@ func Routes() *gin.Engine {
 					pbc := controllers.NewPublicBookController(db)
 					pbc.Recommendation(c)
 				})
-				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+        apiCorePublicBook.GET(`/cover/:image`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Image(c)
+				})
 			}
 			apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
 			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))

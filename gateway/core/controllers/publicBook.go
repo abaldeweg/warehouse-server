@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"net/http"
+	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
 	"github.com/abaldeweg/warehouse-server/gateway/core/repository"
@@ -71,4 +74,33 @@ func (pbc *PublicBookController) Recommendation(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"books": books, "counter": len(books)})
+}
+
+// Image retrieves the cover image of a book by its ID and dimensions.
+func (pbc *PublicBookController) Image(c *gin.Context) {
+	image := c.Param("image")
+	id := strings.Split(image, "_")[0]
+	dimensions := strings.Split(strings.Split(image, "_")[1], ".")[0]
+
+	if _, err := uuid.Parse(id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid book ID format"})
+		return
+	}
+
+	width, err := strconv.Atoi(strings.Split(dimensions, "x")[0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid dimensions format"})
+		return
+	}
+
+	size := "s"
+	if width >= 200 {
+		size = "m"
+	}
+	if width >= 400 {
+		size = "l"
+	}
+
+	filePath := filepath.Join("uploads", id+"-"+size+".jpg")
+	c.FileAttachment(filePath, id+"-"+size+".jpg")
 }

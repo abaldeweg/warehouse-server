@@ -979,6 +979,32 @@ paths:
           description: Branch not found
         500:
           description: Internal Server Error
+  /apis/core/1/api/public/book/cover/{id}:
+    get:
+      summary: Get the cover image of a book by ID and dimensions
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Book uuid
+          example: 0a1f2e74-d220-64cb-ff12-532ffa713976_400x400.jpg
+      responses:
+        200:
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Invalid UUID or dimensions format
+        404:
+          description: Book not found
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
