@@ -16,9 +16,9 @@ type PublicBook struct {
 	Author           Author    `json:"-" gorm:"foreignKey:AuthorID"`
 	AuthorFirstname  string    `json:"authorFirstname" gorm:"-"`
 	AuthorSurname    string    `json:"authorSurname" gorm:"-"`
-	BranchID         *int      `json:"-"`
+	BranchID         int      `json:"-"`
 	Branch           Branch    `json:"-" gorm:"foreignKey:BranchID"`
-	ShortDescription *string   `json:"shortDescription"`
+	ShortDescription string   `json:"shortDescription"`
 	GenreID          uint      `json:"-" gorm:"index"`
 	Genre            Genre     `json:"-" gorm:"foreignKey:GenreID"`
 	GenreName        string    `json:"genre" gorm:"-"`

@@ -935,6 +935,7 @@ paths:
             format: uuid
           required: true
           description: Public Book UUID
+          example: 0a1f2e74-d220-64cb-ff12-532ffa713976
       responses:
         200:
           description: OK
