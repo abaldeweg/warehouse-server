@@ -140,16 +140,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreDirectory := apiCore.Group(`/api/directory`)
-		// {
-		// 	apiCoreDirectory.GET(`/`, handleCoreAPI("/api/directory/"))
-		// 	apiCoreDirectory.POST(`/cover/:id`, handleCoreAPIWithId("/api/directory/cover"))
-		// 	apiCoreDirectory.POST(`/new`, handleCoreAPI("/api/directory/new"))
-		// 	apiCoreDirectory.POST(`/upload`, handleCoreAPI("/api/directory/upload"))
-		// 	apiCoreDirectory.PUT(`/edit`, handleCoreAPI("/api/directory/edit"))
-		// 	apiCoreDirectory.DELETE(`/`, handleCoreAPI("/api/directory/"))
-		// }
-
 		apiCoreFormat := apiCore.Group(`/api/format`)
 		{
 			apiCoreFormat.Use(func(c *gin.Context) {
