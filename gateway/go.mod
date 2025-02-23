@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/gateway
 go 1.23
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.14.0
+	github.com/abaldeweg/warehouse-server/framework v0.14.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
