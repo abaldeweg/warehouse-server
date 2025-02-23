@@ -45,7 +45,7 @@ func listAndFilterLogFiles(pattern string) ([]string, error) {
 	}
 
 	var logFiles []string
-	threshold := time.Now().AddDate(0, 0, -1).Format("20060102")
+	threshold := time.Now().AddDate(0, 0, -3).Format("20060102")
 	thresholdInt, err := strconv.Atoi(threshold)
 	if err != nil {
 		return nil, err
