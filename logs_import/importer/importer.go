@@ -17,7 +17,6 @@ func Import() {
 	}
 
 	fmt.Println("\033[32mLogs successfully imported!\033[0m")
-	// os.Exit(0)
 }
 
 func importLogs() error {
