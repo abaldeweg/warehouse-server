@@ -352,17 +352,19 @@ func handleCoreAPIWithId(path string) gin.HandlerFunc {
 
 // handleCover handles requests to the core API.
 func handleCover(c *gin.Context) {
-	imageUUID := c.Param("id")
+	imageID := c.Param("id")
 
 	validate := validator.New()
-	err := validate.Var(imageUUID, "uuid")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid UUID"})
+	errUUID := validate.Var(imageID, "uuid")
+	errInt := validate.Var(imageID, "numeric")
+
+	if errUUID != nil && errInt != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid ID"})
 		return
 	}
 
 	if authenticator(c) {
-		cover.SaveCover(c, imageUUID)
+		cover.SaveCover(c, imageID)
 
 		c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
 		return
