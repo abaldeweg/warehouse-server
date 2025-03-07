@@ -2,8 +2,6 @@ module github.com/abaldeweg/warehouse-server/gateway
 
 go 1.23.0
 
-toolchain go1.24.1
-
 require (
 	github.com/abaldeweg/warehouse-server/framework v0.14.1
 	github.com/gin-gonic/gin v1.10.0
