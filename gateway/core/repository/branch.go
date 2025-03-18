@@ -22,6 +22,13 @@ func (r *BranchRepository) FindAll() ([]models.Branch, error) {
 	return branches, result.Error
 }
 
+// FindAllByPublic returns all branches where public is true.
+func (r *BranchRepository) FindAllByPublic() ([]models.Branch, error) {
+	var branches []models.Branch
+	result := r.db.Where("public = ?", true).Find(&branches)
+	return branches, result.Error
+}
+
 // FindOne returns one branch by id.
 func (r *BranchRepository) FindOne(id uint) (models.Branch, error) {
 	var branch models.Branch
