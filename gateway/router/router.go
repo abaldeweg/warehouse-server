@@ -226,12 +226,10 @@ func Routes() *gin.Engine {
 				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
 				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
 			}
-			// apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
       apiCorePublic.GET(`/branch/`,  func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranches(c)
 			})
-			// apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
       apiCorePublic.GET(`/branch/show/:id`,  func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranch(c)
