@@ -924,6 +924,50 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/public/branch/:
+    get:
+      tags:
+        - branch
+      summary: List all public branches
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Branch'
+        '500':
+          description: Internal Server Error
+  /apis/core/1/api/public/branch/show/{id}:
+    get:
+      tags:
+        - branch
+      summary: Get a public branch by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Branch ID
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+        '400':
+          description: Invalid ID
+        '403':
+          description: Access forbidden
+        '404':
+          description: Branch not found
+        '500':
+          description: Internal Server Error
 
 components:
   schemas:
