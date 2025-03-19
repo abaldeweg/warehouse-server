@@ -924,6 +924,28 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/public/genre/{id}:
+    get:
+      summary: Get genresfor a branch by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Branch ID
+          example: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        404:
+          description: No genres found
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
