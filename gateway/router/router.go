@@ -228,7 +228,6 @@ func Routes() *gin.Engine {
 			}
 			apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
 			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
-			// apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
 			apiCorePublic.GET(`/genre/:id`, func(c *gin.Context) {
 				ac := controllers.NewPublicGenreController(db)
 				ac.FindAll(c)
