@@ -924,6 +924,116 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/inventory:
+    get:
+      summary: List all inventory items
+      tags:
+        - inventory
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/inventory/new:
+    post:
+      summary: Create a new inventory item
+      tags:
+        - inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/inventory/{id}:
+    get:
+      summary: Get an inventory item by ID
+      tags:
+        - inventory
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Inventory ID
+          example: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Invalid ID
+        404:
+          description: Not Found
+    put:
+      summary: Update an inventory item by ID
+      tags:
+        - inventory
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Inventory ID
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Invalid ID or Bad Request
+        500:
+          description: Internal Server Error
+    delete:
+      summary: Delete an inventory item by ID
+      tags:
+        - inventory
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Inventory ID
+          example: 1
+      responses:
+        204:
+          description: No Content
+        400:
+          description: Invalid ID
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
@@ -1008,3 +1118,22 @@ components:
           type: string
         open:
           type: boolean
+    Inventory:
+      type: object
+      properties:
+        startedAt:
+          type: integer
+          example: 1739548084
+        endedAt:
+          type: integer
+          example: null
+        found:
+          type: integer
+          example: 0
+        notFound:
+          type: integer
+          example: 0
+      required:
+        - startedAt
+        - found
+        - notFound
