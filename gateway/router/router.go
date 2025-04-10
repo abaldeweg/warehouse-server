@@ -205,15 +205,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreInventory := apiCore.Group(`/api/inventory`)
-		// {
-		// 	apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
-		// 	apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
-		// 	apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
-		// 	apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
-		// 	apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
-		// }
-
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
       apiCoreInventory.Use(func(c *gin.Context) {
