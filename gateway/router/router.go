@@ -65,6 +65,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
+    // @fix: port to new API
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
@@ -204,19 +205,53 @@ func Routes() *gin.Engine {
 			})
 		}
 
+		// apiCoreInventory := apiCore.Group(`/api/inventory`)
+		// {
+		// 	apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
+		// 	apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
+		// 	apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
+		// 	apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
+		// 	apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
+		// }
+
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
-			apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
-			apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
-			apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
+      apiCoreInventory.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreInventory.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.List(c)
+			})
+			apiCoreInventory.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Show(c)
+			})
+			apiCoreInventory.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Create(c)
+			})
+			apiCoreInventory.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Update(c)
+			})
+			apiCoreInventory.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Delete(c)
+			})
 		}
 
+    // @fix: port to new API
 		apiCore.GET(`/api/me`, handleCoreAPI("/api/me"))
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
+    // @fix: port to new API
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
