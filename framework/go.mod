@@ -2,8 +2,6 @@ module github.com/abaldeweg/warehouse-server/framework
 
 go 1.23.0
 
-toolchain go1.24.2
-
 require (
 	cloud.google.com/go/storage v1.48.0
 	github.com/gin-contrib/cors v1.7.5
