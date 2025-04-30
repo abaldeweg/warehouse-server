@@ -1,3 +1,3 @@
 module github.com/abaldeweg/warehouse-server/static
 
-go 1.23.2
+go 1.24

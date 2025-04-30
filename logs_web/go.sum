@@ -30,14 +30,6 @@ github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.48.3/go.mod h1:pNP/L2wDlaQnQlFvkDKGSruDoYRpmAxB6drgsskfYwg=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3 h1:2vcVkrNdSMJpoOVAWi9ApsQR5iqNeFGt5Qx8Xlt3IoI=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3/go.mod h1:wRbFgBQUVm1YXrvWKofAEmq9HNJTDphbAaJSSX01KUI=
-github.com/abaldeweg/warehouse-server/framework v0.12.1 h1:ZSEmuE3ZCn445Bm5GPR2/LN/DAv9Z6NwOk/IswDjEL8=
-github.com/abaldeweg/warehouse-server/framework v0.12.1/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
-github.com/abaldeweg/warehouse-server/framework v0.13.0 h1:ATyIOtHMibv3FBh+L6xZdFAEyR7cHugCduL6pjpImWI=
-github.com/abaldeweg/warehouse-server/framework v0.13.0/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
-github.com/abaldeweg/warehouse-server/framework v0.13.1 h1:iHkvtpmTnDk07FlUuzBWEz/SFHcEEUtsRw2HHpXRoTg=
-github.com/abaldeweg/warehouse-server/framework v0.13.1/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
-github.com/abaldeweg/warehouse-server/framework v0.14.0 h1:RM6LT5pteaQ0Ep/qgei1gPNOtAJqKg88eWF33pJdI3s=
-github.com/abaldeweg/warehouse-server/framework v0.14.0/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
 github.com/abaldeweg/warehouse-server/framework v0.14.1 h1:dl8wnML426/6SEyooTkRslsGxVIaoIinLE2Y/bvZ9u0=
 github.com/abaldeweg/warehouse-server/framework v0.14.1/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
@@ -213,8 +205,6 @@ github.com/xdg-go/stringprep v1.0.4/go.mod h1:mPGuuIYwz7CmR2bT9j4GbQqutWS1zV24gi
 github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 h1:ilQV1hzziu+LLM3zUTJ0trRztfwgjqKnBWNtSRkbmwM=
 github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78/go.mod h1:aL8wCCfTfSfmXjznFBSZNN13rSJjlIOI1fUNAtF7rmI=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-go.mongodb.org/mongo-driver v1.17.2 h1:gvZyk8352qSfzyZ2UMWcpDpMSGEr1eqE4T793SqyhzM=
-go.mongodb.org/mongo-driver v1.17.2/go.mod h1:Hy04i7O2kC4RS06ZrhPRqj/u4DTYkFDAAccj+rVKqgQ=
 go.mongodb.org/mongo-driver v1.17.3 h1:TQyXhnsWfWtgAhMtOgtYHMTkZIfBTpMTsMnd9ZBeHxQ=
 go.mongodb.org/mongo-driver v1.17.3/go.mod h1:Hy04i7O2kC4RS06ZrhPRqj/u4DTYkFDAAccj+rVKqgQ=
 go.opencensus.io v0.24.0 h1:y73uSU6J157QMP2kn2r30vwW1A2W2WFwSCGnAVxeaD0=

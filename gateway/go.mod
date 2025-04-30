@@ -1,6 +1,6 @@
 module github.com/abaldeweg/warehouse-server/gateway
 
-go 1.23.0
+go 1.24
 
 require (
 	github.com/abaldeweg/warehouse-server/framework v0.14.1
