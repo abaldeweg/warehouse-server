@@ -5,7 +5,7 @@ go 1.24
 require (
 	cloud.google.com/go/storage v1.48.0
 	github.com/gin-contrib/cors v1.7.5
-	github.com/gin-gonic/gin v1.10.0
+	github.com/gin-gonic/gin v1.10.1
 	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
