@@ -65,6 +65,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
+    // @fix: port to new API
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
@@ -140,16 +141,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreDirectory := apiCore.Group(`/api/directory`)
-		// {
-		// 	apiCoreDirectory.GET(`/`, handleCoreAPI("/api/directory/"))
-		// 	apiCoreDirectory.POST(`/cover/:id`, handleCoreAPIWithId("/api/directory/cover"))
-		// 	apiCoreDirectory.POST(`/new`, handleCoreAPI("/api/directory/new"))
-		// 	apiCoreDirectory.POST(`/upload`, handleCoreAPI("/api/directory/upload"))
-		// 	apiCoreDirectory.PUT(`/edit`, handleCoreAPI("/api/directory/edit"))
-		// 	apiCoreDirectory.DELETE(`/`, handleCoreAPI("/api/directory/"))
-		// }
-
 		apiCoreFormat := apiCore.Group(`/api/format`)
 		{
 			apiCoreFormat.Use(func(c *gin.Context) {
@@ -216,13 +207,37 @@ func Routes() *gin.Engine {
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
-			apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
-			apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
-			apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
+      apiCoreInventory.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreInventory.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.List(c)
+			})
+			apiCoreInventory.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Show(c)
+			})
+			apiCoreInventory.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Create(c)
+			})
+			apiCoreInventory.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Update(c)
+			})
+			apiCoreInventory.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Delete(c)
+			})
 		}
 
+    // @fix: port to new API
 		apiCore.GET(`/api/me`, handleCoreAPI("/api/me"))
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
@@ -376,17 +391,19 @@ func handleCoreAPIWithId(path string) gin.HandlerFunc {
 
 // handleCover handles requests to the core API.
 func handleCover(c *gin.Context) {
-	imageUUID := c.Param("id")
+	imageID := c.Param("id")
 
 	validate := validator.New()
-	err := validate.Var(imageUUID, "uuid")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid UUID"})
+	errUUID := validate.Var(imageID, "uuid")
+	errInt := validate.Var(imageID, "numeric")
+
+	if errUUID != nil && errInt != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid ID"})
 		return
 	}
 
 	if authenticator(c) {
-		cover.SaveCover(c, imageUUID)
+		cover.SaveCover(c, imageID)
 
 		c.JSON(http.StatusOK, gin.H{"message": "Image uploaded successfully"})
 		return

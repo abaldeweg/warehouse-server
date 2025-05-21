@@ -3,8 +3,8 @@ module github.com/abaldeweg/warehouse-server/blog
 go 1.23
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.13.0
-	github.com/gin-gonic/gin v1.10.0
+	github.com/abaldeweg/warehouse-server/framework v0.15.0
+	github.com/gin-gonic/gin v1.10.1
 	github.com/spf13/viper v1.19.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -75,7 +75,6 @@ require (
 	go.opentelemetry.io/otel/sdk v1.31.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.31.0 // indirect
 	go.opentelemetry.io/otel/trace v1.31.0 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.12.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect

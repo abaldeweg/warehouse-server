@@ -1,12 +1,12 @@
 module github.com/abaldeweg/warehouse-server/logs_web
 
-go 1.23.2
+go 1.24
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.13.0
-	github.com/gin-gonic/gin v1.10.0
+	github.com/abaldeweg/warehouse-server/framework v0.15.0
+	github.com/gin-gonic/gin v1.10.1
 	github.com/spf13/viper v1.19.0
-	go.mongodb.org/mongo-driver v1.17.2
+	go.mongodb.org/mongo-driver v1.17.3
 )
 
 require (
