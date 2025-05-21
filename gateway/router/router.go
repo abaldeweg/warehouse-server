@@ -242,15 +242,38 @@ func Routes() *gin.Engine {
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
-    // @fix: port to new API
+		// apiCorePublic := apiCore.Group(`/api/public`)
+		// {
+		// 	apiCorePublicBook := apiCorePublic.Group(`/book`)
+		// 	{
+		// 		apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
+		// 		apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
+		// 		apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
+		// 		apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+		// 	}
+		// 	apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
+		// 	apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
+		// 	apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+		// 	apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
+		// }
+
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
+			apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
 			{
-				apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
-				apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
-				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
-				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+				apiCorePublicBook.GET(`/:id`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Show(c)
+				})
+        apiCorePublicBook.GET(`/recommendation/:branch`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Recommendation(c)
+				})
+        apiCorePublicBook.GET(`/cover/:image`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Image(c)
+				})
 			}
 			apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
 			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
