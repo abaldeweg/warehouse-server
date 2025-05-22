@@ -30,8 +30,6 @@ github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.48.3/go.mod h1:pNP/L2wDlaQnQlFvkDKGSruDoYRpmAxB6drgsskfYwg=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3 h1:2vcVkrNdSMJpoOVAWi9ApsQR5iqNeFGt5Qx8Xlt3IoI=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3/go.mod h1:wRbFgBQUVm1YXrvWKofAEmq9HNJTDphbAaJSSX01KUI=
-github.com/abaldeweg/warehouse-server/framework v0.14.1 h1:dl8wnML426/6SEyooTkRslsGxVIaoIinLE2Y/bvZ9u0=
-github.com/abaldeweg/warehouse-server/framework v0.14.1/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
 github.com/abaldeweg/warehouse-server/framework v0.15.0 h1:yx3H0/SXfiIps3xsGNatMjdTBAlrcVAP/DGHClDlAt0=
 github.com/abaldeweg/warehouse-server/framework v0.15.0/go.mod h1:w2RfHjLEoMmmwxW8Hn3XcOdZ0dqEy8HIhih8TrRVjpY=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
@@ -76,8 +74,6 @@ github.com/gin-contrib/cors v1.7.3 h1:hV+a5xp8hwJoTw7OY+a70FsL8JkVVFTXw9EcfrYUdn
 github.com/gin-contrib/cors v1.7.3/go.mod h1:M3bcKZhxzsvI+rlRSkkxHyljJt1ESd93COUvemZ79j4=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=
-github.com/gin-gonic/gin v1.10.0 h1:nTuyha1TYqgedzytsKYqna+DfLos46nTv2ygFy86HFU=
-github.com/gin-gonic/gin v1.10.0/go.mod h1:4PMNQiOhvDRa013RKVbsiNwoyezlm2rm0uX/T7kzp5Y=
 github.com/gin-gonic/gin v1.10.1 h1:T0ujvqyCSqRopADpgPgiTT63DUQVSfojyME59Ei63pQ=
 github.com/gin-gonic/gin v1.10.1/go.mod h1:4PMNQiOhvDRa013RKVbsiNwoyezlm2rm0uX/T7kzp5Y=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
