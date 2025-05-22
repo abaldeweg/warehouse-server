@@ -924,6 +924,13 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/public/branch/:
+    get:
+      tags:
+        - branch
+      summary: List all public branches
+      responses:
+        '200':
   /apis/core/1/api/public/book/{id}:
     get:
       summary: Get a public book by ID
@@ -947,6 +954,16 @@ paths:
           content:
             application/json:
               schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Branch'
+        '500':
+          description: Internal Server Error
+  /apis/core/1/api/public/branch/show/{id}:
+    get:
+      tags:
+        - branch
+      summary: Get a public branch by ID
                 $ref: '#/components/schemas/PublicBook'
         400:
           description: Invalid UUID
@@ -1002,6 +1019,10 @@ paths:
           schema:
             type: integer
           required: true
+          description: Branch ID
+          example: 1
+      responses:
+        '200':
           description: Inventory ID
           example: 1
       responses:
@@ -1010,6 +1031,14 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Branch'
+        '400':
+          description: Invalid ID
+        '403':
+          description: Access forbidden
+        '404':
+          description: Branch not found
+        '500':
                 type: object
                 properties:
                   books:
