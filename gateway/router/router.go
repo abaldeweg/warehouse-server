@@ -65,7 +65,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
-    // @fix: port to new API
+		// @fix: port to new API
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
@@ -207,7 +207,7 @@ func Routes() *gin.Engine {
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
-      apiCoreInventory.Use(func(c *gin.Context) {
+			apiCoreInventory.Use(func(c *gin.Context) {
 				if !authenticator(c) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 					return
@@ -237,7 +237,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
-    // @fix: port to new API
+		// @fix: port to new API
 		apiCore.GET(`/api/me`, handleCoreAPI("/api/me"))
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
@@ -266,20 +266,20 @@ func Routes() *gin.Engine {
 					pbc := controllers.NewPublicBookController(db)
 					pbc.Show(c)
 				})
-        apiCorePublicBook.GET(`/recommendation/:branch`, func(c *gin.Context) {
+				apiCorePublicBook.GET(`/recommendation/:branch`, func(c *gin.Context) {
 					pbc := controllers.NewPublicBookController(db)
 					pbc.Recommendation(c)
 				})
-        apiCorePublicBook.GET(`/cover/:image`, func(c *gin.Context) {
+				apiCorePublicBook.GET(`/cover/:image`, func(c *gin.Context) {
 					pbc := controllers.NewPublicBookController(db)
 					pbc.Image(c)
 				})
 			}
-      apiCorePublic.GET(`/branch/`,  func(c *gin.Context) {
+			apiCorePublic.GET(`/branch/`, func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranches(c)
 			})
-      apiCorePublic.GET(`/branch/show/:id`,  func(c *gin.Context) {
+			apiCorePublic.GET(`/branch/show/:id`, func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranch(c)
 			})
