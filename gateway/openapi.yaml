@@ -931,6 +931,25 @@ paths:
       summary: List all public branches
       responses:
         '200':
+  /apis/core/1/api/public/book/{id}:
+    get:
+      summary: Get a public book by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Public Book UUID
+          example: 0a1f2e74-d220-64cb-ff12-532ffa713976
+  /apis/core/1/api/inventory:
+    get:
+      summary: List all inventory items
+      tags:
+        - inventory
+      responses:
+        200:
           description: OK
           content:
             application/json:
@@ -945,6 +964,55 @@ paths:
       tags:
         - branch
       summary: Get a public branch by ID
+                $ref: '#/components/schemas/PublicBook'
+        400:
+          description: Invalid UUID
+        404:
+          description: Public Book not found
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/public/book/recommendation/{branch}:
+    get:
+      summary: Get recommended books for a specific branch
+      parameters:
+        - in: path
+          name: branch
+          schema:
+            type: string
+          required: true
+          description: Branch ID
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/inventory/new:
+    post:
+      summary: Create a new inventory item
+      tags:
+        - inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/inventory/{id}:
+    get:
+      summary: Get an inventory item by ID
+      tags:
+        - inventory
       parameters:
         - in: path
           name: id
@@ -955,6 +1023,10 @@ paths:
           example: 1
       responses:
         '200':
+          description: Inventory ID
+          example: 1
+      responses:
+        200:
           description: OK
           content:
             application/json:
@@ -967,6 +1039,88 @@ paths:
         '404':
           description: Branch not found
         '500':
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicBook'
+                  counter:
+                    type: integer
+        400:
+          description: Invalid Branch ID
+        404:
+          description: Branch not found
+        500:
+          description: Internal Server Error
+  /apis/core/1/api/public/book/cover/{id}:
+    get:
+      summary: Get the cover image of a book by ID and dimensions
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Invalid ID
+        404:
+          description: Not Found
+    put:
+      summary: Update an inventory item by ID
+      tags:
+        - inventory
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Book uuid
+          example: 0a1f2e74-d220-64cb-ff12-532ffa713976_400x400.jpg
+            type: integer
+          required: true
+          description: Inventory ID
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        200:
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Invalid UUID or dimensions format
+        404:
+          description: Book not found
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        400:
+          description: Invalid ID or Bad Request
+        500:
+          description: Internal Server Error
+    delete:
+      summary: Delete an inventory item by ID
+      tags:
+        - inventory
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Inventory ID
+          example: 1
+      responses:
+        204:
+          description: No Content
+        400:
+          description: Invalid ID
+        500:
           description: Internal Server Error
 
 components:
@@ -1052,3 +1206,57 @@ components:
           type: string
         open:
           type: boolean
+    PublicBook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        currency:
+          type: string
+        title:
+          type: string
+        authorFirstname:
+          type: string
+        authorSurname:
+          type: string
+        branch_id:
+          type: integer
+        shortDescription:
+          type: string
+        genre:
+          type: string
+        branchName:
+          type: string
+        branchOrdering:
+          type: string
+        price:
+          type: number
+          format: float
+        releaseYear:
+          type: integer
+        cond:
+          type: string
+        format_name:
+          type: string
+        subtitle:
+          type: string
+    Inventory:
+      type: object
+      properties:
+        startedAt:
+          type: integer
+          example: 1739548084
+        endedAt:
+          type: integer
+          example: null
+        found:
+          type: integer
+          example: 0
+        notFound:
+          type: integer
+          example: 0
+      required:
+        - startedAt
+        - found
+        - notFound
