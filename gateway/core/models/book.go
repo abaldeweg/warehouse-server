@@ -8,13 +8,14 @@ import (
 
 // Book represents a book entity.
 type Book struct {
-	ID               uint         `json:"id" gorm:"primaryKey;autoIncrement;->"`
+	ID               uuid.UUID    `json:"id" gorm:"type:uuid;primaryKey;->"`
 	BranchID         uint         `json:"branch_id"`
 	Branch           *Branch      `json:"branch" gorm:"foreignKey:BranchID"`
 	Added            time.Time    `json:"added"`
 	Title            string       `json:"title" gorm:"type:varchar(255);not null" validate:"required"`
 	ShortDescription string       `json:"short_description"`
-	Author           []*Author    `json:"authors" gorm:"many2many:book_author;"`
+	AuthorID         uint         `json:"author_id" gorm:"index"`
+	Author           Author       `json:"-" gorm:"foreignKey:AuthorID"`
 	GenreID          uint         `json:"genre_id" gorm:"index"`
 	Genre            *Genre       `json:"genre" gorm:"foreignKey:GenreID"`
 	Price            float32      `json:"price" gorm:"default:0.00"`
