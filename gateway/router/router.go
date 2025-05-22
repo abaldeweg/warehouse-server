@@ -275,12 +275,10 @@ func Routes() *gin.Engine {
 					pbc.Image(c)
 				})
 			}
-			// apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
       apiCorePublic.GET(`/branch/`,  func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranches(c)
 			})
-			// apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
       apiCorePublic.GET(`/branch/show/:id`,  func(c *gin.Context) {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranch(c)
