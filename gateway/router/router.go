@@ -65,6 +65,7 @@ func Routes() *gin.Engine {
 			})
 		}
 
+    // @fix: port to new API
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
@@ -206,33 +207,83 @@ func Routes() *gin.Engine {
 
 		apiCoreInventory := apiCore.Group(`/api/inventory`)
 		{
-			apiCoreInventory.GET(`/`, handleCoreAPI("/api/inventory/"))
-			apiCoreInventory.GET(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.POST(`/new`, handleCoreAPI("/api/inventory/new"))
-			apiCoreInventory.PUT(`/:id`, handleCoreAPIWithId("/api/inventory"))
-			apiCoreInventory.DELETE(`/:id`, handleCoreAPIWithId("/api/inventory"))
+      apiCoreInventory.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
+			apiCoreInventory.GET(`/`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.List(c)
+			})
+			apiCoreInventory.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Show(c)
+			})
+			apiCoreInventory.POST(`/new`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Create(c)
+			})
+			apiCoreInventory.PUT(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Update(c)
+			})
+			apiCoreInventory.DELETE(`/:id`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
+				ic := controllers.NewInventoryController(db)
+				ic.Delete(c)
+			})
 		}
 
+    // @fix: port to new API
 		apiCore.GET(`/api/me`, handleCoreAPI("/api/me"))
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
+		// apiCorePublic := apiCore.Group(`/api/public`)
+		// {
+		// 	apiCorePublicBook := apiCorePublic.Group(`/book`)
+		// 	{
+		// 		apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
+		// 		apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
+		// 		apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
+		// 		apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+		// 	}
+		// 	apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
+		// 	apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
+		// 	apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+		// 	apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
+		// }
+
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
+			apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
 			{
-				apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
-				apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
-				apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
-				apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
+				apiCorePublicBook.GET(`/:id`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Show(c)
+				})
+        apiCorePublicBook.GET(`/recommendation/:branch`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Recommendation(c)
+				})
+        apiCorePublicBook.GET(`/cover/:image`, func(c *gin.Context) {
+					pbc := controllers.NewPublicBookController(db)
+					pbc.Image(c)
+				})
 			}
-			apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
-			apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
-			// apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
-			apiCorePublic.GET(`/genre/:id`, func(c *gin.Context) {
-				ac := controllers.NewPublicGenreController(db)
-				ac.FindAll(c)
+      apiCorePublic.GET(`/branch/`,  func(c *gin.Context) {
+				ac := controllers.NewPublicBranchController(db)
+				ac.GetBranches(c)
 			})
+      apiCorePublic.GET(`/branch/show/:id`,  func(c *gin.Context) {
+				ac := controllers.NewPublicBranchController(db)
+				ac.GetBranch(c)
+			})
+			apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
 			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
 		}
 
