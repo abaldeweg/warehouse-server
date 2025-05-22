@@ -924,6 +924,9 @@ paths:
           description: Unauthorized
         '500':
           description: Failed to create reservation
+  /apis/core/1/api/public/genre/{id}:
+    get:
+      summary: Get genresfor a branch by ID
   /apis/core/1/api/public/branch/:
     get:
       tags:
@@ -1031,6 +1034,9 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Genre'
+        404:
+          description: No genres found
                 $ref: '#/components/schemas/Branch'
         '400':
           description: Invalid ID
