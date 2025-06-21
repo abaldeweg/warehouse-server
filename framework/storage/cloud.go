@@ -81,3 +81,24 @@ func (s *cloudStorage) remove() error {
 
 	return object.Delete(ctx)
 }
+
+// exists checks if the object exists in Cloud Storage.
+func (s *cloudStorage) exists() (bool, error) {
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return false, fmt.Errorf("creating cloud storage client: %w", err)
+	}
+	defer client.Close()
+
+	bucket := client.Bucket(s.bucketName)
+	object := bucket.Object(filepath.Join(s.directory, s.name))
+	_, err = object.Attrs(ctx)
+	if err == storage.ErrObjectNotExist {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

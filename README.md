@@ -73,6 +73,7 @@ s := storage.NewStorage("filesystem", "data/auth", "api_keys.json")
 k, _ := s.Save()
 k, _ := s.Load()
 k, _ := s.Remove()
+k, _ := s.Exists()
 ```
 
 ## gateway

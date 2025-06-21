@@ -14,6 +14,7 @@ type persistence interface {
 	save(data []byte) error
 	load() ([]byte, error)
 	remove() error
+	exists() (bool, error)
 }
 
 // Storage represents a storage object with configurable parameters.
@@ -53,6 +54,12 @@ func (s *Storage) Remove() error {
 	storage := s.getStorage()
 
 	return storage.remove()
+}
+
+// Exists checks if the data exists in the configured storage mechanism.
+func (s *Storage) Exists() (bool, error) {
+	storage := s.getStorage()
+	return storage.exists()
 }
 
 // getStorage returns the appropriate storage implementation based on the provided type.

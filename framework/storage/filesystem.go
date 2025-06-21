@@ -38,3 +38,16 @@ func (s *filesystemStorage) remove() error {
 
 	return os.Remove(fullPath)
 }
+
+// exists checks if the file exists in the filesystem.
+func (s *filesystemStorage) exists() (bool, error) {
+	fullPath := filepath.Join(s.basePath, s.name)
+	_, err := os.Stat(fullPath)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
