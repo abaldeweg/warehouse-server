@@ -19,40 +19,42 @@ type persistence interface {
 
 // Storage represents a storage object with configurable parameters.
 type Storage struct {
-	Type     StorageType
-	Resource string // e.g. BucketName, DB Name
-	Location string // e.g. Directory
-	Name     string // e.g. Filename, Table Name
+	Type       StorageType
+	FileSystem FilesystemStorage
+	Cloud      CloudStorage
 }
 
 // NewStorage creates a new Storage instance with default values.
-func NewStorage(resource, location, name string) *Storage {
+func NewStorage() *Storage {
 	return &Storage{
-		Type:     StorageTypeFilesystem,
-		Resource: resource,
-		Location: location,
-		Name:     name,
+		Type: StorageTypeFilesystem,
+		FileSystem: FilesystemStorage{
+			Path:     ".",
+			FileName: "data.json",
+		},
+		Cloud: CloudStorage{
+			BucketName: "storage-bucket",
+			Path:       ".",
+			FileName:   "data.json",
+		},
 	}
 }
 
 // Save stores data using the configured storage mechanism.
 func (s *Storage) Save(content []byte) error {
 	storage := s.getStorage()
-
 	return storage.save(content)
 }
 
 // Load retrieves data using the configured storage mechanism.
 func (s *Storage) Load() ([]byte, error) {
 	storage := s.getStorage()
-
 	return storage.load()
 }
 
 // Remove deletes data using the configured storage mechanism.
 func (s *Storage) Remove() error {
 	storage := s.getStorage()
-
 	return storage.remove()
 }
 
@@ -66,10 +68,10 @@ func (s *Storage) Exists() (bool, error) {
 func (s *Storage) getStorage() persistence {
 	switch s.Type {
 	case StorageTypeCloud:
-		return &cloudStorage{bucketName: s.Resource, directory: s.Location, name: s.Name}
+		return &s.Cloud
 	case StorageTypeFilesystem:
 		fallthrough
 	default:
-		return &filesystemStorage{basePath: s.Location, name: s.Name}
+		return &s.FileSystem
 	}
 }

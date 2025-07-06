@@ -69,7 +69,17 @@ package main
 
 import "github.com/abaldeweg/warehouse-server/framework/storage"
 
+// Create a new storage instance
 s := storage.NewStorage("filesystem", "data/auth", "api_keys.json")
+
+// Overwrite settings as needed
+s.FileSystem.Path = "./data/auth"
+s.FileSystem.FileName = "api_keys.json"
+s.Cloud.BucketName = "storage-bucket"
+s.Cloud.Path = "."
+s.Cloud.FileName = "api_keys.json"
+
+// Methods to work with the storage
 k, _ := s.Save()
 k, _ := s.Load()
 k, _ := s.Remove()

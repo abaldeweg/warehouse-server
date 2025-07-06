@@ -9,15 +9,15 @@ import (
 	"cloud.google.com/go/storage"
 )
 
-// cloudStorage implements storage for Google Cloud Storage.
-type cloudStorage struct {
-	bucketName string
-	directory  string
-	name       string
+// CloudStorage implements storage for Google Cloud Storage.
+type CloudStorage struct {
+	BucketName string
+	Path       string
+	FileName   string
 }
 
 // save uploads data to Google Cloud Storage.
-func (s *cloudStorage) save(data []byte) error {
+func (s *CloudStorage) save(data []byte) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -25,8 +25,8 @@ func (s *cloudStorage) save(data []byte) error {
 	}
 	defer client.Close()
 
-	bucket := client.Bucket(s.bucketName)
-	object := bucket.Object(filepath.Join(s.directory, s.name))
+	bucket := client.Bucket(s.BucketName)
+	object := bucket.Object(filepath.Join(s.Path, s.FileName))
 	wc := object.NewWriter(ctx)
 
 	if _, err = wc.Write(data); err != nil {
@@ -41,7 +41,7 @@ func (s *cloudStorage) save(data []byte) error {
 }
 
 // load downloads data from Cloud.
-func (s *cloudStorage) load() ([]byte, error) {
+func (s *CloudStorage) load() ([]byte, error) {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 
@@ -50,8 +50,8 @@ func (s *cloudStorage) load() ([]byte, error) {
 	}
 	defer client.Close()
 
-	bucket := client.Bucket(s.bucketName)
-	object := bucket.Object(filepath.Join(s.directory, s.name))
+	bucket := client.Bucket(s.BucketName)
+	object := bucket.Object(filepath.Join(s.Path, s.FileName))
 	reader, err := object.NewReader(ctx)
 
 	if err != nil {
@@ -68,7 +68,7 @@ func (s *cloudStorage) load() ([]byte, error) {
 }
 
 // remove deletes the object from Cloud.
-func (s *cloudStorage) remove() error {
+func (s *CloudStorage) remove() error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -76,14 +76,14 @@ func (s *cloudStorage) remove() error {
 	}
 	defer client.Close()
 
-	bucket := client.Bucket(s.bucketName)
-	object := bucket.Object(filepath.Join(s.directory, s.name))
+	bucket := client.Bucket(s.BucketName)
+	object := bucket.Object(filepath.Join(s.Path, s.FileName))
 
 	return object.Delete(ctx)
 }
 
 // exists checks if the object exists in Cloud Storage.
-func (s *cloudStorage) exists() (bool, error) {
+func (s *CloudStorage) exists() (bool, error) {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -91,8 +91,8 @@ func (s *cloudStorage) exists() (bool, error) {
 	}
 	defer client.Close()
 
-	bucket := client.Bucket(s.bucketName)
-	object := bucket.Object(filepath.Join(s.directory, s.name))
+	bucket := client.Bucket(s.BucketName)
+	object := bucket.Object(filepath.Join(s.Path, s.FileName))
 	_, err = object.Attrs(ctx)
 	if err == storage.ErrObjectNotExist {
 		return false, nil

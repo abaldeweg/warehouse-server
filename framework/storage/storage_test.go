@@ -12,7 +12,7 @@ func TestFilesystemStorage_Save(t *testing.T) {
 	}
 	defer os.Remove(file.Name())
 
-	fs := &filesystemStorage{name: file.Name()}
+	fs := &FilesystemStorage{FileName: file.Name()}
 
 	testData := []byte("{\"test\":\"data\"}")
 
@@ -38,7 +38,7 @@ func TestFilesystemStorage_Remove(t *testing.T) {
 	}
 	defer os.Remove(file.Name())
 
-	fs := &filesystemStorage{name: file.Name()}
+	fs := &FilesystemStorage{FileName: file.Name()}
 
 	err = fs.save([]byte("test data"))
 	if err != nil {

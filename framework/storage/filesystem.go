@@ -5,22 +5,22 @@ import (
 	"path/filepath"
 )
 
-// filesystemStorage implements storage for the filesystem.
-type filesystemStorage struct {
-	basePath string
-	name     string
+// FilesystemStorage implements storage for the filesystem.
+type FilesystemStorage struct {
+	Path     string
+	FileName string
 }
 
 // save writes data to a file.
-func (s *filesystemStorage) save(data []byte) error {
-	fullPath := filepath.Join(s.basePath, s.name)
+func (s *FilesystemStorage) save(data []byte) error {
+	fullPath := filepath.Join(s.Path, s.FileName)
 
 	return os.WriteFile(fullPath, data, 0644)
 }
 
 // load reads data from a file.
-func (s *filesystemStorage) load() ([]byte, error) {
-	fullPath := filepath.Join(s.basePath, s.name)
+func (s *FilesystemStorage) load() ([]byte, error) {
+	fullPath := filepath.Join(s.Path, s.FileName)
 
 	if _, err := os.Stat(fullPath); err != nil {
 		if os.IsNotExist(err) {
@@ -33,15 +33,15 @@ func (s *filesystemStorage) load() ([]byte, error) {
 }
 
 // remove deletes the file from the filesystem.
-func (s *filesystemStorage) remove() error {
-	fullPath := filepath.Join(s.basePath, s.name)
+func (s *FilesystemStorage) remove() error {
+	fullPath := filepath.Join(s.Path, s.FileName)
 
 	return os.Remove(fullPath)
 }
 
 // exists checks if the file exists in the filesystem.
-func (s *filesystemStorage) exists() (bool, error) {
-	fullPath := filepath.Join(s.basePath, s.name)
+func (s *FilesystemStorage) exists() (bool, error) {
+	fullPath := filepath.Join(s.Path, s.FileName)
 	_, err := os.Stat(fullPath)
 	if err == nil {
 		return true, nil

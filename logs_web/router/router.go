@@ -9,7 +9,9 @@ import (
 
 // Routes sets up the Gin router.
 func Routes() *gin.Engine {
-	s := storage.NewStorage("filesystem", "data/auth", "api_keys.json")
+	s := storage.NewStorage()
+	s.FileSystem.Path = "./data/auth"
+	s.FileSystem.FileName = "api_keys.json"
 	k, _ := s.Load()
 
 	r := router.Engine()
