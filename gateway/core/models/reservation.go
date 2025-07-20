@@ -24,6 +24,17 @@ type Reservation struct {
 	Open       bool      `json:"open" gorm:"default:true"`
 }
 
+// ReservationForm represents a form for creating or updating a reservation.
+type ReservationForm struct {
+	Notes      string `json:"notes"`
+	Books      string `json:"books"`
+	Salutation string `json:"salutation" validate:"required,oneof=m f d"`
+	Firstname  string `json:"firstname" validate:"required,max=255"`
+	Surname    string `json:"surname" validate:"required,max=255"`
+	Mail       string `json:"mail" validate:"required,email,max=255"`
+	Phone      string `json:"phone" validate:"max=255"`
+}
+
 // TableName overrides the default table name for the Reservation model.
 func (Reservation) TableName() string {
 	return "reservation"

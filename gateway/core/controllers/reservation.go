@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
@@ -93,10 +95,36 @@ func (rc *ReservationController) FindOne(c *gin.Context) {
 
 // Create creates a new reservation.
 func (rc *ReservationController) Create(c *gin.Context) {
-	var reservation models.Reservation
-	if err := c.ShouldBindJSON(&reservation); err != nil {
+	var reservationForm models.ReservationForm
+	if err := c.ShouldBindJSON(&reservationForm); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	reservation := models.Reservation{
+		CreatedAt:  time.Now(),
+		Notes:      reservationForm.Notes,
+		Salutation: reservationForm.Salutation,
+		Firstname:  reservationForm.Firstname,
+		Surname:    reservationForm.Surname,
+		Mail:       reservationForm.Mail,
+		Phone:      reservationForm.Phone,
+		Open:       true,
+	}
+
+	reservation.Books = make([]*models.Book, 0)
+	for bookID := range strings.SplitSeq(reservationForm.Books, ",") {
+		bookID = strings.TrimSpace(bookID)
+		if bookID == "" {
+			continue
+		}
+		var book models.Book
+		if err := rc.db.First(&book, "id = ?", bookID).Error; err == nil {
+			if book.Sold || book.Removed || book.Reserved {
+				continue
+			}
+			reservation.Books = append(reservation.Books, &book)
+		}
 	}
 
 	user, ok := c.Get("user")
