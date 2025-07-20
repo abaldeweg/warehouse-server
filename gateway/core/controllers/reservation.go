@@ -178,10 +178,36 @@ func (rc *ReservationController) Update(c *gin.Context) {
 		return
 	}
 
-	var reservation models.Reservation
-	if err := c.ShouldBindJSON(&reservation); err != nil {
+	var reservationForm models.ReservationForm
+	if err := c.ShouldBindJSON(&reservationForm); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	reservation := models.Reservation{
+		CreatedAt:  reservationForm.CreatedAt,
+		Notes:      reservationForm.Notes,
+		Salutation: reservationForm.Salutation,
+		Firstname:  reservationForm.Firstname,
+		Surname:    reservationForm.Surname,
+		Mail:       reservationForm.Mail,
+		Phone:      reservationForm.Phone,
+		Open:       reservationForm.Open,
+	}
+
+	reservation.Books = make([]*models.Book, 0)
+	for bookID := range strings.SplitSeq(reservationForm.Books, ",") {
+		bookID = strings.TrimSpace(bookID)
+		if bookID == "" {
+			continue
+		}
+		var book models.Book
+		if err := rc.db.First(&book, "id = ?", bookID).Error; err == nil {
+			if book.Sold || book.Removed || book.Reserved {
+				continue
+			}
+			reservation.Books = append(reservation.Books, &book)
+		}
 	}
 
 	reservation.BranchID = uint(user.(auth.User).Branch.Id)
@@ -211,7 +237,7 @@ func (rc *ReservationController) Update(c *gin.Context) {
 func (rc *ReservationController) Delete(c *gin.Context) {
 	uuid, err := uuid.Parse(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
