@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/abaldeweg/warehouse-server/framework v0.19.1
 	github.com/gin-gonic/gin v1.10.1
-	github.com/spf13/viper v1.19.0
+	github.com/spf13/viper v1.20.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
