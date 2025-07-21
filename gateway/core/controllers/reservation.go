@@ -102,6 +102,7 @@ func (rc *ReservationController) Create(c *gin.Context) {
 	}
 
 	reservation := models.Reservation{
+		ID:         uuid.New().String(),
 		CreatedAt:  time.Now(),
 		Notes:      reservationForm.Notes,
 		Salutation: reservationForm.Salutation,
@@ -121,6 +122,12 @@ func (rc *ReservationController) Create(c *gin.Context) {
 		var book models.Book
 		if err := rc.db.First(&book, "id = ?", bookID).Error; err == nil {
 			if book.Sold || book.Removed || book.Reserved {
+				continue
+			}
+			book.Reserved = true
+			book.ReservedAt = time.Now()
+			book.ReservationID = uuid.MustParse(reservation.ID)
+			if err := rc.db.Save(&book).Error; err != nil {
 				continue
 			}
 			reservation.Books = append(reservation.Books, &book)
@@ -185,7 +192,8 @@ func (rc *ReservationController) Update(c *gin.Context) {
 	}
 
 	reservation := models.Reservation{
-		CreatedAt:  reservationForm.CreatedAt,
+		ID:         existingReservation.ID,
+		CreatedAt:  existingReservation.CreatedAt,
 		Notes:      reservationForm.Notes,
 		Salutation: reservationForm.Salutation,
 		Firstname:  reservationForm.Firstname,
@@ -195,20 +203,20 @@ func (rc *ReservationController) Update(c *gin.Context) {
 		Open:       reservationForm.Open,
 	}
 
-	reservation.Books = make([]*models.Book, 0)
-	for bookID := range strings.SplitSeq(reservationForm.Books, ",") {
-		bookID = strings.TrimSpace(bookID)
-		if bookID == "" {
-			continue
-		}
-		var book models.Book
-		if err := rc.db.First(&book, "id = ?", bookID).Error; err == nil {
-			if book.Sold || book.Removed || book.Reserved {
-				continue
-			}
-			reservation.Books = append(reservation.Books, &book)
-		}
-	}
+	// reservation.Books = make([]*models.Book, 0)
+	// for bookID := range strings.SplitSeq(reservationForm.Books, ",") {
+	// 	bookID = strings.TrimSpace(bookID)
+	// 	if bookID == "" {
+	// 		continue
+	// 	}
+	// 	var book models.Book
+	// 	if err := rc.db.First(&book, "id = ?", bookID).Error; err == nil {
+	// 		if book.Sold || book.Removed || book.Reserved {
+	// 			continue
+	// 		}
+	// 		reservation.Books = append(reservation.Books, &book)
+	// 	}
+	// }
 
 	reservation.BranchID = uint(user.(auth.User).Branch.Id)
 
@@ -217,7 +225,7 @@ func (rc *ReservationController) Update(c *gin.Context) {
 		return
 	}
 
-	reservation.ID = uuid.String()
+	// reservation.ID = uuid.String()
 
 	if err := rc.reservationRepo.Update(&reservation); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update"})

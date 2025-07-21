@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -45,20 +44,5 @@ func (Reservation) TableName() string {
 // Validate validates the Reservation model.
 func (r *Reservation) Validate(db *gorm.DB) bool {
 	validate := validator.New()
-	return validate.StructExcept(r, "Branch", "Books") == nil
-}
-
-// BeforeCreate hook for Reservation model.
-func (r *Reservation) BeforeCreate(tx *gorm.DB) (err error) {
-	r.ID = uuid.New().String()
-	for _, book := range r.Books {
-		book.Reserved = true
-		book.ReservedAt = time.Now()
-		book.ReservationID = uuid.MustParse(r.ID)
-
-		if err := tx.Save(book).Error; err != nil {
-			return err
-		}
-	}
-	return nil
+	return validate.StructExcept(r, "Branch") == nil
 }

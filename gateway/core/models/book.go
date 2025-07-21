@@ -8,7 +8,7 @@ import (
 
 // Book represents a book entity.
 type Book struct {
-	ID               uuid.UUID    `json:"id" gorm:"type:uuid;primaryKey;->"`
+	ID               uuid.UUID    `json:"id" gorm:"type:uuid;primaryKey"`
 	BranchID         uint         `json:"branch_id"`
 	Branch           *Branch      `json:"branch" gorm:"foreignKey:BranchID"`
 	Added            time.Time    `json:"added"`
@@ -34,7 +34,7 @@ type Book struct {
 	Format           *Format      `json:"format" gorm:"foreignKey:FormatID"`
 	FormatID         uint         `json:"format_id" gorm:"not null"`
 	Subtitle         string       `json:"subtitle" validate:"max=255"`
-	Duplicate        bool         `gorm:"default:false"`
+	Duplicate        bool         `json:"duplicate" gorm:"default:false"`
 	ReservationID    uuid.UUID    `json:"reservation_id"`
 	Reservation      *Reservation `json:"reservation" gorm:"foreignKey:ReservationID"`
 }
