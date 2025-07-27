@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/logs_web
 go 1.24
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.19.1
+	github.com/abaldeweg/warehouse-server/framework v0.20.1
 	github.com/gin-gonic/gin v1.10.1
 	github.com/spf13/viper v1.19.0
 	go.mongodb.org/mongo-driver v1.17.4
@@ -37,7 +37,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.26.0 // indirect
+	github.com/go-playground/validator/v10 v10.27.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
@@ -86,9 +86,9 @@ require (
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/oauth2 v0.24.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/api v0.210.0 // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
