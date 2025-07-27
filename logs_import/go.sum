@@ -4,6 +4,8 @@ github.com/abaldeweg/warehouse-server/framework v0.18.0 h1:NbuUZzpsgmlL1FpCHc21R
 github.com/abaldeweg/warehouse-server/framework v0.18.0/go.mod h1:snwwbxQrn5XlonjZCfPEaMcA2LmFsn7UdVweM63VsXw=
 github.com/abaldeweg/warehouse-server/framework v0.19.1 h1:ERX5dUGrQ27xZKE+sJG+lrBRxdwhyPZJ73ufLkjKJ5k=
 github.com/abaldeweg/warehouse-server/framework v0.19.1/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
+github.com/abaldeweg/warehouse-server/framework v0.20.2 h1:VbEiD33xoIn58rHAqOxNpiHBm8U1O0TYr4vXS7ujskk=
+github.com/abaldeweg/warehouse-server/framework v0.20.2/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
