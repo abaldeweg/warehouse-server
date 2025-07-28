@@ -103,7 +103,7 @@ func (rc *ReservationController) Create(c *gin.Context) {
 
 	reservation := models.Reservation{
 		ID:         uuid.New().String(),
-		CreatedAt:  time.Now(),
+		CreatedAt:  reservationForm.ToTime(),
 		Notes:      reservationForm.Notes,
 		Salutation: reservationForm.Salutation,
 		Firstname:  reservationForm.Firstname,
@@ -193,7 +193,7 @@ func (rc *ReservationController) Update(c *gin.Context) {
 
 	reservation := models.Reservation{
 		ID:         existingReservation.ID,
-		CreatedAt:  existingReservation.CreatedAt,
+		CreatedAt:  reservationForm.ToTime(),
 		Notes:      reservationForm.Notes,
 		Salutation: reservationForm.Salutation,
 		Firstname:  reservationForm.Firstname,

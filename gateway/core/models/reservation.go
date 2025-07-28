@@ -26,15 +26,20 @@ type Reservation struct {
 
 // ReservationForm represents a form for creating or updating a reservation.
 type ReservationForm struct {
-	CreatedAt  time.Time `json:"created_at"`
-	Notes      string    `json:"notes"`
-	Books      string    `json:"books"`
-	Salutation string    `json:"salutation" validate:"required,oneof=m f d"`
-	Firstname  string    `json:"firstname" validate:"required,max=255"`
-	Surname    string    `json:"surname" validate:"required,max=255"`
-	Mail       string    `json:"mail" validate:"required,email,max=255"`
-	Phone      string    `json:"phone" validate:"max=255"`
-	Open       bool      `json:"open"`
+	CreatedAt  int64  `json:"created_at"`
+	Notes      string `json:"notes"`
+	Books      string `json:"books"`
+	Salutation string `json:"salutation" validate:"required,oneof=m f d"`
+	Firstname  string `json:"firstname" validate:"required,max=255"`
+	Surname    string `json:"surname" validate:"required,max=255"`
+	Mail       string `json:"mail" validate:"required,email,max=255"`
+	Phone      string `json:"phone" validate:"max=255"`
+	Open       bool   `json:"open"`
+}
+
+// ToTime converts the CreatedAt unix timestamp to time.Time
+func (f *ReservationForm) ToTime() time.Time {
+	return time.Unix(f.CreatedAt, 0)
 }
 
 // TableName overrides the default table name for the Reservation model.
