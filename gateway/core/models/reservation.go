@@ -39,7 +39,7 @@ type ReservationForm struct {
 
 // ReservationUpdateForm represents a form for creating or updating a reservation.
 type ReservationUpdateForm struct {
-	CreatedAt  int64  `json:"created_at"`
+	CreatedAt  int64  `json:"createdAt"`
 	Notes      string `json:"notes"`
 	Salutation string `json:"salutation" validate:"required,oneof=m f d"`
 	Firstname  string `json:"firstname" validate:"required,max=255"`
