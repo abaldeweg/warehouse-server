@@ -57,7 +57,7 @@ func (rr *reservationRepository) Create(reservation *models.Reservation) error {
 
 // Update updates an existing reservation.
 func (rr *reservationRepository) Update(reservation *models.Reservation) error {
-	return rr.db.Model(&models.Reservation{}).Where("id = ?", reservation.ID).Updates(reservation).Error
+	return rr.db.Save(reservation).Error
 }
 
 // Delete deletes a reservation by its UUID.
