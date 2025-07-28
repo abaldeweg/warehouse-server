@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -12,7 +13,7 @@ type Reservation struct {
 	ID         string    `json:"id" gorm:"primaryKey"`
 	BranchID   uint      `json:"branch_id" gorm:"index"`
 	Branch     Branch    `json:"branch" gorm:"foreignKey:BranchID"`
-	CreatedAt  time.Time `json:"created_at"`
+	CreatedAt  time.Time `json:"createdAt"`
 	Notes      string    `json:"notes"`
 	Books      []*Book   `json:"books" gorm:"foreignKey:ReservationID"`
 	Salutation string    `json:"salutation" validate:"required,oneof=m f d"`
@@ -45,4 +46,16 @@ func (Reservation) TableName() string {
 func (r *Reservation) Validate(db *gorm.DB) bool {
 	validate := validator.New()
 	return validate.StructExcept(r, "Branch") == nil
+}
+
+// MarshalJSON customizes the JSON output for Reservation.
+func (r Reservation) MarshalJSON() ([]byte, error) {
+	type Alias Reservation
+	return json.Marshal(&struct {
+		CreatedAt int64 `json:"createdAt"`
+		*Alias
+	}{
+		CreatedAt: r.CreatedAt.Unix(),
+		Alias:     (*Alias)(&r),
+	})
 }

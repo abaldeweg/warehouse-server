@@ -13,19 +13,19 @@ type Book struct {
 	Branch           *Branch      `json:"branch" gorm:"foreignKey:BranchID"`
 	Added            time.Time    `json:"added"`
 	Title            string       `json:"title" gorm:"type:varchar(255);not null" validate:"required"`
-	ShortDescription string       `json:"short_description"`
+	ShortDescription string       `json:"shortDescription"`
 	AuthorID         uint         `json:"author_id" gorm:"index"`
 	Author           Author       `json:"-" gorm:"foreignKey:AuthorID"`
 	GenreID          uint         `json:"genre_id" gorm:"index"`
 	Genre            *Genre       `json:"genre" gorm:"foreignKey:GenreID"`
 	Price            float32      `json:"price" gorm:"default:0.00"`
 	Sold             bool         `json:"sold" gorm:"default:false"`
-	SoldOn           time.Time    `json:"sold_on,omitempty"`
+	SoldOn           time.Time    `json:"soldOn,omitempty"`
 	Removed          bool         `json:"removed" gorm:"default:false"`
-	RemovedOn        time.Time    `json:"removed_on,omitempty"`
+	RemovedOn        time.Time    `json:"removedOn,omitempty"`
 	Reserved         bool         `json:"reserved" gorm:"default:false"`
-	ReservedAt       time.Time    `json:"reserved_at,omitempty"`
-	ReleaseYear      int          `json:"published_date" validate:"release_year"`
+	ReservedAt       time.Time    `json:"reservedAt,omitempty"`
+	ReleaseYear      int          `json:"releaseYear" validate:"release_year"`
 	Condition        *Condition   `json:"condition" gorm:"foreignKey:ConditionID"`
 	ConditionID      uint         `json:"condition_id"`
 	Tags             []*Tag       `json:"tags" gorm:"many2many:book_tag;"`

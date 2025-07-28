@@ -43,7 +43,7 @@ func (rr *reservationRepository) ReservationStatus(branchID uint) (int64, error)
 // FindOne retrieves a reservation by its UUID.
 func (rr *reservationRepository) FindOne(id uuid.UUID) (*models.Reservation, error) {
 	var reservation models.Reservation
-	err := rr.db.Preload("Branch").Preload("Books").First(&reservation, "id = ?", id).Error
+	err := rr.db.Preload("Branch").Preload("Books").Preload("Books.Branch").Preload("Books.Genre").Preload("Books.Tags").First(&reservation, "id = ?", id).Error
 	if err != nil {
 		return nil, err
 	}
