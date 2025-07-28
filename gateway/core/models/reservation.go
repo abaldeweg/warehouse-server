@@ -37,8 +37,25 @@ type ReservationForm struct {
 	Open       bool   `json:"open"`
 }
 
+// ReservationUpdateForm represents a form for creating or updating a reservation.
+type ReservationUpdateForm struct {
+	CreatedAt  int64  `json:"created_at"`
+	Notes      string `json:"notes"`
+	Salutation string `json:"salutation" validate:"required,oneof=m f d"`
+	Firstname  string `json:"firstname" validate:"required,max=255"`
+	Surname    string `json:"surname" validate:"required,max=255"`
+	Mail       string `json:"mail" validate:"required,email,max=255"`
+	Phone      string `json:"phone" validate:"max=255"`
+	Open       bool   `json:"open"`
+}
+
 // ToTime converts the CreatedAt unix timestamp to time.Time
 func (f *ReservationForm) ToTime() time.Time {
+	return time.Unix(f.CreatedAt, 0)
+}
+
+// ToTime converts the CreatedAt unix timestamp to time.Time
+func (f *ReservationUpdateForm) ToTime() time.Time {
 	return time.Unix(f.CreatedAt, 0)
 }
 

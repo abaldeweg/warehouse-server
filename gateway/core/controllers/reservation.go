@@ -185,7 +185,7 @@ func (rc *ReservationController) Update(c *gin.Context) {
 		return
 	}
 
-	var reservationForm models.ReservationForm
+	var reservationForm models.ReservationUpdateForm
 	if err := c.ShouldBindJSON(&reservationForm); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
