@@ -15,7 +15,7 @@ type Book struct {
 	Title            string       `json:"title" gorm:"type:varchar(255);not null" validate:"required"`
 	ShortDescription string       `json:"shortDescription"`
 	AuthorID         uint         `json:"author_id" gorm:"index"`
-	Author           Author       `json:"-" gorm:"foreignKey:AuthorID"`
+	Author           Author       `json:"author" gorm:"foreignKey:AuthorID"`
 	GenreID          uint         `json:"genre_id" gorm:"index"`
 	Genre            *Genre       `json:"genre" gorm:"foreignKey:GenreID"`
 	Price            float32      `json:"price" gorm:"default:0.00"`
