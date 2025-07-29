@@ -8,6 +8,8 @@ github.com/abaldeweg/warehouse-server/framework v0.19.1 h1:ERX5dUGrQ27xZKE+sJG+l
 github.com/abaldeweg/warehouse-server/framework v0.19.1/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
 github.com/abaldeweg/warehouse-server/framework v0.20.2 h1:VbEiD33xoIn58rHAqOxNpiHBm8U1O0TYr4vXS7ujskk=
 github.com/abaldeweg/warehouse-server/framework v0.20.2/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
+github.com/abaldeweg/warehouse-server/framework v0.20.11 h1:2ytJhYeDaZX2d2ZYzNdffiyrb6gSVRqACGVfdWS7gPs=
+github.com/abaldeweg/warehouse-server/framework v0.20.11/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
 github.com/bytedance/sonic v1.12.6/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic v1.13.2 h1:8/H1FempDZqC4VqjptGo14QQlJx8VdZJegxs6wwfqpQ=
