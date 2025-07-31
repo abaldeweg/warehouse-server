@@ -102,18 +102,6 @@ k, _ := s.Exists()
 |MYSQL_URL|Databse config string for MySQL|`adm:pass@tcp(localhost:3306)/warehouse?charset=utf8mb4&parseTime=True&loc=Local`
 |SQLITE_NAME|Database name for SQLite (without file extension)|`warehouse`
 
-## Blog
-
-Mount auth volume to `/usr/src/app/data/auth/` and data volume to `/usr/src/app/data/content/`.
-
-The routes needs the API-Key to contain the `articles` permission.
-
-### Blog Settings
-
-|Var                    |Description
-|-----------------------|-----------
-|CORS_ALLOW_ORIGIN      |Allowed origins
-
 ## Static
 
 The module sets up a simple HTTP file server that serves files from the `data` directory on port 8080.
