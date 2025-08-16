@@ -135,7 +135,3 @@ Mount data volumes to `/usr/src/app/data/auth/`.
 |Var                    |Description
 |-----------------------|-----------
 |MONGODB_URI            |MongoDB connection string
-
-## Release
-
-Run `make release TAG=1.0.0`.
