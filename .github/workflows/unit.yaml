@@ -12,10 +12,10 @@ jobs:
   test-framework:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version: "1.25"
       - name: Run framework tests
         working-directory: ./framework
         run: |
@@ -25,10 +25,10 @@ jobs:
   test-gateway:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version: "1.25"
       - name: Run gateway tests
         working-directory: ./gateway
         run: |
@@ -38,10 +38,10 @@ jobs:
   test-logs_import:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version: "1.25"
       - name: Run logs_import tests
         working-directory: ./logs_import
         run: |
@@ -51,10 +51,10 @@ jobs:
   test-logs_web:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version: "1.25"
       - name: Run logs_web tests
         working-directory: ./logs_web
         run: |
