@@ -36,6 +36,8 @@ github.com/abaldeweg/warehouse-server/framework v0.20.2 h1:VbEiD33xoIn58rHAqOxNp
 github.com/abaldeweg/warehouse-server/framework v0.20.2/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
 github.com/abaldeweg/warehouse-server/framework v0.20.11 h1:2ytJhYeDaZX2d2ZYzNdffiyrb6gSVRqACGVfdWS7gPs=
 github.com/abaldeweg/warehouse-server/framework v0.20.11/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
+github.com/abaldeweg/warehouse-server/framework v0.21.1 h1:5ko8b2HPRntu+hosWLQ0MM2tV9cqz0AFgnNuXIfakIs=
+github.com/abaldeweg/warehouse-server/framework v0.21.1/go.mod h1:Ng1lNH6d34aDE0uaFzm0LXfMFYSFaCCPjNZ705QoYcQ=
 github.com/bytedance/sonic v1.13.3 h1:MS8gmaH16Gtirygw7jV91pDCN33NyMrPbN7qiYhEsF0=
 github.com/bytedance/sonic v1.13.3/go.mod h1:o68xyaF9u2gvVBuGHPlUVCy+ZfmNNO5ETf1+KgkJhz4=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
