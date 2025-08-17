@@ -20,5 +20,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.25"
+      - name: Configure Git
+        run: |
+          git config --global user.email "a@baldeweg.org"
+          git config --global user.name "André Baldeweg"
       - name: Run release
         run: make release TAG=${{ github.event.inputs.tag }}
