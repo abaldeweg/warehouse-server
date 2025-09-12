@@ -87,11 +87,6 @@ func (ctrl *InventoryController) Create(c *gin.Context) {
 		return
 	}
 
-	if !inventory.Validate(ctrl.DB) {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid JSON"})
-		return
-	}
-
 	if err := ctrl.Repo.Create(inventory); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 		return
