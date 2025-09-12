@@ -20,6 +20,17 @@ type Inventory struct {
 	NotFound           int        `json:"notFound" validate:"min=0"`
 }
 
+// NewInventory returns an Inventory with default values.
+func NewInventory() *Inventory {
+	now := time.Now().Unix()
+	return &Inventory{
+		StartedAtTimestamp: now,
+		EndedAtTimestamp:   nil,
+		Found:              0,
+		NotFound:           0,
+	}
+}
+
 // TableName sets the table name for the Inventory model.
 func (Inventory) TableName() string {
 	return "inventory"

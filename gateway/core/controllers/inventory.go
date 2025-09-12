@@ -68,11 +68,7 @@ func (ctrl *InventoryController) Show(c *gin.Context) {
 
 // Create creates a new inventory item.
 func (ctrl *InventoryController) Create(c *gin.Context) {
-	var inventory models.Inventory
-	if err := c.ShouldBindJSON(&inventory); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid JSON"})
-		return
-	}
+	inventory := models.NewInventory()
 
 	user, ok := c.Get("user")
 	if !ok {
@@ -96,12 +92,12 @@ func (ctrl *InventoryController) Create(c *gin.Context) {
 		return
 	}
 
-	if err := ctrl.Repo.Create(&inventory); err != nil {
+	if err := ctrl.Repo.Create(inventory); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 		return
 	}
 
-  createdInventory, err := ctrl.Repo.FindByID(inventory.ID)
+	createdInventory, err := ctrl.Repo.FindByID(inventory.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve created inventory"})
 		return
