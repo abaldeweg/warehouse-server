@@ -2,6 +2,10 @@
 
 warehouse-server is a database to manage your warehouse.
 
+## Documentation
+
+📋 **[Architecture Decision Records (ADRs)](docs/adr/)** - Key architectural decisions and their rationale
+
 ## Getting Started
 
 Build the images and start the container.
