@@ -139,6 +139,7 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 	inventory.ID = uint(id)
 	inventory.BranchID = uint(user.(auth.User).Branch.Id)
 
+	endedAt := int64(jsonBody.EndedAt)
 	inventory.EndedAtTimestamp = &endedAt
 
 	if err := ctrl.Repo.Update(inventory); err != nil {
