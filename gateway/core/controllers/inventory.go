@@ -24,7 +24,7 @@ func NewInventoryController(db *gorm.DB) *InventoryController {
 
 // List lists all inventory items.
 func (ctrl *InventoryController) List(c *gin.Context) {
-  user, ok := c.Get("user")
+	user, ok := c.Get("user")
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
 		return
@@ -109,11 +109,15 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 		return
 	}
 
-  var inventory models.Inventory
-	if err := c.ShouldBindJSON(&inventory); err != nil {
+	var jsonBody struct {
+		EndedAt string `json:"endedAt"`
+	}
+	if err := c.ShouldBindJSON(&jsonBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid JSON"})
 		return
 	}
+
+	inventory := models.NewInventory()
 
 	user, ok := c.Get("user")
 	if !ok {
@@ -121,26 +125,30 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 		return
 	}
 
-  existingGenre, err := ctrl.Repo.FindByID(uint(id))
+	existingInventory, err := ctrl.Repo.FindByID(uint(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Genre not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Inventory not found"})
 		return
 	}
 
-	if existingGenre.BranchID != uint(user.(auth.User).Branch.Id) {
+	if existingInventory.BranchID != uint(user.(auth.User).Branch.Id) {
 		c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
 		return
 	}
 
-  inventory.ID = uint(id)
-  inventory.BranchID = uint(user.(auth.User).Branch.Id)
+	inventory.ID = uint(id)
+	inventory.BranchID = uint(user.(auth.User).Branch.Id)
 
-	if !inventory.Validate(ctrl.DB) {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid JSON"})
-		return
+	if jsonBody.EndedAt != "" {
+		endedAt, err := strconv.ParseInt(jsonBody.EndedAt, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid endedAt value"})
+			return
+		}
+		inventory.EndedAtTimestamp = &endedAt
 	}
 
-	if err := ctrl.Repo.Update(&inventory); err != nil {
+	if err := ctrl.Repo.Update(inventory); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 		return
 	}
