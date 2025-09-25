@@ -110,7 +110,7 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 	}
 
 	var jsonBody struct {
-		EndedAt string `json:"endedAt"`
+		EndedAt float64 `json:"endedAt"`
 	}
 	if err := c.ShouldBindJSON(&jsonBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid JSON"})
@@ -139,14 +139,7 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 	inventory.ID = uint(id)
 	inventory.BranchID = uint(user.(auth.User).Branch.Id)
 
-	if jsonBody.EndedAt != "" {
-		endedAt, err := strconv.ParseInt(jsonBody.EndedAt, 10, 64)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid endedAt value"})
-			return
-		}
-		inventory.EndedAtTimestamp = &endedAt
-	}
+	inventory.EndedAtTimestamp = &endedAt
 
 	if err := ctrl.Repo.Update(inventory); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
