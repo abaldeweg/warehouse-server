@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var authenticator = auth.Authenticate
+var authenticator = auth.AuthenticateTEST
 
 // Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
@@ -68,6 +68,14 @@ func Routes() *gin.Engine {
 		// @fix: port to new API
 		apiCoreBook := apiCore.Group(`/api/book`)
 		{
+			apiCoreBook.Use(func(c *gin.Context) {
+				if !authenticator(c) {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+					return
+				}
+				c.Next()
+			})
+
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
 			apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
 			apiCoreBook.GET(`/stats`, handleCoreAPI("/api/book/stats"))
@@ -76,7 +84,11 @@ func Routes() *gin.Engine {
 			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
 			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
-			apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
+			// apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
+			apiCoreBook.GET(`/cover/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.ShowCover(c)
+			})
 			apiCoreBook.POST(`/cover/:id`, handleCover)
 			apiCoreBook.DELETE(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
 			apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/api/book/sell"))

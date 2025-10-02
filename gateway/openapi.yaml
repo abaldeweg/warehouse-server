@@ -1105,6 +1105,42 @@ paths:
           description: Invalid ID
         500:
           description: Internal Server Error
+  /apis/core/1/api/book/cover/{id}:
+    get:
+      summary: Get all cover images for a book by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Book UUID
+      responses:
+        200:
+          description: Cover images for the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cover_s:
+                    type: string
+                    description: Small cover image (base64)
+                  cover_m:
+                    type: string
+                    description: Medium cover image (base64)
+                  cover_l:
+                    type: string
+                    description: Large cover image (base64)
+        400:
+          description: Invalid book id
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: Book not found
 
 components:
   schemas:
