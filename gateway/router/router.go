@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var authenticator = auth.AuthenticateTEST
+var authenticator = auth.Authenticate
 
 // Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
