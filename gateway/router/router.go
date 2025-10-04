@@ -84,7 +84,6 @@ func Routes() *gin.Engine {
 			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
 			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
-			// apiCoreBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
 			apiCoreBook.GET(`/cover/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ShowCover(c)
