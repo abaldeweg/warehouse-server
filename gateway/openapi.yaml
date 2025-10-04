@@ -1141,6 +1141,25 @@ paths:
                 type: object
         404:
           description: Book not found
+    delete:
+      summary: Delete all cover images for a book by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Book ID
+      responses:
+        200:
+          description: Cover images deleted
+        400:
+          description: Invalid book ID
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
 
 components:
   schemas:
