@@ -3,6 +3,8 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/abaldeweg/warehouse-server/gateway/auth"
+	"github.com/abaldeweg/warehouse-server/gateway/core/models"
 	"github.com/abaldeweg/warehouse-server/gateway/core/repository"
 	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"github.com/gin-gonic/gin"
@@ -22,6 +24,69 @@ func NewBookController(db *gorm.DB) *BookController {
 		DB:   db,
 		Repo: repository.NewBookRepository(db),
 	}
+}
+
+// ShowStats retrieves book statistics.
+func (pbc *BookController) ShowStats(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+
+	var (
+		all       int64
+		available int64
+		reserved  int64
+		sold      int64
+		removed   int64
+	)
+
+	// total books for branch
+	if err := pbc.DB.Model(&models.Book{}).Where("branch_id = ?", branchId).Count(&all).Error; err != nil {
+		all = 0
+	}
+
+	// available: not sold, not removed, not reserved
+	if err := pbc.DB.Model(&models.Book{}).
+		Where("branch_id = ? AND sold = ? AND removed = ? AND reserved = ?", branchId, false, false, false).
+		Count(&available).Error; err != nil {
+		available = 0
+	}
+
+	// reserved
+	if err := pbc.DB.Model(&models.Book{}).
+		Where("branch_id = ? AND reserved = ?", branchId, true).
+		Count(&reserved).Error; err != nil {
+		reserved = 0
+	}
+
+	// sold
+	if err := pbc.DB.Model(&models.Book{}).
+		Where("branch_id = ? AND sold = ?", branchId, true).
+		Count(&sold).Error; err != nil {
+		sold = 0
+	}
+
+	// removed
+	if err := pbc.DB.Model(&models.Book{}).
+		Where("branch_id = ? AND removed = ?", branchId, true).
+		Count(&removed).Error; err != nil {
+		removed = 0
+	}
+
+	// storage size
+	var size int64 = 0
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"all":       all,
+		"available": available,
+		"reserved":  reserved,
+		"sold":      sold,
+		"removed":   removed,
+		"storage":   float64(size) / 1000000.0,
+	})
 }
 
 // ShowCover retrieves the cover images.

@@ -78,7 +78,11 @@ func Routes() *gin.Engine {
 
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
 			apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
-			apiCoreBook.GET(`/stats`, handleCoreAPI("/api/book/stats"))
+			// apiCoreBook.GET(`/stats`, handleCoreAPI("/api/book/stats"))
+			apiCoreBook.GET(`/stats`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.ShowStats(c)
+			})
 			apiCoreBook.PUT(`/inventory/found/:id`, handleCoreAPIWithId("/api/book/inventory/found"))
 			apiCoreBook.PUT(`/inventory/notfound/:id`, handleCoreAPIWithId("/api/book/inventory/notfound"))
 			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))

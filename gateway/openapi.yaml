@@ -1161,6 +1161,46 @@ paths:
         403:
           description: Forbidden
 
+  /apis/core/1/api/book/stats:
+    get:
+      summary: Get statistics for books in the authenticated user's branch
+      responses:
+        200:
+          description: Statistics for the branch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all:
+                    type: integer
+                    format: int64
+                    description: Total number of books for the branch
+                  available:
+                    type: integer
+                    format: int64
+                    description: Books available (not sold, not removed, not reserved)
+                  reserved:
+                    type: integer
+                    format: int64
+                    description: Number of reserved books
+                  sold:
+                    type: integer
+                    format: int64
+                    description: Number of sold books
+                  removed:
+                    type: integer
+                    format: int64
+                    description: Number of removed books
+                  storage:
+                    type: number
+                    format: float
+                    description: Size of storage under data directory in megabytes
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+
 components:
   schemas:
     AuthorEntity:
