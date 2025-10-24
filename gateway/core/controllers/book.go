@@ -78,6 +78,9 @@ func (pbc *BookController) ShowStats(ctx *gin.Context) {
 
 	// storage size
 	var size int64 = 0
+	if s, err := cover.GetSize(); err == nil {
+		size = s
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"all":       all,
