@@ -26,6 +26,22 @@ func NewBookController(db *gorm.DB) *BookController {
 	}
 }
 
+// CleanBooks removes books that are marked as removed or sold.
+func (pbc *BookController) CleanBooks(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+	if err := pbc.Repo.DeleteBooksByBranch(branchId); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to clean books"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"msg": "Cleaned up successfully!"})
+}
+
 // ShowStats retrieves book statistics.
 func (pbc *BookController) ShowStats(ctx *gin.Context) {
 	user, ok := ctx.Get("user")
