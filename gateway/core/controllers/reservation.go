@@ -125,8 +125,10 @@ func (rc *ReservationController) Create(c *gin.Context) {
 				continue
 			}
 			book.Reserved = true
-			book.ReservedAt = time.Now()
-			book.ReservationID = uuid.MustParse(reservation.ID)
+			now := time.Now()
+			book.ReservedAt = &now
+			rid := uuid.MustParse(reservation.ID)
+			book.ReservationID = &rid
 			if err := rc.db.Save(&book).Error; err != nil {
 				continue
 			}

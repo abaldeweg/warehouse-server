@@ -52,9 +52,9 @@ func runMigrations(db *gorm.DB) {
 		&models.Genre{},
 		&models.Format{},
 		&models.Reservation{},
-    &models.Book{},
-    &models.PublicBook{},
-    &models.Inventory{},
+		&models.Book{},
+		// &models.PublicBook{},
+		&models.Inventory{},
 	)
 
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 type Inventory struct {
 	ID                 uint       `json:"id" gorm:"primaryKey;autoIncrement;->"`
 	BranchID           uint       `json:"branch_id" gorm:"index"`
-	Branch             Branch     `json:"branch" gorm:"foreignKey:BranchID"`
+	Branch             *Branch    `json:"branch" gorm:"foreignKey:BranchID"`
 	StartedAt          time.Time  `json:"-"`
 	StartedAtTimestamp int64      `json:"startedAt" gorm:"-"`
 	EndedAt            *time.Time `json:"-"`

@@ -117,8 +117,6 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 		return
 	}
 
-	inventory := models.NewInventory()
-
 	user, ok := c.Get("user")
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
@@ -136,17 +134,14 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 		return
 	}
 
-	inventory.ID = uint(id)
-	inventory.BranchID = uint(user.(auth.User).Branch.Id)
-
 	endedAt := int64(jsonBody.EndedAt)
-	inventory.EndedAtTimestamp = &endedAt
+	existingInventory.EndedAtTimestamp = &endedAt
 
-	if err := ctrl.Repo.Update(inventory); err != nil {
+	if err := ctrl.Repo.Update(existingInventory); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 		return
 	}
-	c.JSON(http.StatusOK, inventory)
+	c.JSON(http.StatusOK, existingInventory)
 }
 
 // Delete deletes an inventory item by ID.

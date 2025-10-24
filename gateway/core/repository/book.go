@@ -37,3 +37,17 @@ func (r *BookRepository) DeleteBooksByBranch(branchID uint) error {
 
 	return tx.Commit().Error
 }
+
+// FindByID retrieves a book by UUID.
+func (r *BookRepository) FindByID(id interface{}) (*models.Book, error) {
+	var book models.Book
+	if err := r.DB.First(&book, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+	return &book, nil
+}
+
+// Update saves the provided book.
+func (r *BookRepository) Update(book *models.Book) error {
+	return r.DB.Save(book).Error
+}
