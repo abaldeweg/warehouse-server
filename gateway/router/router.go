@@ -78,7 +78,6 @@ func Routes() *gin.Engine {
 
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
 			apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
-			// apiCoreBook.GET(`/stats`, handleCoreAPI("/api/book/stats"))
 			apiCoreBook.GET(`/stats`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ShowStats(c)
@@ -93,7 +92,6 @@ func Routes() *gin.Engine {
 				bc.ShowCover(c)
 			})
 			apiCoreBook.POST(`/cover/:id`, handleCover)
-			// apiCoreBook.DELETE(`/cover/:id`, handleCoreAPIWithId("/api/book/cover"))
 			apiCoreBook.DELETE(`/cover/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.DeleteCover(c)
