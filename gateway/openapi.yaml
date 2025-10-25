@@ -1161,6 +1161,64 @@ paths:
         403:
           description: Forbidden
 
+  /apis/core/1/api/book/inventory/found/{id}:
+    put:
+      summary: Mark a book as found in the active inventory for the authenticated user's branch
+      tags:
+        - book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Book UUID
+      responses:
+        200:
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        400:
+          description: Invalid book id
+        401:
+          description: Unauthorized
+        404:
+          description: Book or active inventory not found
+        500:
+          description: Internal Server Error
+
+  /apis/core/1/api/book/inventory/notfound/{id}:
+    put:
+      summary: Mark a book as not found in the active inventory for the authenticated user's branch
+      tags:
+        - book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Book UUID
+      responses:
+        200:
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        400:
+          description: Invalid book id
+        401:
+          description: Unauthorized
+        404:
+          description: Book or active inventory not found
+        500:
+          description: Internal Server Error
+
   /apis/core/1/api/book/stats:
     get:
       summary: Get statistics for books in the authenticated user's branch
@@ -1358,3 +1416,37 @@ components:
         - startedAt
         - found
         - notFound
+
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branch_id:
+          type: integer
+        title:
+          type: string
+        shortDescription:
+          type: string
+        author_id:
+          type: integer
+        genre_id:
+          type: integer
+        price:
+          type: number
+          format: float
+        sold:
+          type: boolean
+        removed:
+          type: boolean
+        reserved:
+          type: boolean
+        releaseYear:
+          type: integer
+        inventory:
+          type: boolean
+          nullable: true
+      required:
+        - id
+        - title

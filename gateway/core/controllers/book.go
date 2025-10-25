@@ -42,6 +42,126 @@ func (pbc *BookController) CleanBooks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"msg": "Cleaned up successfully!"})
 }
 
+// FindInventory marks books as found in inventory.
+func (pbc *BookController) FindInventory(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+
+	id := ctx.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid book id"})
+		return
+	}
+	book, err := pbc.Repo.FindByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	invRepo := repository.NewInventoryRepository(pbc.DB)
+	inventory, err := invRepo.FindActiveInventory(branchId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return
+	}
+	if inventory == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Active inventory not found"})
+		return
+	}
+	if user.(auth.User).Branch.Id != int(inventory.Branch.ID) {
+		ctx.JSON(http.StatusForbidden, gin.H{"msg": "Invalid Branch"})
+		return
+	}
+
+	if book.Inventory != nil && *book.Inventory {
+		inventory.Found = inventory.Found - 1
+	} else {
+		inventory.Found = inventory.Found + 1
+	}
+
+	if book.Inventory != nil && *book.Inventory {
+		book.Inventory = nil
+	} else {
+		val := true
+		book.Inventory = &val
+	}
+
+	if err := invRepo.Update(inventory); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update inventory"})
+		return
+	}
+	if err := pbc.Repo.Update(book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update book"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, book)
+}
+
+// NotFoundInventory marks books as not found in inventory.
+func (pbc *BookController) NotFoundInventory(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+
+	id := ctx.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid book id"})
+		return
+	}
+	book, err := pbc.Repo.FindByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	invRepo := repository.NewInventoryRepository(pbc.DB)
+	inventory, err := invRepo.FindActiveInventory(branchId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return
+	}
+	if inventory == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Active inventory not found"})
+		return
+	}
+	if user.(auth.User).Branch.Id != int(inventory.Branch.ID) {
+		ctx.JSON(http.StatusForbidden, gin.H{"msg": "Invalid Branch"})
+		return
+	}
+
+	if book.Inventory != nil && *book.Inventory == false {
+		inventory.NotFound = inventory.NotFound - 1
+	} else {
+		inventory.NotFound = inventory.NotFound + 1
+	}
+
+	if book.Inventory != nil && *book.Inventory == false {
+		book.Inventory = nil
+	} else {
+		val := false
+		book.Inventory = &val
+	}
+
+	if err := invRepo.Update(inventory); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update inventory"})
+		return
+	}
+	if err := pbc.Repo.Update(book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update book"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, book)
+}
+
 // ShowStats retrieves book statistics.
 func (pbc *BookController) ShowStats(ctx *gin.Context) {
 	user, ok := ctx.Get("user")

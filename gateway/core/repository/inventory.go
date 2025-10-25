@@ -35,12 +35,12 @@ func (repo *InventoryRepository) FindByID(id uint) (*models.Inventory, error) {
 
 // Create adds a new inventory item to the database.
 func (repo *InventoryRepository) Create(inventory *models.Inventory) error {
-	return repo.DB.Create(inventory).Error
+	return repo.DB.Omit("Branch").Create(inventory).Error
 }
 
 // Update modifies an existing inventory item in the database.
 func (repo *InventoryRepository) Update(inventory *models.Inventory) error {
-	return repo.DB.Save(inventory).Error
+	return repo.DB.Omit("Branch").Save(inventory).Error
 }
 
 // Delete removes an inventory item by ID from the database.
@@ -55,4 +55,13 @@ func (repo *InventoryRepository) FindActive(branch uint) (int64, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// FindActiveInventory returns the active Inventory record for a branch (ended_at IS NULL).
+func (repo *InventoryRepository) FindActiveInventory(branch uint) (*models.Inventory, error) {
+	var inventory models.Inventory
+	if err := repo.DB.Preload("Branch").Where("branch_id = ? AND ended_at IS NULL", branch).First(&inventory).Error; err != nil {
+		return nil, err
+	}
+	return &inventory, nil
 }
