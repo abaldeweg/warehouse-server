@@ -27,7 +27,7 @@ type Book struct {
 	ReservedAt       *time.Time   `json:"reservedAt,omitempty" gorm:"default:null"`
 	ReleaseYear      int          `json:"releaseYear" gorm:"type:int;column:release_year" validate:"gte=1000,lte=9999"`
 	Condition        *Condition   `json:"condition" gorm:"foreignKey:ConditionID"`
-	ConditionID      *uint        `json:"cond_id" gorm:"default:null"`
+	ConditionID      *uint        `json:"cond_id" gorm:"column:cond_id;default:null"`
 	Tags             []*Tag       `json:"tags" gorm:"many2many:book_tag;default:null"`
 	Recommendation   bool         `json:"recommendations" gorm:"foreignKey:BookID;default:false"`
 	Inventory        *bool        `json:"inventory" gorm:"default:null"`
