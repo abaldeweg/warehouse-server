@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
@@ -154,6 +155,51 @@ func (pbc *BookController) NotFoundInventory(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update inventory"})
 		return
 	}
+	if err := pbc.Repo.Update(book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update book"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, book)
+}
+
+// SellBook marks books as sold.
+func (pbc *BookController) SellBook(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	id := ctx.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid book id"})
+		return
+	}
+
+	book, err := pbc.Repo.FindByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	if book.BranchID == nil || user.(auth.User).Branch.Id != int(*book.BranchID) {
+		ctx.JSON(http.StatusForbidden, gin.H{"msg": "Invalid Branch"})
+		return
+	}
+
+	book.Sold = !book.Sold
+	if book.Sold {
+		t := time.Now()
+		book.SoldOn = &t
+	} else {
+		book.SoldOn = nil
+	}
+
+	book.Reserved = false
+	book.ReservedAt = nil
+	book.Reservation = nil
+	book.ReservationID = nil
+
 	if err := pbc.Repo.Update(book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update book"})
 		return
