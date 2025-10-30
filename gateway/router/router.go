@@ -113,7 +113,11 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.SellBook(c)
 			})
-			apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/api/book/remove"))
+			// apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/api/book/remove"))
+			apiCoreBook.PUT(`/remove/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.RemoveBook(c)
+			})
 			apiCoreBook.PUT(`/reserve/:id`, handleCoreAPIWithId("/api/book/reserve"))
 			apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
 		}
