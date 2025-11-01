@@ -51,3 +51,12 @@ func (r *BookRepository) FindByID(id interface{}) (*models.Book, error) {
 func (r *BookRepository) Update(book *models.Book) error {
 	return r.DB.Save(book).Error
 }
+
+// FindByID retrieves a book by UUID.
+func (r *BookRepository) FindByIDAndPreload(id interface{}) (*models.Book, error) {
+	var book models.Book
+	if err := r.DB.Preload("Branch").Preload("Author").Preload("Genre").Preload("Condition").Preload("Format").Preload("Reservation").Preload("Tags").First(&book, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+	return &book, nil
+}
