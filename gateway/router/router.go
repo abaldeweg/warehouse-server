@@ -127,7 +127,11 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.ReserveBook(c)
 			})
-			apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
+			// apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
+			apiCoreBook.DELETE(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.DeleteBook(c)
+			})
 		}
 
 		apiCoreBranch := apiCore.Group(`/api/branch`)
