@@ -388,3 +388,30 @@ func (pbc *BookController) DeleteCover(ctx *gin.Context) {
 	cover.DeleteCover(bookID)
 	ctx.JSON(http.StatusOK, gin.H{"message": "cover images deleted"})
 }
+
+// ShowBook retrieves a book by its ID.
+func (pbc *BookController) ShowBook(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	id := ctx.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid book id"})
+		return
+	}
+
+	book, err := pbc.Repo.FindByIDAndPreload(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	if book.BranchID == nil || user.(auth.User).Branch.Id != int(*book.BranchID) {
+		ctx.JSON(http.StatusForbidden, gin.H{"msg": "Invalid Branch"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, book)
+}

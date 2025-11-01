@@ -96,7 +96,11 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.NotFoundInventory(c)
 			})
-			apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
+			// apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
+			apiCoreBook.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.ShowBook(c)
+			})
 			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
 			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.GET(`/cover/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
