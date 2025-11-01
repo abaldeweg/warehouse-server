@@ -60,3 +60,17 @@ func (r *BookRepository) FindByIDAndPreload(id interface{}) (*models.Book, error
 	}
 	return &book, nil
 }
+
+// Delete removes the given book from the database and deletes its cover files.
+func (r *BookRepository) Delete(book *models.Book) error {
+	tx := r.DB.Begin()
+
+	cover.DeleteCover(book.ID)
+
+	if err := tx.Delete(book).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
+}
