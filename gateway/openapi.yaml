@@ -1198,6 +1198,49 @@ paths:
           description: Book not found
         500:
           description: Internal Server Error
+    put:
+      summary: Update a book by ID for the authenticated user's branch
+      tags:
+        - book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Book UUID
+      requestBody:
+        description: Book object that needs to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBook"
+      responses:
+        "200":
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        "400":
+          description: Bad Request or Invalid book id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Book not found
+        "500":
+          description: Internal Server Error
     delete:
       summary: Delete a book by ID for the authenticated user's branch
       tags:
@@ -1618,6 +1661,57 @@ components:
         inventory:
           type: boolean
           nullable: true
+      required:
+        - id
+        - title
+
+    UpdateBook:
+      type: object
+      properties:
+        added:
+          type: integer
+          example: 1730540800
+        title:
+          type: string
+        shortDescription:
+          type: string
+        author:
+          type: string
+          example: "Doe,Jane"
+        genre:
+          type: integer
+          example: 1
+        price:
+          type: number
+          format: float
+          example: 1.5
+        sold:
+          type: boolean
+        removed:
+          type: boolean
+        reserved:
+          type: boolean
+        releaseYear:
+          type: integer
+          example: 2025
+        cond:
+          type: integer
+          example: 1
+        tags:
+          type: array
+          items:
+            type: integer
+          example:
+            - 1
+        recommendation:
+          type: boolean
+        format:
+          type: integer
+          example: 1
+        subtitle:
+          type: string
+        duplicate:
+          type: boolean
       required:
         - id
         - title
