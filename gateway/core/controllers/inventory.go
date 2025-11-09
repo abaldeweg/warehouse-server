@@ -141,6 +141,16 @@ func (ctrl *InventoryController) Update(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
 		return
 	}
+
+  if existingInventory.EndedAtTimestamp != nil {
+		br := repository.NewBookRepository(ctrl.DB)
+		if err := br.RemoveNotFoundBooks(uint(user.(auth.User).Branch.Id)); err != nil {
+			c.Error(err)
+		}
+		if err := br.ResetInventory(uint(user.(auth.User).Branch.Id)); err != nil {
+			c.Error(err)
+		}
+	}
 	c.JSON(http.StatusOK, existingInventory)
 }
 
