@@ -77,7 +77,6 @@ func Routes() *gin.Engine {
 			})
 
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
-			// apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
 			apiCoreBook.DELETE(`/clean`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.CleanBooks(c)
@@ -86,23 +85,23 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.ShowStats(c)
 			})
-			// apiCoreBook.PUT(`/inventory/found/:id`, handleCoreAPIWithId("/api/book/inventory/found"))
 			apiCoreBook.PUT(`/inventory/found/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.FindInventory(c)
 			})
-			// apiCoreBook.PUT(`/inventory/notfound/:id`, handleCoreAPIWithId("/api/book/inventory/notfound"))
 			apiCoreBook.PUT(`/inventory/notfound/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.NotFoundInventory(c)
 			})
-			// apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ShowBook(c)
 			})
 			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
-			apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
+			apiCoreBook.PUT(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+				bc := controllers.NewBookController(db)
+				bc.UpdateBook(c)
+			})
 			apiCoreBook.GET(`/cover/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ShowCover(c)
@@ -112,22 +111,18 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.DeleteCover(c)
 			})
-			// apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/api/book/sell"))
 			apiCoreBook.PUT(`/sell/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.SellBook(c)
 			})
-			// apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/api/book/remove"))
 			apiCoreBook.PUT(`/remove/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.RemoveBook(c)
 			})
-			// apiCoreBook.PUT(`/reserve/:id`, handleCoreAPIWithId("/api/book/reserve"))
 			apiCoreBook.PUT(`/reserve/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ReserveBook(c)
 			})
-			// apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.DELETE(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.DeleteBook(c)
@@ -291,21 +286,6 @@ func Routes() *gin.Engine {
 		apiCore.POST(`/api/login_check`, handleCoreAPI("/api/login_check"))
 		apiCore.PUT(`/api/password`, handleCoreAPI("/api/password"))
 
-		// apiCorePublic := apiCore.Group(`/api/public`)
-		// {
-		// 	apiCorePublicBook := apiCorePublic.Group(`/book`)
-		// 	{
-		// 		apiCorePublicBook.GET(`/find`, handleCoreAPI("/api/public/book/find"))
-		// 		apiCorePublicBook.GET(`/:id`, handleCoreAPIWithId("/api/public/book"))
-		// 		apiCorePublicBook.GET(`/recommendation/:id`, handleCoreAPIWithId("/api/public/book/recommendation"))
-		// 		apiCorePublicBook.GET(`/cover/:id`, handleCoreAPIWithId("/api/public/book/cover"))
-		// 	}
-		// 	apiCorePublic.GET(`/branch/`, handleCoreAPI("/api/public/branch/"))
-		// 	apiCorePublic.GET(`/branch/show/:id`, handleCoreAPIWithId("/api/public/branch/show"))
-		// 	apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
-		// 	apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
-		// }
-
 		apiCorePublic := apiCore.Group(`/api/public`)
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
@@ -332,7 +312,10 @@ func Routes() *gin.Engine {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranch(c)
 			})
-			apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+			apiCorePublic.GET(`/genre/:id`, func(c *gin.Context) {
+				pbc := controllers.NewPublicGenreController(db)
+				pbc.FindAll(c)
+			})
 			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
 		}
 
@@ -371,16 +354,6 @@ func Routes() *gin.Engine {
 				rc.Delete(c)
 			})
 		}
-
-		// apiCoreReservation := apiCore.Group(`/api/reservation`)
-		// {
-		// 	apiCoreReservation.GET(`/list`, handleCoreAPI("/api/reservation/list"))
-		// 	apiCoreReservation.GET(`/status`, handleCoreAPI("/api/reservation/status"))
-		// 	apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// 	apiCoreReservation.POST(`/new`, handleCoreAPI("/api/reservation/new"))
-		// 	apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// 	apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// }
 
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{
@@ -422,20 +395,6 @@ func Routes() *gin.Engine {
 func handleCoreAPI(path string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		safePath := filepath.Join("/", path)
-
-		if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
-			return
-		}
-	}
-}
-
-// handleCoreAPIWithId handles requests to the core API.
-func handleCoreAPIWithId(path string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id := c.Param("id")
-
-		safePath := filepath.Join("/", path, id)
 
 		if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})

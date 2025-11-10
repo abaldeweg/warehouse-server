@@ -44,6 +44,26 @@ type Book struct {
 	ReservedAtUnix   *int64       `json:"reservedAt,omitempty" gorm:"-"`
 }
 
+// BookUpdate represents an update payload.
+type BookUpdate struct {
+	Added            *int64   `json:"added,omitempty"`
+	Title            *string  `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
+	ShortDescription *string  `json:"shortDescription,omitempty"`
+	Author           *string  `json:"author,omitempty"`
+	GenreID          *uint    `json:"genre,omitempty"`
+	Price            *float64 `json:"price,omitempty" validate:"omitempty,gte=0"`
+	Sold             *bool    `json:"sold,omitempty"`
+	Removed          *bool    `json:"removed,omitempty"`
+	Reserved         *bool    `json:"reserved,omitempty"`
+	ReleaseYear      *int     `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	CondID           *uint    `json:"cond,omitempty"`
+	Tags             []*int64 `json:"tags,omitempty"`
+	Recommendation   *bool    `json:"recommendation,omitempty"`
+	FormatID         *uint    `json:"format,omitempty"`
+	Subtitle         *string  `json:"subtitle,omitempty" validate:"omitempty,max=255"`
+	Duplicate        *bool    `json:"duplicate,omitempty"`
+}
+
 // TableName overrides the default table name for Book model.
 func (Book) TableName() string {
 	return "book"

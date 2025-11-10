@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
@@ -446,4 +447,182 @@ func (pbc *BookController) DeleteBook(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"msg": "Book deleted successfully"})
+}
+
+// UpdateBook updates a book.
+func (pbc *BookController) UpdateBook(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	id := ctx.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid book id"})
+		return
+	}
+
+	book, err := pbc.Repo.FindByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	if book.BranchID == nil || user.(auth.User).Branch.Id != int(*book.BranchID) {
+		ctx.JSON(http.StatusForbidden, gin.H{"msg": "Invalid Branch"})
+		return
+	}
+
+	// Bind into BookUpdate to allow partial updates, then map to existing book
+	var bu models.BookUpdate
+	if err := ctx.ShouldBindJSON(&bu); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Please enter a valid book! \n " + err.Error()})
+		return
+	}
+
+	// Apply non-nil fields from BookUpdate to the existing book
+	if bu.Added != nil {
+		book.AddedUnix = *bu.Added
+	}
+	if bu.Title != nil {
+		book.Title = *bu.Title
+	}
+	if bu.ShortDescription != nil {
+		book.ShortDescription = bu.ShortDescription
+	}
+	if bu.Author != nil {
+		// Author in BookUpdate is a string; try to split into firstname and surname
+		fname := ""
+		sname := ""
+		if *bu.Author != "" {
+			parts := strings.Fields(*bu.Author)
+			if len(parts) == 1 {
+				fname = parts[0]
+			} else if len(parts) >= 2 {
+				fname = parts[0]
+				sname = strings.Join(parts[1:], " ")
+			}
+		}
+		if book.Author == nil {
+			book.Author = &models.Author{Firstname: fname, Surname: sname}
+		} else {
+			if fname != "" {
+				book.Author.Firstname = fname
+			}
+			if sname != "" {
+				book.Author.Surname = sname
+			}
+		}
+	}
+	if bu.GenreID != nil {
+		book.GenreID = bu.GenreID
+	}
+	if bu.Price != nil {
+		book.Price = *bu.Price
+	}
+	if bu.Sold != nil {
+		book.Sold = *bu.Sold
+	}
+	if bu.Removed != nil {
+		book.Removed = *bu.Removed
+	}
+	if bu.Reserved != nil {
+		book.Reserved = *bu.Reserved
+	}
+	if bu.ReleaseYear != nil {
+		book.ReleaseYear = *bu.ReleaseYear
+	}
+	if bu.CondID != nil {
+		book.ConditionID = bu.CondID
+	}
+	if bu.Tags != nil {
+		var tags []*models.Tag
+		for _, t := range bu.Tags {
+			if t == nil {
+				continue
+			}
+			id := uint(*t)
+			var tag models.Tag
+			if err := pbc.DB.First(&tag, "id = ?", id).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Tag not found", "tag_id": id})
+					return
+				}
+				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch tag"})
+				return
+			}
+			tags = append(tags, &tag)
+		}
+		book.Tags = tags
+	}
+	if bu.Recommendation != nil {
+		book.Recommendation = *bu.Recommendation
+	}
+	if bu.FormatID != nil {
+		book.FormatID = *bu.FormatID
+	}
+	if bu.Subtitle != nil {
+		book.Subtitle = bu.Subtitle
+	}
+	if bu.Duplicate != nil {
+		book.Duplicate = *bu.Duplicate
+	}
+
+	existing, err := pbc.Repo.FindDuplicate(book)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return
+	}
+	if existing != nil && existing.ID != book.ID {
+		ctx.JSON(http.StatusConflict, gin.H{"msg": "Book not saved, because it exists already!"})
+		return
+	}
+
+	// sold
+	if book.Sold && book.SoldOn == nil {
+		t := time.Now()
+		book.SoldOn = &t
+	}
+
+	// revert sold
+	if !book.Sold && book.SoldOn != nil {
+		book.SoldOn = nil
+	}
+
+	// removed
+	if book.Removed && book.RemovedOn == nil {
+		t := time.Now()
+		book.RemovedOn = &t
+	}
+
+	// revert removed
+	if !book.Removed && book.RemovedOn != nil {
+		book.RemovedOn = nil
+	}
+
+	// reserved
+	if book.Reserved && book.ReservedAt == nil {
+		t := time.Now()
+		book.ReservedAt = &t
+	}
+
+	// revert reserved
+	if !book.Reserved && book.ReservedAt != nil {
+		book.ReservedAt = nil
+		book.Reservation = nil
+		book.ReservationID = nil
+	}
+
+	if err := pbc.Repo.Update(book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to update book"})
+		return
+	}
+
+	updatedBook, err := pbc.Repo.FindByIDAndPreload(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"msg": "Book not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updatedBook)
 }
