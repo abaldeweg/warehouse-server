@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
+	"github.com/abaldeweg/warehouse-server/gateway/core/repository"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
@@ -38,6 +39,11 @@ func Connect() *gorm.DB {
 
 	if databaseType != "mysql" {
 		runMigrations(db)
+
+		br := repository.NewBookRepository(db)
+		if err := br.DeleteBooks(0); err != nil {
+			log.Printf("warning: DeleteBooks failed: %v", err)
+		}
 	}
 
 	return db
