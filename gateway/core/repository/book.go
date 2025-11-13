@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
 	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"gorm.io/gorm"
@@ -15,6 +17,10 @@ type BookRepository struct {
 func NewBookRepository(db *gorm.DB) *BookRepository {
 	return &BookRepository{DB: db}
 }
+
+// KEEP_REMOVED_DAYS is the default number of days to keep removed/sold books
+// before permanently deleting them.
+const KEEP_REMOVED_DAYS = 28
 
 // DeleteBooksByBranch finds all books for the given branch that are marked
 // as sold or removed. Then, deletes their cover files and removes them from the DB.
@@ -133,6 +139,34 @@ func (r *BookRepository) Delete(book *models.Book) error {
 	if err := tx.Delete(book).Error; err != nil {
 		tx.Rollback()
 		return err
+	}
+
+	return tx.Commit().Error
+}
+
+// DeleteBooks deletes books whose `sold_on` or `removed_on` timestamp is
+// older than `clearLimit` days. If `clearLimit` <= 0 the default
+// `KEEP_REMOVED_DAYS` is used.
+func (r *BookRepository) DeleteBooks(clearLimit int) error {
+	if clearLimit <= 0 {
+		clearLimit = KEEP_REMOVED_DAYS
+	}
+
+	cutoff := time.Now().AddDate(0, 0, -clearLimit)
+
+	var books []models.Book
+	if err := r.DB.Where("sold_on <= ? OR removed_on <= ?", cutoff, cutoff).Find(&books).Error; err != nil {
+		return err
+	}
+
+	tx := r.DB.Begin()
+	for _, b := range books {
+		cover.DeleteCover(b.ID)
+
+		if err := tx.Delete(&b).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	return tx.Commit().Error
