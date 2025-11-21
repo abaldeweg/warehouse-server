@@ -376,16 +376,6 @@ func Routes() *gin.Engine {
 			})
 		}
 
-		// apiCoreReservation := apiCore.Group(`/api/reservation`)
-		// {
-		// 	apiCoreReservation.GET(`/list`, handleCoreAPI("/api/reservation/list"))
-		// 	apiCoreReservation.GET(`/status`, handleCoreAPI("/api/reservation/status"))
-		// 	apiCoreReservation.GET(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// 	apiCoreReservation.POST(`/new`, handleCoreAPI("/api/reservation/new"))
-		// 	apiCoreReservation.PUT(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// 	apiCoreReservation.DELETE(`/:id`, handleCoreAPIWithId("/api/reservation"))
-		// }
-
 		apiCoreTag := apiCore.Group(`/api/tag`)
 		{
 			apiCoreTag.Use(func(c *gin.Context) {
