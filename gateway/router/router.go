@@ -312,7 +312,11 @@ func Routes() *gin.Engine {
 				ac := controllers.NewPublicBranchController(db)
 				ac.GetBranch(c)
 			})
-			apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+			// apiCorePublic.GET(`/genre/:id`, handleCoreAPIWithId("/api/public/genre"))
+			apiCorePublic.GET(`/genre/:id`, func(c *gin.Context) {
+				pbc := controllers.NewPublicGenreController(db)
+				pbc.FindAll(c)
+			})
 			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
 		}
 

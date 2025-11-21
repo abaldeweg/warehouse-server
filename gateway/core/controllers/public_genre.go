@@ -11,15 +11,17 @@ import (
 
 // PublicGenreController struct defines the database connection.
 type PublicGenreController struct {
-	DB        *gorm.DB
-	GenreRepo repository.GenreRepository
+	DB         *gorm.DB
+	GenreRepo  repository.GenreRepository
+	BranchRepo *repository.BranchRepository
 }
 
 // NewPublicGenreController creates a new instance of PublicGenreController.
 func NewPublicGenreController(db *gorm.DB) *PublicGenreController {
 	return &PublicGenreController{
-		DB:        db,
-		GenreRepo: repository.NewGenreRepository(db),
+		DB:         db,
+		GenreRepo:  repository.NewGenreRepository(db),
+		BranchRepo: repository.NewBranchRepository(db),
 	}
 }
 
@@ -34,6 +36,17 @@ func (gc *PublicGenreController) FindAll(c *gin.Context) {
 	branchID, err := strconv.Atoi(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
+		return
+	}
+
+	branch, err := gc.BranchRepo.FindOne(uint(branchID))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Branch not found"})
+		return
+	}
+
+	if !branch.Public {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Access to this branch is restricted"})
 		return
 	}
 
