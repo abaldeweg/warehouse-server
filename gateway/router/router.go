@@ -77,7 +77,6 @@ func Routes() *gin.Engine {
 			})
 
 			apiCoreBook.GET(`/find`, handleCoreAPI("/api/book/find"))
-			// apiCoreBook.DELETE(`/clean`, handleCoreAPI("/api/book/clean"))
 			apiCoreBook.DELETE(`/clean`, RoleMiddleware("ROLE_ADMIN"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.CleanBooks(c)
@@ -86,23 +85,19 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.ShowStats(c)
 			})
-			// apiCoreBook.PUT(`/inventory/found/:id`, handleCoreAPIWithId("/api/book/inventory/found"))
 			apiCoreBook.PUT(`/inventory/found/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.FindInventory(c)
 			})
-			// apiCoreBook.PUT(`/inventory/notfound/:id`, handleCoreAPIWithId("/api/book/inventory/notfound"))
 			apiCoreBook.PUT(`/inventory/notfound/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.NotFoundInventory(c)
 			})
-			// apiCoreBook.GET(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.GET(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ShowBook(c)
 			})
 			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
-			// apiCoreBook.PUT(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.PUT(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.UpdateBook(c)
@@ -116,22 +111,18 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.DeleteCover(c)
 			})
-			// apiCoreBook.PUT(`/sell/:id`, handleCoreAPIWithId("/api/book/sell"))
 			apiCoreBook.PUT(`/sell/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.SellBook(c)
 			})
-			// apiCoreBook.PUT(`/remove/:id`, handleCoreAPIWithId("/api/book/remove"))
 			apiCoreBook.PUT(`/remove/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.RemoveBook(c)
 			})
-			// apiCoreBook.PUT(`/reserve/:id`, handleCoreAPIWithId("/api/book/reserve"))
 			apiCoreBook.PUT(`/reserve/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.ReserveBook(c)
 			})
-			// apiCoreBook.DELETE(`/:id`, handleCoreAPIWithId("/api/book"))
 			apiCoreBook.DELETE(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.DeleteBook(c)
