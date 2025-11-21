@@ -51,7 +51,70 @@ func (r *BookRepository) FindByID(id interface{}) (*models.Book, error) {
 
 // Update saves the provided book.
 func (r *BookRepository) Update(book *models.Book) error {
-	return r.DB.Save(book).Error
+	tx := r.DB.Begin()
+
+	if err := tx.Omit("Tags").Save(book).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if book.Tags != nil {
+		if err := tx.Exec("DELETE FROM book_tag WHERE book_id = ?", book.ID).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		if len(book.Tags) > 0 {
+			vals := make([]map[string]any, 0, len(book.Tags))
+			for _, t := range book.Tags {
+				vals = append(vals, map[string]any{"book_id": book.ID, "tag_id": t.ID})
+			}
+
+			if err := tx.Table("book_tag").Create(vals).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+	}
+
+	return tx.Commit().Error
+}
+
+// FindDuplicate searches for an existing book that would be considered a duplicate
+func (r *BookRepository) FindDuplicate(b *models.Book) (*models.Book, error) {
+	var existing models.Book
+	query := r.DB.Where("title = ?", b.Title).
+		Where("sold = ?", b.Sold).
+		Where("removed = ?", b.Removed).
+		Where("release_year = ?", b.ReleaseYear).
+		Where("format_id = ?", b.FormatID)
+
+	if b.BranchID != nil {
+		query = query.Where("branch_id = ?", *b.BranchID)
+	} else {
+		query = query.Where("branch_id IS NULL")
+	}
+
+	if b.AuthorID != nil {
+		query = query.Where("author_id = ?", *b.AuthorID)
+	} else {
+		query = query.Where("author_id IS NULL")
+	}
+
+	if b.GenreID != nil {
+		query = query.Where("genre_id = ?", *b.GenreID)
+	} else {
+		query = query.Where("genre_id IS NULL")
+	}
+
+	if err := query.First(&existing).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &existing, nil
 }
 
 // FindByID retrieves a book by UUID.
