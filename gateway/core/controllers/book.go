@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -539,7 +540,17 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.ReleaseYear = *bu.ReleaseYear
 	}
 	if bu.CondID != nil {
-		book.ConditionID = bu.CondID
+		if *bu.CondID == "" {
+			book.ConditionID = nil
+		} else {
+			v64, err := strconv.ParseUint(*bu.CondID, 10, 64)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid condition id"})
+				return
+			}
+			v := uint(v64)
+			book.ConditionID = &v
+		}
 	}
 	if bu.Tags != nil {
 		var tags []*models.Tag

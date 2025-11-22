@@ -56,7 +56,7 @@ type BookUpdate struct {
 	Removed          *bool    `json:"removed,omitempty"`
 	Reserved         *bool    `json:"reserved,omitempty"`
 	ReleaseYear      *int     `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
-	CondID           *uint    `json:"cond,omitempty"`
+	CondID           *string  `json:"cond,omitempty"`
 	Tags             []*int64 `json:"tags,omitempty"`
 	Recommendation   *bool    `json:"recommendation,omitempty"`
 	FormatID         *uint    `json:"format,omitempty"`
