@@ -491,16 +491,22 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.ShortDescription = bu.ShortDescription
 	}
 	if bu.Author != nil {
-		// Author in BookUpdate is a string; try to split into firstname and surname
 		fname := ""
 		sname := ""
 		if *bu.Author != "" {
-			parts := strings.Fields(*bu.Author)
-			if len(parts) == 1 {
-				fname = parts[0]
-			} else if len(parts) >= 2 {
-				fname = parts[0]
-				sname = strings.Join(parts[1:], " ")
+			authorStr := *bu.Author
+			if strings.Contains(authorStr, ",") {
+				parts := strings.SplitN(authorStr, ",", 2)
+				sname = strings.TrimSpace(parts[0])
+				fname = strings.TrimSpace(parts[1])
+			} else {
+				parts := strings.Fields(authorStr)
+				if len(parts) == 1 {
+					fname = parts[0]
+				} else if len(parts) >= 2 {
+					fname = parts[0]
+					sname = strings.Join(parts[1:], " ")
+				}
 			}
 		}
 		if book.Author == nil {
