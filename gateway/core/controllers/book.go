@@ -522,7 +522,17 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		}
 	}
 	if bu.GenreID != nil {
-		book.GenreID = bu.GenreID
+		if *bu.GenreID == "" {
+			book.GenreID = nil
+		} else {
+			v64, err := strconv.ParseUint(*bu.GenreID, 10, 64)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid genre id"})
+				return
+			}
+			v := uint(v64)
+			book.GenreID = &v
+		}
 	}
 	if bu.Price != nil {
 		book.Price = *bu.Price
@@ -576,7 +586,16 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.Recommendation = *bu.Recommendation
 	}
 	if bu.FormatID != nil {
-		book.FormatID = *bu.FormatID
+		if *bu.FormatID == "" {
+			book.FormatID = 0
+		} else {
+			v64, err := strconv.ParseUint(*bu.FormatID, 10, 64)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid format id"})
+				return
+			}
+			book.FormatID = uint(v64)
+		}
 	}
 	if bu.Subtitle != nil {
 		book.Subtitle = bu.Subtitle

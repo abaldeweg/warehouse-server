@@ -50,7 +50,7 @@ type BookUpdate struct {
 	Title            *string  `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
 	ShortDescription *string  `json:"shortDescription,omitempty"`
 	Author           *string  `json:"author,omitempty"`
-	GenreID          *uint    `json:"genre,omitempty"`
+	GenreID          *string  `json:"genre,omitempty"`
 	Price            *float64 `json:"price,omitempty" validate:"omitempty,gte=0"`
 	Sold             *bool    `json:"sold,omitempty"`
 	Removed          *bool    `json:"removed,omitempty"`
@@ -59,7 +59,7 @@ type BookUpdate struct {
 	CondID           *string  `json:"cond,omitempty"`
 	Tags             []*int64 `json:"tags,omitempty"`
 	Recommendation   *bool    `json:"recommendation,omitempty"`
-	FormatID         *uint    `json:"format,omitempty"`
+	FormatID         *string  `json:"format,omitempty"`
 	Subtitle         *string  `json:"subtitle,omitempty" validate:"omitempty,max=255"`
 	Duplicate        *bool    `json:"duplicate,omitempty"`
 }
