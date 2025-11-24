@@ -1,6 +1,8 @@
 package models
 
 import (
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -46,22 +48,44 @@ type Book struct {
 
 // BookUpdate represents an update payload.
 type BookUpdate struct {
-	Added            *int64   `json:"added,omitempty"`
-	Title            *string  `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
-	ShortDescription *string  `json:"shortDescription,omitempty"`
-	Author           *string  `json:"author,omitempty"`
-	GenreID          *string  `json:"genre,omitempty"`
-	Price            *float64 `json:"price,omitempty" validate:"omitempty,gte=0"`
-	Sold             *bool    `json:"sold,omitempty"`
-	Removed          *bool    `json:"removed,omitempty"`
-	Reserved         *bool    `json:"reserved,omitempty"`
-	ReleaseYear      *int     `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
-	CondID           *string  `json:"cond,omitempty"`
-	Tags             []*int64 `json:"tags,omitempty"`
-	Recommendation   *bool    `json:"recommendation,omitempty"`
-	FormatID         *string  `json:"format,omitempty"`
-	Subtitle         *string  `json:"subtitle,omitempty" validate:"omitempty,max=255"`
-	Duplicate        *bool    `json:"duplicate,omitempty"`
+	Added            *int64  `json:"added,omitempty"`
+	Title            *string `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
+	ShortDescription *string `json:"shortDescription,omitempty"`
+	Author           *string `json:"author,omitempty"`
+	// GenreID may be provided as a JSON number or a JSON string.
+	// UintOrString implements UnmarshalJSON to accept both formats.
+	GenreID        *UintOrString `json:"genre,omitempty"`
+	Price          *float64      `json:"price,omitempty" validate:"omitempty,gte=0"`
+	Sold           *bool         `json:"sold,omitempty"`
+	Removed        *bool         `json:"removed,omitempty"`
+	Reserved       *bool         `json:"reserved,omitempty"`
+	ReleaseYear    *int          `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	CondID         *UintOrString `json:"cond,omitempty"`
+	Tags           []*int64      `json:"tags,omitempty"`
+	Recommendation *bool         `json:"recommendation,omitempty"`
+	FormatID       *UintOrString `json:"format,omitempty"`
+	Subtitle       *string       `json:"subtitle,omitempty" validate:"omitempty,max=255"`
+	Duplicate      *bool         `json:"duplicate,omitempty"`
+}
+
+type UintOrString struct {
+	Val *uint
+}
+
+func (u *UintOrString) UnmarshalJSON(data []byte) error {
+	s := strings.TrimSpace(string(data))
+	if strings.EqualFold(s, "null") || s == "" {
+		u.Val = nil
+		return nil
+	}
+	s = strings.Trim(s, "\"")
+	v64, err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		return err
+	}
+	v := uint(v64)
+	u.Val = &v
+	return nil
 }
 
 // TableName overrides the default table name for Book model.

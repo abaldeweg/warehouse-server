@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -522,15 +521,10 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		}
 	}
 	if bu.GenreID != nil {
-		if *bu.GenreID == "" {
+		if bu.GenreID.Val == nil {
 			book.GenreID = nil
 		} else {
-			v64, err := strconv.ParseUint(*bu.GenreID, 10, 64)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid genre id"})
-				return
-			}
-			v := uint(v64)
+			v := *bu.GenreID.Val
 			book.GenreID = &v
 		}
 	}
@@ -550,15 +544,10 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.ReleaseYear = *bu.ReleaseYear
 	}
 	if bu.CondID != nil {
-		if *bu.CondID == "" {
+		if bu.CondID.Val == nil {
 			book.ConditionID = nil
 		} else {
-			v64, err := strconv.ParseUint(*bu.CondID, 10, 64)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid condition id"})
-				return
-			}
-			v := uint(v64)
+			v := *bu.CondID.Val
 			book.ConditionID = &v
 		}
 	}
@@ -586,15 +575,10 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.Recommendation = *bu.Recommendation
 	}
 	if bu.FormatID != nil {
-		if *bu.FormatID == "" {
+		if bu.FormatID.Val == nil {
 			book.FormatID = 0
 		} else {
-			v64, err := strconv.ParseUint(*bu.FormatID, 10, 64)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid format id"})
-				return
-			}
-			book.FormatID = uint(v64)
+			book.FormatID = *bu.FormatID.Val
 		}
 	}
 	if bu.Subtitle != nil {
