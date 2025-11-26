@@ -48,24 +48,22 @@ type Book struct {
 
 // BookUpdate represents an update payload.
 type BookUpdate struct {
-	Added            *int64  `json:"added,omitempty"`
-	Title            *string `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
-	ShortDescription *string `json:"shortDescription,omitempty"`
-	Author           *string `json:"author,omitempty"`
-	// GenreID may be provided as a JSON number or a JSON string.
-	// UintOrString implements UnmarshalJSON to accept both formats.
-	GenreID        *UintOrString `json:"genre,omitempty"`
-	Price          *float64      `json:"price,omitempty" validate:"omitempty,gte=0"`
-	Sold           *bool         `json:"sold,omitempty"`
-	Removed        *bool         `json:"removed,omitempty"`
-	Reserved       *bool         `json:"reserved,omitempty"`
-	ReleaseYear    *int          `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
-	CondID         *UintOrString `json:"cond,omitempty"`
-	Tags           []*int64      `json:"tags,omitempty"`
-	Recommendation *bool         `json:"recommendation,omitempty"`
-	FormatID       *UintOrString `json:"format,omitempty"`
-	Subtitle       *string       `json:"subtitle,omitempty" validate:"omitempty,max=255"`
-	Duplicate      *bool         `json:"duplicate,omitempty"`
+	Added            *int64        `json:"added,omitempty"`
+	Title            *string       `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
+	ShortDescription *string       `json:"shortDescription,omitempty"`
+	Author           *string       `json:"author,omitempty"`
+	GenreID          *UintOrString `json:"genre,omitempty"`
+	Price            *float64      `json:"price,omitempty" validate:"omitempty,gte=0"`
+	Sold             *bool         `json:"sold,omitempty"`
+	Removed          *bool         `json:"removed,omitempty"`
+	Reserved         *bool         `json:"reserved,omitempty"`
+	ReleaseYear      *int          `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	CondID           *UintOrString `json:"cond,omitempty"`
+	Tags             []*int64      `json:"tags,omitempty"`
+	Recommendation   *bool         `json:"recommendation,omitempty"`
+	FormatID         *UintOrString `json:"format,omitempty"`
+	Subtitle         *string       `json:"subtitle,omitempty" validate:"omitempty,max=255"`
+	Duplicate        *bool         `json:"duplicate,omitempty"`
 }
 
 type UintOrString struct {
