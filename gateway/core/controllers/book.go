@@ -529,7 +529,11 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		}
 	}
 	if bu.Price != nil {
-		book.Price = *bu.Price
+		if bu.Price.Val == nil {
+			book.Price = 0
+		} else {
+			book.Price = *bu.Price.Val
+		}
 	}
 	if bu.Sold != nil {
 		book.Sold = *bu.Sold

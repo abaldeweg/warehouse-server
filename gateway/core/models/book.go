@@ -53,7 +53,7 @@ type BookUpdate struct {
 	ShortDescription *string       `json:"shortDescription,omitempty"`
 	Author           *string       `json:"author,omitempty"`
 	GenreID          *UintOrString `json:"genre,omitempty"`
-	Price            *float64      `json:"price,omitempty" validate:"omitempty,gte=0"`
+	Price            *FloatOrString `json:"price,omitempty" validate:"omitempty,gte=0"`
 	Sold             *bool         `json:"sold,omitempty"`
 	Removed          *bool         `json:"removed,omitempty"`
 	Reserved         *bool         `json:"reserved,omitempty"`
@@ -68,6 +68,25 @@ type BookUpdate struct {
 
 type UintOrString struct {
 	Val *uint
+}
+
+type FloatOrString struct {
+	Val *float64
+}
+
+func (f *FloatOrString) UnmarshalJSON(data []byte) error {
+	s := strings.TrimSpace(string(data))
+	if strings.EqualFold(s, "null") || s == "" {
+		f.Val = nil
+		return nil
+	}
+	s = strings.Trim(s, "\"")
+	v, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return err
+	}
+	f.Val = &v
+	return nil
 }
 
 func (u *UintOrString) UnmarshalJSON(data []byte) error {
