@@ -545,7 +545,11 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.Reserved = *bu.Reserved
 	}
 	if bu.ReleaseYear != nil {
-		book.ReleaseYear = *bu.ReleaseYear
+		if bu.ReleaseYear.Val == nil {
+			book.ReleaseYear = 0
+		} else {
+			book.ReleaseYear = *bu.ReleaseYear.Val
+		}
 	}
 	if bu.CondID != nil {
 		if bu.CondID.Val == nil {

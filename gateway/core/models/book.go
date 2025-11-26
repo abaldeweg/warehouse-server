@@ -57,7 +57,7 @@ type BookUpdate struct {
 	Sold             *bool         `json:"sold,omitempty"`
 	Removed          *bool         `json:"removed,omitempty"`
 	Reserved         *bool         `json:"reserved,omitempty"`
-	ReleaseYear      *int          `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	ReleaseYear      *IntOrString  `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
 	CondID           *UintOrString `json:"cond,omitempty"`
 	Tags             []*int64      `json:"tags,omitempty"`
 	Recommendation   *bool         `json:"recommendation,omitempty"`
@@ -72,6 +72,10 @@ type UintOrString struct {
 
 type FloatOrString struct {
 	Val *float64
+}
+
+type IntOrString struct {
+	Val *int
 }
 
 func (f *FloatOrString) UnmarshalJSON(data []byte) error {
@@ -102,6 +106,22 @@ func (u *UintOrString) UnmarshalJSON(data []byte) error {
 	}
 	v := uint(v64)
 	u.Val = &v
+	return nil
+}
+
+func (i *IntOrString) UnmarshalJSON(data []byte) error {
+	s := strings.TrimSpace(string(data))
+	if strings.EqualFold(s, "null") || s == "" {
+		i.Val = nil
+		return nil
+	}
+	s = strings.Trim(s, "\"")
+	v64, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return err
+	}
+	v := int(v64)
+	i.Val = &v
 	return nil
 }
 
