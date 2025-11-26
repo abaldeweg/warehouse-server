@@ -48,22 +48,22 @@ type Book struct {
 
 // BookUpdate represents an update payload.
 type BookUpdate struct {
-	Added            *int64        `json:"added,omitempty"`
-	Title            *string       `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
-	ShortDescription *string       `json:"shortDescription,omitempty"`
-	Author           *string       `json:"author,omitempty"`
-	GenreID          *UintOrString `json:"genre,omitempty"`
+	Added            *int64         `json:"added,omitempty"`
+	Title            *string        `json:"title,omitempty" validate:"omitempty,min=1,max=255"`
+	ShortDescription *string        `json:"shortDescription,omitempty"`
+	Author           *string        `json:"author,omitempty"`
+	GenreID          *UintOrString  `json:"genre,omitempty"`
 	Price            *FloatOrString `json:"price,omitempty" validate:"omitempty,gte=0"`
-	Sold             *bool         `json:"sold,omitempty"`
-	Removed          *bool         `json:"removed,omitempty"`
-	Reserved         *bool         `json:"reserved,omitempty"`
-	ReleaseYear      *IntOrString  `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
-	CondID           *UintOrString `json:"cond,omitempty"`
-	Tags             []*int64      `json:"tags,omitempty"`
-	Recommendation   *bool         `json:"recommendation,omitempty"`
-	FormatID         *UintOrString `json:"format,omitempty"`
-	Subtitle         *string       `json:"subtitle,omitempty" validate:"omitempty,max=255"`
-	Duplicate        *bool         `json:"duplicate,omitempty"`
+	Sold             *bool          `json:"sold,omitempty"`
+	Removed          *bool          `json:"removed,omitempty"`
+	Reserved         *bool          `json:"reserved,omitempty"`
+	ReleaseYear      *IntOrString   `json:"releaseYear,omitempty" validate:"omitempty,gte=1000,lte=9999"`
+	CondID           *UintOrString  `json:"cond,omitempty"`
+	Tags             []*int64       `json:"tags,omitempty"`
+	Recommendation   *bool          `json:"recommendation,omitempty"`
+	FormatID         *UintOrString  `json:"format,omitempty"`
+	Subtitle         *string        `json:"subtitle,omitempty" validate:"omitempty,max=255"`
+	Duplicate        *bool          `json:"duplicate,omitempty"`
 }
 
 type UintOrString struct {
@@ -80,11 +80,11 @@ type IntOrString struct {
 
 func (f *FloatOrString) UnmarshalJSON(data []byte) error {
 	s := strings.TrimSpace(string(data))
+	s = strings.Trim(s, "\"")
 	if strings.EqualFold(s, "null") || s == "" {
 		f.Val = nil
 		return nil
 	}
-	s = strings.Trim(s, "\"")
 	v, err := strconv.ParseFloat(s, 64)
 	if err != nil {
 		return err
@@ -95,11 +95,11 @@ func (f *FloatOrString) UnmarshalJSON(data []byte) error {
 
 func (u *UintOrString) UnmarshalJSON(data []byte) error {
 	s := strings.TrimSpace(string(data))
+	s = strings.Trim(s, "\"")
 	if strings.EqualFold(s, "null") || s == "" {
 		u.Val = nil
 		return nil
 	}
-	s = strings.Trim(s, "\"")
 	v64, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
 		return err
@@ -111,11 +111,11 @@ func (u *UintOrString) UnmarshalJSON(data []byte) error {
 
 func (i *IntOrString) UnmarshalJSON(data []byte) error {
 	s := strings.TrimSpace(string(data))
+	s = strings.Trim(s, "\"")
 	if strings.EqualFold(s, "null") || s == "" {
 		i.Val = nil
 		return nil
 	}
-	s = strings.Trim(s, "\"")
 	v64, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		return err
