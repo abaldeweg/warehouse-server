@@ -924,7 +924,60 @@ paths:
           description: Failed to create reservation
   /apis/core/1/api/public/genre/{id}:
     get:
-      summary: Get genresfor a branch by ID
+      summary: Get genres for a branch by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Branch ID
+          example: 1
+      responses:
+        200:
+          description: A list of genres for the specified branch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Genre"
+        400:
+          description: Invalid ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        403:
+          description: Access to this branch is restricted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        404:
+          description: Branch not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /apis/core/1/api/public/branch/:
     get:
       tags:
