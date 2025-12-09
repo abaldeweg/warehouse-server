@@ -491,16 +491,22 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.ShortDescription = bu.ShortDescription
 	}
 	if bu.Author != nil {
-		// Author in BookUpdate is a string; try to split into firstname and surname
 		fname := ""
 		sname := ""
 		if *bu.Author != "" {
-			parts := strings.Fields(*bu.Author)
-			if len(parts) == 1 {
-				fname = parts[0]
-			} else if len(parts) >= 2 {
-				fname = parts[0]
-				sname = strings.Join(parts[1:], " ")
+			authorStr := *bu.Author
+			if strings.Contains(authorStr, ",") {
+				parts := strings.SplitN(authorStr, ",", 2)
+				sname = strings.TrimSpace(parts[0])
+				fname = strings.TrimSpace(parts[1])
+			} else {
+				parts := strings.Fields(authorStr)
+				if len(parts) == 1 {
+					fname = parts[0]
+				} else if len(parts) >= 2 {
+					fname = parts[0]
+					sname = strings.Join(parts[1:], " ")
+				}
 			}
 		}
 		if book.Author == nil {
@@ -515,10 +521,19 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		}
 	}
 	if bu.GenreID != nil {
-		book.GenreID = bu.GenreID
+		if bu.GenreID.Val == nil {
+			book.GenreID = nil
+		} else {
+			v := *bu.GenreID.Val
+			book.GenreID = &v
+		}
 	}
 	if bu.Price != nil {
-		book.Price = *bu.Price
+		if bu.Price.Val == nil {
+			book.Price = 0
+		} else {
+			book.Price = *bu.Price.Val
+		}
 	}
 	if bu.Sold != nil {
 		book.Sold = *bu.Sold
@@ -530,10 +545,19 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.Reserved = *bu.Reserved
 	}
 	if bu.ReleaseYear != nil {
-		book.ReleaseYear = *bu.ReleaseYear
+		if bu.ReleaseYear.Val == nil {
+			book.ReleaseYear = 0
+		} else {
+			book.ReleaseYear = *bu.ReleaseYear.Val
+		}
 	}
 	if bu.CondID != nil {
-		book.ConditionID = bu.CondID
+		if bu.CondID.Val == nil {
+			book.ConditionID = nil
+		} else {
+			v := *bu.CondID.Val
+			book.ConditionID = &v
+		}
 	}
 	if bu.Tags != nil {
 		var tags []*models.Tag
@@ -559,7 +583,11 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 		book.Recommendation = *bu.Recommendation
 	}
 	if bu.FormatID != nil {
-		book.FormatID = *bu.FormatID
+		if bu.FormatID.Val == nil {
+			book.FormatID = 0
+		} else {
+			book.FormatID = *bu.FormatID.Val
+		}
 	}
 	if bu.Subtitle != nil {
 		book.Subtitle = bu.Subtitle

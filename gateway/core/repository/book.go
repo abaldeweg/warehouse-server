@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
 	"github.com/abaldeweg/warehouse-server/gateway/cover"
 	"gorm.io/gorm"
@@ -136,4 +138,21 @@ func (r *BookRepository) Delete(book *models.Book) error {
 	}
 
 	return tx.Commit().Error
+}
+
+// RemoveNotFoundBooks marks books as removed for the given branch,
+// that were marked as not found in an inventory.
+func (r *BookRepository) RemoveNotFoundBooks(branchID uint) error {
+	return r.DB.Model(&models.Book{}).
+		Where("branch_id = ? AND inventory IS NOT NULL AND inventory = ?", branchID, false).
+		Updates(map[string]interface{}{
+			"removed":    true,
+			"removed_on": time.Now(),
+		}).Error
+}
+
+// ResetInventory sets the inventory flag to NULL for all books of the branch.
+func (r *BookRepository) ResetInventory(branchID uint) error {
+	return r.DB.Model(&models.Book{}).
+		Where("branch_id = ?", branchID).UpdateColumn("inventory", gorm.Expr("NULL")).Error
 }
