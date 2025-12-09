@@ -403,20 +403,6 @@ func handleCoreAPI(path string) gin.HandlerFunc {
 	}
 }
 
-// handleCoreAPIWithId handles requests to the core API.
-func handleCoreAPIWithId(path string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id := c.Param("id")
-
-		safePath := filepath.Join("/", path, id)
-
-		if err := proxy.Proxy(c, viper.GetString("API_CORE"), safePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
-			return
-		}
-	}
-}
-
 // handleCover handles requests to the core API.
 func handleCover(c *gin.Context) {
 	imageID := c.Param("id")
