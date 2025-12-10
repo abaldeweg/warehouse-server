@@ -5,7 +5,7 @@
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
   "features": {
-    "ghcr.io/abaldeweg/services/bash:0.1.0": {}
+    "ghcr.io/abaldeweg/services/bash:0.2.0": {}
   },
   "forwardPorts": [
     5984
