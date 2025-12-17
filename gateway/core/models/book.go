@@ -85,6 +85,7 @@ func (f *FloatOrString) UnmarshalJSON(data []byte) error {
 		f.Val = nil
 		return nil
 	}
+	s = strings.ReplaceAll(s, ",", ".")
 	v, err := strconv.ParseFloat(s, 64)
 	if err != nil {
 		return err
