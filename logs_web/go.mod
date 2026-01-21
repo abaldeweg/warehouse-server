@@ -6,7 +6,7 @@ require (
 	github.com/abaldeweg/warehouse-server/framework v0.21.9
 	github.com/gin-gonic/gin v1.11.0
 	github.com/spf13/viper v1.21.0
-	go.mongodb.org/mongo-driver v1.17.6
+	go.mongodb.org/mongo-driver v1.17.7
 )
 
 require (
