@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/logs_import
 go 1.24
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.21.9
+	github.com/abaldeweg/warehouse-server/framework v0.31.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	go.mongodb.org/mongo-driver v1.17.9
