@@ -1,14 +1,10 @@
 package router
 
 import (
-	"context"
-	"encoding/json"
 	"net/http"
 	"path/filepath"
 	"strconv"
-	"time"
 
-	"github.com/abaldeweg/warehouse-server/gateway/analyze"
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/controllers"
 	"github.com/abaldeweg/warehouse-server/gateway/core/database"
@@ -34,6 +30,8 @@ func Routes() *gin.Engine {
 	})
 
 	db := database.Connect()
+
+	mongoDB, _ := mdb.NewMDBClient()
 
 	apiCore := r.Group(`/apis/core/1`)
 	{
@@ -295,79 +293,8 @@ func Routes() *gin.Engine {
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
 			apiCorePublicBook.GET(`/find`, func(ctx *gin.Context) {
-				type AnalyzeShopSearchSearchFilter struct {
-					Field    string `json:"field"`
-					Operator string `json:"operator"`
-					Value    any    `json:"value"`
-				}
-
-				type AnalyzeShopSearchOrderField struct {
-					Field     string `json:"field"`
-					Direction string `json:"direction"`
-				}
-
-				type AnalyzeShopSearchOrderBy struct {
-					Article []AnalyzeShopSearchOrderField `json:"article,omitempty"`
-				}
-
-				type AnalyzeShopSearchOptions struct {
-					Term    string                          `json:"term,omitempty"`
-					Filter  []AnalyzeShopSearchSearchFilter `json:"filter,omitempty"`
-					OrderBy AnalyzeShopSearchOrderBy        `json:"orderBy,omitempty"`
-					Offset  int                             `json:"offset,omitempty"`
-				}
-
-				analyzeShopSearch := analyze.AnalyzeShopSearch{
-					Term:   "",
-					Branch: 0,
-					Genre:  0,
-					Page:   1,
-					Date:   time.Now().Format("2006-01-02 15:04:05"),
-				}
-
-				options := ctx.Query("options")
-				var opts AnalyzeShopSearchOptions
-				if options != "" {
-					if err := json.Unmarshal([]byte(options), &opts); err != nil {
-						ctx.Next()
-						return
-					}
-				}
-
-				if opts.Term != "" {
-					analyzeShopSearch.Term = opts.Term
-				}
-
-				getFilterValue := func(filters []AnalyzeShopSearchSearchFilter, field string) int {
-					for _, f := range filters {
-						if f.Field == field {
-							switch v := f.Value.(type) {
-							case string:
-								n, _ := strconv.Atoi(v)
-								return n
-							}
-						}
-					}
-					return 0
-				}
-
-				if b := getFilterValue(opts.Filter, "branch"); b != 0 {
-					analyzeShopSearch.Branch = b
-				}
-
-				if g := getFilterValue(opts.Filter, "genre"); g != 0 {
-					analyzeShopSearch.Genre = g
-				}
-
-				if opts.Offset != 0 {
-					analyzeShopSearch.Page = opts.Offset/20 + 1
-				}
-
-				db, _ := mdb.NewMDBClient()
-				defer db.Client.Disconnect(context.TODO())
-				analyzer := analyze.NewAnalyze(db, "shop_search")
-				analyzer.Add(analyzeShopSearch)
-				ctx.Next()
+				apiAnalyze := controllers.NewAnalyzeController(mongoDB)
+				apiAnalyze.Create(ctx)
 			}, handleCoreAPI("/api/public/book/find"))
 			{
 				apiCorePublicBook.GET(`/:id`, func(c *gin.Context) {
