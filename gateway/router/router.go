@@ -392,6 +392,19 @@ func Routes() *gin.Engine {
 				tc.Delete(c)
 			})
 		}
+
+		apiAnalyze := apiCore.Group(`/api/analyze`)
+		apiAnalyze.Use(func(c *gin.Context) {
+			if !authenticator(c) {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+				return
+			}
+			c.Next()
+		})
+		apiAnalyze.GET(`/shop-search`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+			ac := controllers.NewAnalyzeController(mongoDB)
+			ac.GetShopSearchEntries(c)
+		})
 	}
 
 	return r

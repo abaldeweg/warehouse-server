@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -73,4 +74,36 @@ func (ac *AnalyzeController) Create(c *gin.Context) {
 
 	ac.repo.Add(analyzeShopSearch)
 	c.Next()
+}
+
+// GetShopSearchEntries handles GET requests returning analyze entries between start and end dates.
+func (ac *AnalyzeController) GetShopSearchEntries(c *gin.Context) {
+	start := c.Query("start")
+	end := c.Query("end")
+	if start == "" || end == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "start and end query parameters are required"})
+		return
+	}
+
+	layout := "2006-01-02"
+	s, err := time.Parse(layout, start)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid start date format, expected YYYY-MM-DD"})
+		return
+	}
+	e, err := time.Parse(layout, end)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid end date format, expected YYYY-MM-DD"})
+		return
+	}
+
+	startStr := s.Format("2006-01-02") + " 00:00:00"
+	endStr := e.Format("2006-01-02") + " 23:59:59"
+
+	items, err := ac.repo.FindShopSearchByDateRange(startStr, endStr)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to query analyze data"})
+		return
+	}
+	c.JSON(http.StatusOK, items)
 }
