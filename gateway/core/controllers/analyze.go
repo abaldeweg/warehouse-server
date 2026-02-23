@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/models"
 	"github.com/abaldeweg/warehouse-server/gateway/core/repository"
 	"github.com/abaldeweg/warehouse-server/gateway/db/mdb"
@@ -78,6 +79,13 @@ func (ac *AnalyzeController) Create(c *gin.Context) {
 
 // GetShopSearchEntries handles GET requests returning analyze entries between start and end dates.
 func (ac *AnalyzeController) GetShopSearchEntries(c *gin.Context) {
+	user, ok := c.Get("user")
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+
 	start := c.Query("start")
 	end := c.Query("end")
 	if start == "" || end == "" {
@@ -100,7 +108,7 @@ func (ac *AnalyzeController) GetShopSearchEntries(c *gin.Context) {
 	startStr := s.Format("2006-01-02") + " 00:00:00"
 	endStr := e.Format("2006-01-02") + " 23:59:59"
 
-	items, err := ac.repo.FindShopSearchByDateRange(startStr, endStr)
+	items, err := ac.repo.FindShopSearchByBranchAndDateRange(branchId, startStr, endStr)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to query analyze data"})
 		return

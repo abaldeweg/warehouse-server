@@ -26,9 +26,9 @@ func (a *AnalyzeRepository) Add(data models.AnalyzeShopSearch) (*mongo.InsertOne
 	return a.client.InsertOne(context.TODO(), data)
 }
 
-// FindShopSearchByDateRange returns analyze entries where the date string is between start and end.
-func (a *AnalyzeRepository) FindShopSearchByDateRange(start, end string) ([]models.AnalyzeShopSearch, error) {
-	filter := bson.M{"date": bson.M{"$gte": start, "$lte": end}}
+// FindShopSearchByBranchAndDateRange returns analyze entries where the date string is between start and end.
+func (a *AnalyzeRepository) FindShopSearchByBranchAndDateRange(branchId uint, start, end string) ([]models.AnalyzeShopSearch, error) {
+	filter := bson.M{"branch": branchId, "date": bson.M{"$gte": start, "$lte": end}}
 
 	cur, err := a.client.Find(context.TODO(), filter)
 	if err != nil {
