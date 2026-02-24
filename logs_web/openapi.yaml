@@ -111,6 +111,89 @@ paths:
                     type: string
                     example: "Internal server error"
 
+  /apis/core/1/api/analyze/shop-search:
+    get:
+      summary: Retrieve shop-search analysis entries
+      description: Retrieve shop-search entries from the analyze service.
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date
+            example: "2025-01-31"
+          required: true
+          description: Start date for filtering shop-search entries
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date
+            example: "2026-01-31"
+          required: true
+          description: End date for filtering shop-search entries
+      responses:
+        "200":
+          description: Successfully retrieved shop-search entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "69970a2d14540d40be2e3284"
+                    branch:
+                      type: integer
+                      example: 1
+                    date:
+                      type: string
+                      example: "2026-02-19 13:03:41"
+                    term:
+                      type: string
+                      example: "test"
+                    page:
+                      type: integer
+                      example: 2
+                    genre:
+                      type: integer
+                      example: 31
+              example:
+                - id: "69970a2d14540d40be2e3284"
+                  branch: 1
+                  date: "2026-02-19 13:03:41"
+                  term: "test"
+                  page: 2
+                  genre: 31
+                - id: "6999817355589b21b1efb9e2"
+                  branch: 1
+                  date: "2026-02-21 09:57:07"
+                  term: "test"
+                  page: 2
+                  genre: 31
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "start and end query parameters are required"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
 components:
   securitySchemes:
     APIKeyAuth:
