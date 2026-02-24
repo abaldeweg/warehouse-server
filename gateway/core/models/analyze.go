@@ -7,7 +7,7 @@ type AnalyzeShopSearch struct {
 	Date   string `bson:"date" json:"date,omitempty"`
 	Term   string `bson:"term" json:"term,omitempty"`
 	Page   int    `bson:"page" json:"page,omitempty"`
-	Genre  *int   `bson:"genre" json:"genre,omitempty"`
+	Genre  *string `bson:"genre" json:"genre,omitempty"`
 }
 
 // AnalyzeShopSearchFilter struct for analyze shop search filter.

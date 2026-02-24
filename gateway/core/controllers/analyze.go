@@ -11,17 +11,20 @@ import (
 	"github.com/abaldeweg/warehouse-server/gateway/core/repository"
 	"github.com/abaldeweg/warehouse-server/gateway/db/mdb"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // AnalyzeController struct for analyze controller.
 type AnalyzeController struct {
-	repo *repository.AnalyzeRepository
+	repo      *repository.AnalyzeRepository
+	genreRepo repository.GenreRepository
 }
 
 // NewAnalyzeController creates a new analyze controller.
-func NewAnalyzeController(db *mdb.MDBClient) *AnalyzeController {
+func NewAnalyzeController(db *mdb.MDBClient, genreDB *gorm.DB) *AnalyzeController {
 	return &AnalyzeController{
-		repo: repository.NewAnalyzeRepository(db),
+		repo:      repository.NewAnalyzeRepository(db),
+		genreRepo: repository.NewGenreRepository(genreDB),
 	}
 }
 
@@ -66,8 +69,10 @@ func (ac *AnalyzeController) Create(c *gin.Context) {
 	}
 
 	if g := getFilterValue(opts.Filter, "genre"); g != 0 {
-		genre := g
-		analyzeShopSearch.Genre = &genre
+		genre, err := ac.genreRepo.FindOne(uint(g))
+		if err == nil {
+			analyzeShopSearch.Genre = &genre.Name
+		}
 	}
 
 	if opts.Offset != 0 {

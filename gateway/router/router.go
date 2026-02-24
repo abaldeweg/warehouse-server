@@ -293,7 +293,7 @@ func Routes() *gin.Engine {
 		{
 			apiCorePublicBook := apiCorePublic.Group(`/book`)
 			apiCorePublicBook.GET(`/find`, func(ctx *gin.Context) {
-				apiAnalyze := controllers.NewAnalyzeController(mongoDB)
+				apiAnalyze := controllers.NewAnalyzeController(mongoDB, db)
 				apiAnalyze.Create(ctx)
 			}, handleCoreAPI("/api/public/book/find"))
 			{
@@ -402,7 +402,7 @@ func Routes() *gin.Engine {
 			c.Next()
 		})
 		apiAnalyze.GET(`/shop-search`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
-			ac := controllers.NewAnalyzeController(mongoDB)
+			ac := controllers.NewAnalyzeController(mongoDB, db)
 			ac.GetShopSearchEntries(c)
 		})
 	}
