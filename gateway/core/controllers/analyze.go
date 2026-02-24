@@ -30,7 +30,7 @@ func (ac *AnalyzeController) Create(c *gin.Context) {
 	analyzeShopSearch := models.AnalyzeShopSearch{
 		Term:   "",
 		Branch: 0,
-		Genre:  0,
+		Genre:  nil,
 		Page:   1,
 		Date:   time.Now().Format("2006-01-02 15:04:05"),
 	}
@@ -66,7 +66,8 @@ func (ac *AnalyzeController) Create(c *gin.Context) {
 	}
 
 	if g := getFilterValue(opts.Filter, "genre"); g != 0 {
-		analyzeShopSearch.Genre = g
+		genre := g
+		analyzeShopSearch.Genre = &genre
 	}
 
 	if opts.Offset != 0 {
