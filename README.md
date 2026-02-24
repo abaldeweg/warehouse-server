@@ -107,31 +107,3 @@ k, _ := s.Exists()
 The module sets up a simple HTTP file server that serves files from the `data` directory on port 8080.
 
 Mount data volume to `/usr/src/app/data/`.
-
-## logs_import
-
-The module processes logs.
-
-Mount data volume to `/usr/src/app/data/logs/`.
-
-|Var                    |Description
-|-----------------------|-----------
-|MONGODB_URI            |MongoDB connection string
-
-Create a config file in `/data/config/config.json` with the following contents and fit it to your needs.
-
-```json
-{
-  "blocklist": ["/"]
-}
-```
-
-## logs_web
-
-The module returns log entries by request.
-
-Mount data volumes to `/usr/src/app/data/auth/`.
-
-|Var                    |Description
-|-----------------------|-----------
-|MONGODB_URI            |MongoDB connection string

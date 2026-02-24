@@ -3,7 +3,5 @@ go 1.24
 use (
 	./framework
 	./gateway
-	./logs_import
-	./logs_web
 	./static
 )
