@@ -3,13 +3,13 @@ module github.com/abaldeweg/warehouse-server/gateway
 go 1.24
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.31.1
+	github.com/abaldeweg/warehouse-server/framework v0.32.1
 	github.com/gin-gonic/gin v1.11.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	go.mongodb.org/mongo-driver/v2 v2.5.0
+	go.mongodb.org/mongo-driver v1.17.9
 	go.mongodb.org/mongo-driver/v2 v2.5.0
 	golang.org/x/image v0.30.0
 )
