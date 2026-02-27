@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/framework
 go 1.24.0
 
 require (
-	cloud.google.com/go/storage v1.48.0
+	cloud.google.com/go/storage v1.60.0
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/google/uuid v1.6.0
