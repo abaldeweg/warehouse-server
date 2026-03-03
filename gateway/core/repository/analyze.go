@@ -7,6 +7,7 @@ import (
 	"github.com/abaldeweg/warehouse-server/gateway/db/mdb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // AnalyzeRepository struct for analyze repository.
@@ -30,7 +31,8 @@ func (a *AnalyzeRepository) Add(data models.AnalyzeShopSearch) (*mongo.InsertOne
 func (a *AnalyzeRepository) FindShopSearchByBranchAndDateRange(branchId uint, start, end string) ([]models.AnalyzeShopSearch, error) {
 	filter := bson.M{"branch": branchId, "date": bson.M{"$gte": start, "$lte": end}}
 
-	cur, err := a.client.Find(context.TODO(), filter)
+	opts := options.Find().SetSort(bson.D{{Key: "date", Value: -1}})
+	cur, err := a.client.Find(context.TODO(), filter, opts)
 	if err != nil {
 		return nil, err
 	}
