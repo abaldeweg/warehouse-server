@@ -1,6 +1,6 @@
 module github.com/abaldeweg/warehouse-server/gateway
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/abaldeweg/warehouse-server/framework v0.32.1
@@ -9,7 +9,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	go.mongodb.org/mongo-driver/v2 v2.5.0
+	go.mongodb.org/mongo-driver v1.17.9
 	golang.org/x/image v0.36.0
 )
 
