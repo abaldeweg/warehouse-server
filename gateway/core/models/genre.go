@@ -8,8 +8,8 @@ import (
 // Genre represents a genre entity.
 type Genre struct {
 	ID       uint   `json:"id" gorm:"primaryKey;autoIncrement;->"`
-	Name     string `json:"name" gorm:"type:varchar(255);not null" validate:"required,min=1,max=255"`
-	BranchID uint   `json:"branch_id" gorm:"index"`
+	Name     string `json:"name" gorm:"type:varchar(255);not null;uniqueIndex:idx_branch_name" validate:"required,min=1,max=255"`
+	BranchID uint   `json:"branch_id" gorm:"index;uniqueIndex:idx_branch_name"`
 	Branch   Branch `json:"branch" gorm:"foreignKey:BranchID"`
 }
 
