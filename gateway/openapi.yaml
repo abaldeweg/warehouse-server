@@ -922,6 +922,30 @@ paths:
           description: Unauthorized
         "500":
           description: Failed to create reservation
+  /apis/core/1/api/public/reservation/new:
+    post:
+      summary: Create a new reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublicReservation"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "SUCCESS"
+        "400":
+          description: Invalid reservation data
+        "500":
+          description: Failed to create reservation
   /apis/core/1/api/public/genre/{id}:
     get:
       summary: Get genres for a branch by ID
@@ -1629,6 +1653,34 @@ components:
           type: string
         open:
           type: boolean
+    PublicReservation:
+      type: object
+      properties:
+        notes:
+          type: string
+        books:
+          type: string
+          description: Comma-separated list of book IDs
+        salutation:
+          type: string
+          enum: [f, m, d]
+        firstname:
+          type: string
+        surname:
+          type: string
+        mail:
+          type: string
+          example: mail@test.localhost
+        phone:
+          type: string
+          example: "12345678"
+      required:
+        - books
+        - salutation
+        - firstname
+        - surname
+        - mail
+        - phone
     PublicBook:
       type: object
       properties:

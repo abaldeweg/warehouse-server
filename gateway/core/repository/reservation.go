@@ -52,12 +52,12 @@ func (rr *reservationRepository) FindOne(id uuid.UUID) (*models.Reservation, err
 
 // Create creates a new reservation.
 func (rr *reservationRepository) Create(reservation *models.Reservation) error {
-	return rr.db.Create(reservation).Error
+	return rr.db.Omit("Branch", "Books").Create(reservation).Error
 }
 
 // Update updates an existing reservation.
 func (rr *reservationRepository) Update(reservation *models.Reservation) error {
-	return rr.db.Save(reservation).Error
+	return rr.db.Omit("Branch", "Books").Save(reservation).Error
 }
 
 // Delete deletes a reservation by its UUID.
