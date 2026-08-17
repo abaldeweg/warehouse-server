@@ -1680,7 +1680,6 @@ components:
         - firstname
         - surname
         - mail
-        - phone
     PublicBook:
       type: object
       properties:

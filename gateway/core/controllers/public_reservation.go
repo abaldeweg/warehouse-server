@@ -46,7 +46,7 @@ func (rc *PublicReservationController) Create(c *gin.Context) {
 		Open:       true,
 	}
 
-	reservation.Books = make([]*models.Book, 0)
+	var booksToUpdate []*models.Book
 	for bookID := range strings.SplitSeq(reservationForm.Books, ",") {
 		bookID = strings.TrimSpace(bookID)
 		if bookID == "" {
@@ -57,14 +57,7 @@ func (rc *PublicReservationController) Create(c *gin.Context) {
 			if book.Sold || book.Removed || book.Reserved {
 				continue
 			}
-			book.Reserved = true
-			now := time.Now()
-			book.ReservedAt = &now
-			rid := uuid.MustParse(reservation.ID)
-			book.ReservationID = &rid
-			if err := rc.db.Select("reserved", "reserved_at", "reservation_id").Save(&book).Error; err != nil {
-				continue
-			}
+			booksToUpdate = append(booksToUpdate, &book)
 			reservation.Books = append(reservation.Books, &book)
 		}
 	}
@@ -81,6 +74,15 @@ func (rc *PublicReservationController) Create(c *gin.Context) {
 	if err := rc.reservationRepo.Create(&reservation); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create reservation"})
 		return
+	}
+
+	rid := uuid.MustParse(reservation.ID)
+	now := time.Now()
+	for _, book := range booksToUpdate {
+		book.Reserved = true
+		book.ReservedAt = &now
+		book.ReservationID = &rid
+		rc.db.Select("reserved", "reserved_at", "reservation_id").Save(book)
 	}
 
 	_, err := rc.reservationRepo.FindOne(uuid.MustParse(reservation.ID))
