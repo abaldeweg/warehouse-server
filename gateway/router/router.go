@@ -322,7 +322,11 @@ func Routes() *gin.Engine {
 				pbc := controllers.NewPublicGenreController(db)
 				pbc.FindAll(c)
 			})
-			apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
+			// apiCorePublic.POST(`/reservation/new`, handleCoreAPI("/api/public/reservation/new"))
+			apiCorePublic.POST(`/reservation/new`, func(c *gin.Context) {
+				rc := controllers.NewPublicReservationController(db)
+				rc.Create(c)
+			})
 		}
 
 		apiCoreReservation := apiCore.Group(`/api/reservation`)
