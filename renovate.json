@@ -4,6 +4,7 @@
     ":disableDependencyDashboard"
   ],
   "minimumReleaseAge": "1 day",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "packageRules": [
     {
       "updateTypes": [
