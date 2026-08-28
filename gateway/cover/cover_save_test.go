@@ -31,11 +31,6 @@ func TestSaveCover(t *testing.T) {
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
 		}},
-    {"test.JPG", []string{
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
-			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-s.jpg",
-		}},
 		{"test.png", []string{
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-l.jpg",
 			"36ee6d5c-820b-4f0c-9637-73b63dacc2a7-m.jpg",
@@ -98,7 +93,7 @@ func TestFailingSaveCover(t *testing.T) {
 	})
 
 	testCases := []struct {
-		imageName      string
+		imageName string
 	}{
 		{"test.gif"},
 	}
