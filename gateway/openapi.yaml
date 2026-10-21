@@ -1238,6 +1238,48 @@ paths:
         403:
           description: Forbidden
 
+  /apis/core/1/api/book/new:
+    post:
+      summary: Create a new book for the authenticated user's branch
+      tags:
+        - book
+      requestBody:
+        description: Book data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBook"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        400:
+          description: Invalid book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        401:
+          description: Unauthorized
+        409:
+          description: Duplicate book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        500:
+          description: Internal Server Error
+
   /apis/core/1/api/book/{id}:
     get:
       summary: Get a book by ID for the authenticated user's branch

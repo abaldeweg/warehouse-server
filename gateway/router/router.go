@@ -1,9 +1,13 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/abaldeweg/warehouse-server/gateway/auth"
 	"github.com/abaldeweg/warehouse-server/gateway/core/controllers"
@@ -16,7 +20,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var authenticator = auth.Authenticate
+var authenticator = auth.AuthenticateTEST
 
 // Routes sets up the routes for the gateway.
 func Routes() *gin.Engine {
@@ -100,7 +104,16 @@ func Routes() *gin.Engine {
 				bc := controllers.NewBookController(db)
 				bc.ShowBook(c)
 			})
-			apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
+			if isExperimentActive("port-book") {
+				logExperimentRoute("port-book", "local (controllers.CreateBook)")
+				apiCoreBook.POST(`/new`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
+					bc := controllers.NewBookController(db)
+					bc.CreateBook(c)
+				})
+			} else {
+				logExperimentRoute("port-book", "proxy (handleCoreAPI /api/book/new)")
+				apiCoreBook.POST(`/new`, handleCoreAPI("/api/book/new"))
+			}
 			apiCoreBook.PUT(`/:id`, RoleMiddleware("ROLE_USER"), func(c *gin.Context) {
 				bc := controllers.NewBookController(db)
 				bc.UpdateBook(c)
@@ -414,6 +427,27 @@ func Routes() *gin.Engine {
 }
 
 // handleCoreAPI handles requests to the core API.
+func isExperimentActive(name string) bool {
+	experiments := viper.GetString("EXPERIMENTS")
+	for _, exp := range strings.Split(experiments, ",") {
+		if strings.TrimSpace(exp) == name {
+			return true
+		}
+	}
+	return false
+}
+
+func logExperimentRoute(experiment, path string) {
+	file, err := os.OpenFile("experiments.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	entry := fmt.Sprintf("%s - Experiment: %s, Selected Route: %s\n", time.Now().UTC().Format(time.RFC3339), experiment, path)
+	_, _ = file.WriteString(entry)
+}
+
 func handleCoreAPI(path string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		safePath := filepath.Join("/", path)
