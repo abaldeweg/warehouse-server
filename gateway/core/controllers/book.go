@@ -654,3 +654,226 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, updatedBook)
 }
+
+// CreateBook creates a new book.
+func (pbc *BookController) CreateBook(ctx *gin.Context) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "Unauthorized"})
+		return
+	}
+	branchId := uint(user.(auth.User).Branch.Id)
+
+	var bu models.BookUpdate
+	if err := ctx.ShouldBindJSON(&bu); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Please enter a valid book! \n " + err.Error()})
+		return
+	}
+
+	book := &models.Book{
+		ID:       uuid.New(),
+		BranchID: &branchId,
+	}
+
+	// Default releaseYear to current year if not provided
+	book.ReleaseYear = time.Now().Year()
+
+	if bu.Added != nil {
+		book.AddedUnix = *bu.Added
+	} else {
+		book.AddedUnix = time.Now().Unix()
+	}
+
+	if bu.Title != nil {
+		book.Title = *bu.Title
+	}
+	if bu.ShortDescription != nil {
+		book.ShortDescription = bu.ShortDescription
+	}
+	if bu.Author != nil {
+		fname := ""
+		sname := ""
+		if *bu.Author != "" {
+			authorStr := *bu.Author
+			if strings.Contains(authorStr, ",") {
+				parts := strings.SplitN(authorStr, ",", 2)
+				sname = strings.TrimSpace(parts[0])
+				fname = strings.TrimSpace(parts[1])
+			} else {
+				parts := strings.Fields(authorStr)
+				if len(parts) == 1 {
+					fname = parts[0]
+				} else if len(parts) >= 2 {
+					fname = parts[0]
+					sname = strings.Join(parts[1:], " ")
+				}
+			}
+		}
+		if book.Author == nil {
+			book.Author = &models.Author{Firstname: fname, Surname: sname}
+		} else {
+			if fname != "" {
+				book.Author.Firstname = fname
+			}
+			if sname != "" {
+				book.Author.Surname = sname
+			}
+		}
+	}
+	if bu.GenreID != nil {
+		if bu.GenreID.Val == nil {
+			book.GenreID = nil
+		} else {
+			v := *bu.GenreID.Val
+			var genre models.Genre
+			if err := pbc.DB.First(&genre, "id = ?", v).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Genre not found", "genre_id": v})
+					return
+				}
+				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch genre"})
+				return
+			}
+			if genre.BranchID != branchId {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid branch for genre", "genre_id": v})
+				return
+			}
+			book.GenreID = &v
+		}
+	}
+	if bu.Price != nil {
+		if bu.Price.Val == nil {
+			book.Price = 0
+		} else {
+			book.Price = *bu.Price.Val
+		}
+	}
+	if bu.Sold != nil {
+		book.Sold = *bu.Sold
+	}
+	if bu.Removed != nil {
+		book.Removed = *bu.Removed
+	}
+	if bu.Reserved != nil {
+		book.Reserved = *bu.Reserved
+	}
+	if bu.ReleaseYear != nil {
+		if bu.ReleaseYear.Val == nil {
+			book.ReleaseYear = 0
+		} else {
+			book.ReleaseYear = *bu.ReleaseYear.Val
+		}
+	}
+	if bu.CondID != nil {
+		if bu.CondID.Val == nil {
+			book.ConditionID = nil
+		} else {
+			v := *bu.CondID.Val
+			var condition models.Condition
+			if err := pbc.DB.First(&condition, "id = ?", v).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Condition not found", "cond_id": v})
+					return
+				}
+				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch condition"})
+				return
+			}
+			if condition.BranchID != branchId {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid branch for condition", "cond_id": v})
+				return
+			}
+			book.ConditionID = &v
+		}
+	}
+	if bu.Tags != nil {
+		var tags []*models.Tag
+		for _, t := range bu.Tags {
+			if t == nil {
+				continue
+			}
+			id := uint(*t)
+			var tag models.Tag
+			if err := pbc.DB.First(&tag, "id = ?", id).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Tag not found", "tag_id": id})
+					return
+				}
+				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch tag"})
+				return
+			}
+			tags = append(tags, &tag)
+		}
+		book.Tags = tags
+	}
+	if bu.Recommendation != nil {
+		book.Recommendation = *bu.Recommendation
+	}
+	if bu.FormatID != nil {
+		if bu.FormatID.Val == nil {
+			book.FormatID = 0
+		} else {
+			v := *bu.FormatID.Val
+			var format models.Format
+			if err := pbc.DB.First(&format, "id = ?", v).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Format not found", "format_id": v})
+					return
+				}
+				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch format"})
+				return
+			}
+			if format.BranchID != branchId {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid branch for format", "format_id": v})
+				return
+			}
+			book.FormatID = v
+		}
+	}
+	if bu.Subtitle != nil {
+		book.Subtitle = bu.Subtitle
+	}
+	if bu.Duplicate != nil {
+		book.Duplicate = *bu.Duplicate
+	}
+
+	existing, err := pbc.Repo.FindDuplicate(book)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Internal Error"})
+		return
+	}
+	if existing != nil {
+		ctx.JSON(http.StatusConflict, gin.H{"msg": "Book not saved, because it exists already!"})
+		return
+	}
+
+	// sold
+	if book.Sold && book.SoldOn == nil {
+		t := time.Now()
+		book.SoldOn = &t
+	}
+
+	// removed
+	if book.Removed && book.RemovedOn == nil {
+		t := time.Now()
+		book.RemovedOn = &t
+	}
+
+	// reserved
+	if book.Reserved && book.ReservedAt == nil {
+		t := time.Now()
+		book.ReservedAt = &t
+	}
+
+	if err := pbc.Repo.Update(book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to create book"})
+		return
+	}
+
+	createdBook, err := pbc.Repo.FindByIDAndPreload(book.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Book created, but failed to retrieve"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, createdBook)
+}
