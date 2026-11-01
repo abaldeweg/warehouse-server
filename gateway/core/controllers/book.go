@@ -801,6 +801,10 @@ func (pbc *BookController) CreateBook(ctx *gin.Context) {
 				ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch tag"})
 				return
 			}
+			if tag.BranchID != branchId {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid branch for tag", "tag_id": id})
+				return
+			}
 			tags = append(tags, &tag)
 		}
 		book.Tags = tags
