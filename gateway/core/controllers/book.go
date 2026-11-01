@@ -812,6 +812,10 @@ func (pbc *BookController) CreateBook(ctx *gin.Context) {
 	if bu.Recommendation != nil {
 		book.Recommendation = *bu.Recommendation
 	}
+	if bu.FormatID == nil || bu.FormatID.Val == nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Format is required"})
+		return
+	}
 	if bu.FormatID != nil {
 		if bu.FormatID.Val == nil {
 			book.FormatID = 0
