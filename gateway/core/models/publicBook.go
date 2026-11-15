@@ -27,7 +27,7 @@ type PublicBook struct {
 	Price            float32    `json:"price" gorm:"default:0.00"`
 	ReleaseYear      int        `json:"releaseYear"`
 	Condition        *Condition `json:"-" gorm:"foreignKey:ConditionID"`
-	ConditionID      *uint      `json:"-" gorm:"default:null"`
+	ConditionID      *uint      `json:"-" gorm:"column:cond_id;default:null"`
 	Cond             string     `json:"cond" binding:"required" gorm:"-"`
 	Format           *Format    `json:"-" gorm:"foreignKey:FormatID"`
 	FormatID         uint       `json:"-" gorm:""`
