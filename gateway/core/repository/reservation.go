@@ -40,10 +40,20 @@ func (rr *reservationRepository) ReservationStatus(branchID uint) (int64, error)
 	return count, err
 }
 
+// orderBooksByGenreAndAuthor sorts books by genre name and then by author name, both in descending order.
+func orderBooksByGenreAndAuthor(db *gorm.DB) *gorm.DB {
+	return db.
+		Joins("LEFT JOIN genre ON genre.id = book.genre_id").
+		Joins("LEFT JOIN author ON author.id = book.author_id").
+		Order("genre.name ASC").
+		Order("author.surname ASC").
+		Order("author.firstname ASC")
+}
+
 // FindOne retrieves a reservation by its UUID.
 func (rr *reservationRepository) FindOne(id uuid.UUID) (*models.Reservation, error) {
 	var reservation models.Reservation
-	err := rr.db.Preload("Branch").Preload("Books").Preload("Books.Branch").Preload("Books.Genre").Preload("Books.Tags").Preload("Books.Author").Preload("Books.Condition").First(&reservation, "id = ?", id).Error
+	err := rr.db.Preload("Branch").Preload("Books", orderBooksByGenreAndAuthor).Preload("Books.Branch").Preload("Books.Genre").Preload("Books.Tags").Preload("Books.Author").Preload("Books.Condition").First(&reservation, "id = ?", id).Error
 	if err != nil {
 		return nil, err
 	}
