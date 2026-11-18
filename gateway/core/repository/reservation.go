@@ -40,7 +40,7 @@ func (rr *reservationRepository) ReservationStatus(branchID uint) (int64, error)
 	return count, err
 }
 
-// orderBooksByGenreAndAuthor sorts books by genre name and then by author name, both in descending order.
+// orderBooksByGenreAndAuthor sorts books by genre name and then by author name, both in ascending order.
 func orderBooksByGenreAndAuthor(db *gorm.DB) *gorm.DB {
 	return db.
 		Joins("LEFT JOIN genre ON genre.id = book.genre_id").
