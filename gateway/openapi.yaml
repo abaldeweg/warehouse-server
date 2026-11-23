@@ -1858,6 +1858,10 @@ components:
           type: string
         duplicate:
           type: boolean
+        reservation_id:
+          type: string
+          format: uuid
+          description: Optional. If omitted, the existing reservation is kept.
       required:
         - id
         - title

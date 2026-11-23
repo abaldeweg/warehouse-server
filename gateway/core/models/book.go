@@ -64,6 +64,7 @@ type BookUpdate struct {
 	FormatID         *UintOrString  `json:"format,omitempty"`
 	Subtitle         *string        `json:"subtitle,omitempty" validate:"omitempty,max=255"`
 	Duplicate        *bool          `json:"duplicate,omitempty"`
+	ReservationID    *uuid.UUID     `json:"reservation_id,omitempty"`
 }
 
 type UintOrString struct {
