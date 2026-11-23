@@ -595,6 +595,20 @@ func (pbc *BookController) UpdateBook(ctx *gin.Context) {
 	if bu.Duplicate != nil {
 		book.Duplicate = *bu.Duplicate
 	}
+	if bu.ReservationID != nil {
+		var reservation models.Reservation
+		if err := pbc.DB.First(&reservation, "id = ?", *bu.ReservationID).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Reservation not found", "reservation_id": *bu.ReservationID})
+				return
+			}
+			ctx.JSON(http.StatusInternalServerError, gin.H{"msg": "Failed to fetch reservation"})
+			return
+		}
+		rid := *bu.ReservationID
+		book.ReservationID = &rid
+		book.Reservation = nil
+	}
 
 	existing, err := pbc.Repo.FindDuplicate(book)
 	if err != nil {
