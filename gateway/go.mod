@@ -3,7 +3,7 @@ module github.com/abaldeweg/warehouse-server/gateway
 go 1.27.0
 
 require (
-	github.com/abaldeweg/warehouse-server/framework v0.34.1
+	github.com/abaldeweg/warehouse-server/framework v0.35.0
 	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-playground/validator/v10 v10.30.6
